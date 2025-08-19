@@ -2,6 +2,7 @@
   "expo": {
     "name": "awaazesehat-app",
     "slug": "awaazesehat-app",
+    "scheme": "awaazesehat",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,8 +10,8 @@
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#0B6E27"
     },
     "ios": {
       "supportsTablet": true
@@ -18,8 +19,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0B6E27"
       },
+      "package": "com.awaazesehat123.awaazesehatapp",
       "edgeToEdgeEnabled": true
     },
     "web": {
