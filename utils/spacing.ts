@@ -1,0 +1,18 @@
+export const Spacing = {
+  "4XSmall": 0,
+  "3XSmall": 2,
+  "2XSmall": 4,
+  "XSmall": 6,
+  Small: 8,
+  SmallMedium: 12,
+  Medium2: 14,
+  Medium: 16,
+  MediumLarge: 20,
+  Large: 24,
+  XLarge: 28,
+  "2XLarge": 32,
+  "3XLarge": 36,
+  "4XLarge": 40,
+  "5XLarge": 48,
+  "6XLarge": 56,
+} as const;
