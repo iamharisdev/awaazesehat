@@ -1,17 +1,14 @@
-import React from "react";
-import {
-  I18nManager,
-  ImageBackground,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
-import { useDispatch } from "react-redux";
+import { Icons } from "@/assets/svgs";
 import { Button } from "@/components";
 import { styles } from "@/styles/startupStyle";
-import { Icons } from "@/assets/svgs";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import * as Updates from "expo-updates";
+import {
+  ImageBackground,
+  Text,
+  View
+} from "react-native";
+import { useDispatch } from "react-redux";
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -20,14 +17,6 @@ const Index = () => {
   const switchLanguage = async () => {
     const newLang = i18n.language === "en" ? "ur" : "en";
     await i18n.changeLanguage(newLang);
-
-    // if (newLang === "ur") {
-    //   I18nManager.forceRTL(true);
-    // } else {
-    //   I18nManager.forceRTL(false);
-    // }
-
-    // await Updates.reloadAsync(); // reload app to apply RTL layout
   };
 
   return (

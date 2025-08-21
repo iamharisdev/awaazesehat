@@ -1,15 +1,10 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import * as Localization from "expo-localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// Import translation JSON files
 import enTranslation from "./locales/en.json";
 import urTranslation from "./locales/ur.json";
 
 const supportedLangs = ["en", "ur"];
-
-// Async function to load saved language
 
 const getInitialLanguage = async (): Promise<string> => {
   try {
@@ -20,19 +15,18 @@ const getInitialLanguage = async (): Promise<string> => {
   } catch (e) {
     console.error("Error reading saved language", e);
   }
-
-  const sysLang = Localization.getLocales()[0].languageCode ?? "en"; // fallback if null
-  return supportedLangs.includes(sysLang) ? sysLang : "en";
+  return "en";
 };
+
 (async () => {
-  const selectedLang = await getInitialLanguage();
+  const selectedLanguage = await getInitialLanguage();
 
   i18n.use(initReactI18next).init({
     resources: {
       en: { translation: enTranslation },
       ur: { translation: urTranslation },
     },
-    lng: selectedLang,
+    lng: selectedLanguage,
     fallbackLng: "en",
     interpolation: {
       escapeValue: false,
