@@ -1,17 +1,9 @@
 {
-  "startup": {
-    "welcome": "Welcome! \n Your partner in better patient guidance and care",
-    "create_an_account": "Create an account",
-    "login": "Log in",
-    "terms_of_services": "Terms of Services",
-    "'and": "and",
-    "privacy_policy": "Privacy Policy",
-    "footer": "By Signing up, you agree to Awaaz-e-Sehat’s"
-  },
-  "validation": {
-    "required": "This field is required",
-    "email_invalid": "Please enter a valid email",
-    "password_min": "Password must be at least {{min}} characters",
-    "terms_required": "You must accept the Terms of Services and Privacy Policy"
-  }
+  "Welcome! Your partner in better patient guidance and care": "Welcome! \n Your partner in better patient guidance and care",
+  "Create an account": "Create an account",
+  "Log in": "Log in",
+  "Terms of Services": "Terms of Services",
+  "'and": "and",
+  "Privacy Policy": "Privacy Policy",
+  "By Signing up, you agree to Awaaz-e-Sehat’s": "By Signing up, you agree to Awaaz-e-Sehat’s"
 }

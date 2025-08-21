@@ -39,28 +39,26 @@ const Index = () => {
         <View style={styles.logo}>
           <Icons.Logo />
         </View>
-        <Text style={styles.headingText}> {t("startup.welcome")}</Text>
+        <Text style={styles.headingText}>
+          {" "}
+          {t("Welcome! Your partner in better patient guidance and care")}
+        </Text>
         <View style={styles.flex}>
           <Text style={styles.footerText}>
-            {t("startup.footer")}{" "}
-            <Text style={styles.underLineText}>
-              {t("startup.terms_of_services")}
-            </Text>{" "}
-            {t("startup.and")}{" "}
-            <Text style={styles.underLineText}>
-              {" "}
-              {t("startup.privacy_policy")}
-            </Text>
+            {t("By Signing up, you agree to Awaaz-e-Sehat’s")}{" "}
+            <Text style={styles.underLineText}>{t("Terms of Services")}</Text>{" "}
+            {t("and")}{" "}
+            <Text style={styles.underLineText}> {t("Privacy Policy")}</Text>
           </Text>
 
           <Button
-            title={t("startup.create_an_account")}
+            title={t("Create an account")}
             btnProps={{ onPress: () => switchLanguage() }}
             style={styles.btn1ViewStyle}
             textStyle={styles.btn1TextStyle}
           />
           <Button
-            title={t("startup.login")}
+            title={t("Log in")}
             btnProps={{ onPress: () => console.log("hello") }}
             style={styles.btn2ViewStyle}
             textStyle={[styles.btn1TextStyle, styles.btn2TextStyle]}
