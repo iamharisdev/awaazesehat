@@ -28,6 +28,7 @@ export const styles = StyleSheet.create({
     width: wp(pxToWp(299)),
     alignSelf: "center",
   },
+  flex: { flex: 0.3 },
 
   footerText: {
     color: colors.white,

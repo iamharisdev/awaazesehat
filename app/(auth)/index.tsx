@@ -19,7 +19,7 @@ const Index = () => {
         <Text style={styles.headingText}>
           {" Welcome! \n Your partner in better patient guidance and care"}
         </Text>
-        <View style={{ flex: 0.3 }}>
+        <View style={styles.flex}>
           <Text style={styles.footerText}>
             By Signing up, you agree to Awaaz-e-Sehat’s{" "}
             <Text style={styles.underLineText}>Terms of Services</Text> and{" "}
