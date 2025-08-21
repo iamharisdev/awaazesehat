@@ -39,7 +39,9 @@ const Index = () => {
         <View style={styles.logo}>
           <Icons.Logo />
         </View>
+
         <Text style={styles.headingText}> {t("startup.welcome")}</Text>
+
         <View style={styles.flex}>
           <Text style={styles.footerText}>
             {t("startup.footer")}{" "}
