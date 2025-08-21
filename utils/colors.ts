@@ -47,5 +47,8 @@ export const colors = {
     b10: "#262626",
     b05: "#0D0D0D",
   },
-  white:'#FFFFFF'
+  white: {
+    w1: "#FFFFFF",
+    w2: "#FAFAFA",
+  },
 };

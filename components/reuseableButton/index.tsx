@@ -9,9 +9,10 @@ import {
   ViewStyle,
 } from "react-native";
 import { styles } from "./style";
+import { colors } from "@/utils/colors";
 
 interface CustomButtonProps {
-  title: string;
+  title?: string;
   style?: ViewStyle;
   textStyle?: StyleProp<TextStyle>;
   variant?: "primary" | "secondary";
@@ -35,14 +36,17 @@ const ReuseableButton: React.FC<CustomButtonProps> = ({
       {...btnProps}
       style={[
         styles.button,
-        { justifyContent: leftComponent ? "space-between" : "center" },
+        {
+          justifyContent: leftComponent ? "space-between" : "center",
+          backgroundColor: disabled ? colors.green.g70 : colors.green.g20,
+        },
         style,
       ]}
       disabled={disabled}
       activeOpacity={0.8}
     >
       {leftComponent}
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+      {title && <Text style={[styles.buttonText, textStyle]}>{title}</Text>}
       {rightComponent}
     </TouchableOpacity>
   );

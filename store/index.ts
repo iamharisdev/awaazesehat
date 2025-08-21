@@ -3,6 +3,7 @@ import { api } from '../services/api';
 import userReducer from '../features/userSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 import { asyncStorage } from '../storage/asyncStorage';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -12,7 +13,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: asyncStorage,
-  whitelist: ['user'], // only persist this slice
+  whitelist: [], // only persist this slice
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -29,3 +30,6 @@ export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
