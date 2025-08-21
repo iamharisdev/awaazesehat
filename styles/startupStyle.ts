@@ -18,8 +18,9 @@ export const styles = StyleSheet.create({
   },
 
   headingText: {
-    flex: 0.1,
+    flex: 0.2,
     color: colors.white,
+ 
     fontFamily: "Medium",
     fontWeight: 500,
     fontSize: normalizeFont(19),
@@ -28,6 +29,7 @@ export const styles = StyleSheet.create({
     width: wp(pxToWp(299)),
     alignSelf: "center",
   },
+  flex: { flex: 0.3 },
 
   footerText: {
     color: colors.white,

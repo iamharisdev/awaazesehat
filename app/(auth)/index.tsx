@@ -1,5 +1,11 @@
 import React from "react";
-import { I18nManager, ImageBackground, Text, View } from "react-native";
+import {
+  I18nManager,
+  ImageBackground,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components";
 import { styles } from "@/styles/startupStyle";
@@ -33,22 +39,28 @@ const Index = () => {
         <View style={styles.logo}>
           <Icons.Logo />
         </View>
-        <Text style={styles.headingText}>{t("welcome")}</Text>
-        <View style={{ flex: 0.3 }}>
+        <Text style={styles.headingText}> {t("startup.welcome")}</Text>
+        <View style={styles.flex}>
           <Text style={styles.footerText}>
-            By Signing up, you agree to Awaaz-e-Sehat’s{" "}
-            <Text style={styles.underLineText}>Terms of Services</Text> and{" "}
-            <Text style={styles.underLineText}> Privacy Policy</Text>
+            {t("startup.footer")}{" "}
+            <Text style={styles.underLineText}>
+              {t("startup.terms_of_services")}
+            </Text>{" "}
+            {t("startup.and")}{" "}
+            <Text style={styles.underLineText}>
+              {" "}
+              {t("startup.privacy_policy")}
+            </Text>
           </Text>
 
           <Button
-            title="Hello"
+            title={t("startup.create_an_account")}
             btnProps={{ onPress: () => switchLanguage() }}
             style={styles.btn1ViewStyle}
             textStyle={styles.btn1TextStyle}
           />
           <Button
-            title="Hello"
+            title={t("startup.login")}
             btnProps={{ onPress: () => console.log("hello") }}
             style={styles.btn2ViewStyle}
             textStyle={[styles.btn1TextStyle, styles.btn2TextStyle]}
