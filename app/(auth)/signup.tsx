@@ -6,13 +6,17 @@ import {
   KeyboardAvoidingWrapper,
 } from "@/components";
 import { styles } from "@/styles/login";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 const Signup = () => {
   const { t } = useTranslation();
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
+
   return (
     <KeyboardAvoidingWrapper>
       <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
@@ -42,6 +46,13 @@ const Signup = () => {
             disabled={!email}
             title={t("Send code")}
             style={styles.btnViewStyle}
+            btnProps={{
+              onPress: () =>
+                router.push({
+                  pathname: "/otp",
+                  params: { email },
+                }),
+            }}
           />
         </View>
       </View>

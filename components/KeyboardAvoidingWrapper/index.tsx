@@ -1,11 +1,11 @@
 import React from "react";
 import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    TouchableWithoutFeedback,
-    View,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 import { styles } from "./style";
 
@@ -17,7 +17,7 @@ const KeyboardAvoidingWrapper: React.FC<Props> = ({ children }) => {
   return (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={"padding" }
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView

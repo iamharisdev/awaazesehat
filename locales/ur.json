@@ -1,9 +1,19 @@
 {
-  "Welcome! Your partner in better patient guidance and care": "خوش آمدید! \n آپ کے بہتر مریض رہنمائی اور دیکھ بھال کے ساتھی",
-  "Create an account": "اکاؤنٹ بنائیں",
-  "Log in": "لاگ ان",
-  "Terms of Services": "سروس کی شرائط",
-  "'and": "اور",
-  "Privacy Policy": "پرائیویسی پالیسی",
-  "By Signing up, you agree to Awaaz-e-Sehat’s": "سائن اپ کر کے، آپ آوازِ صحت کی شرائط سے اتفاق کرتے ہیں"
+  "Welcome! Your partner in better patient guidance and care": "Khush Aamdeed! \n Aap ka saathi behtareen patient rehnumai aur dekhbhaal mein",
+  "Create an account": "Naya account banayein",
+  "Log in": "Login karein",
+  "Terms of Services": "Sharaait-e-Khidmaat",
+  "'and": "aur",
+  "Privacy Policy": "Privacy Policy",
+  "By Signing up, you agree to Awaaz-e-Sehat’s": "Sign up karke aap Awaaz-e-Sehat ki sharaait ko mante hain",
+  "Create account with email": "Email ke zariye account banayein",
+  "We will be sending you an OTP on this email, it helps us keep your account secure.": "Hum aap ko is email par OTP bhejenge, jo aap ka account mehfooz rakhta hai.",
+  "Your email *": "Aap ka email *",
+  "Enter Email": "Email darj karein",
+  "Send code": "Code bhejein",
+  "Your Password": "Aap ka password *",
+  "Forgot password?": "Password bhool gaye?",
+  "Create your password": "Apna password banayein",
+  "Your password should be 9 characters, containing a letter and a number": "Aap ka password 9 huroof ka hona chahiye, jisme aik letter aur aik number ho",
+  "Register": "Register karein"
 }

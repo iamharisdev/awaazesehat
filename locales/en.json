@@ -12,5 +12,8 @@
   "Enter Email":"Enter Email",
   "Send code":"Send code",
   "Your Password":"Your Password *",
-  "Forgot password?":"Forgot password?"
+  "Forgot password?":"Forgot password?",
+  "Create your password":"Create your password",
+  "Your password should be 9 characters, containing a letter and a number":"Your password should be 9 characters, containing a letter and a number",
+  "Register":"Register"
 }

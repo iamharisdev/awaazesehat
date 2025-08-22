@@ -21,6 +21,7 @@ export const styles = StyleSheet.create({
     color: colors.black.b40,
     marginBottom: hp(5),
   },
+  center:{alignSelf:'center'},
 
   email: {
     fontFamily: "Medium",
@@ -47,11 +48,11 @@ export const styles = StyleSheet.create({
 
   btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
 
-absolute: {
-  position: "absolute",
-  left: 0,
-  right: 0,
-  bottom: hp(2), // keeps a little spacing from bottom
-  alignItems: "center",
-},
+  absolute: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: hp(2), // keeps a little spacing from bottom
+    alignItems: "center",
+  },
 });

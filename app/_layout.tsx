@@ -29,8 +29,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent() {
-  const {statusBar} = useAppSelector((state) => state.user);
-
+  const { statusBar } = useAppSelector((state) => state.user);
 
   const [loaded] = useFonts({
     Regular: require("../assets/fonts/Roboto-Regular.ttf"),
@@ -56,7 +55,11 @@ function RootLayoutContent() {
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <StatusBar style="dark" translucent />
-      <Stack screenOptions={{ headerShown: false }}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="(home)" />
       </Stack>
