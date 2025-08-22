@@ -9,32 +9,28 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./style";
+import { Icons } from "@/assets/svgs";
 
 type Props = {
   label?: string;
   inputProps?: TextInputProps;
-  isPassword?: boolean;
+  password?: boolean;
 };
 
-const AppInput: React.FC<Props> = ({
-  label,
-  inputProps,
-  isPassword = false,
-}) => {
-  const [secure, setSecure] = useState(isPassword);
-
+const AppInput: React.FC<Props> = ({ label, inputProps, password = false }) => {
+  const [securePassword, setSecurePassword] = useState(password);
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{label}</Text>
       <View style={styles.inputContainer}>
-        <TextInput {...inputProps} secureTextEntry={secure} style={styles.inputStyle}/>
-        {isPassword && (
-          <TouchableOpacity onPress={() => setSecure(!secure)}>
-            <Ionicons
-              name={secure ? "eye-off" : "eye"}
-              size={20}
-              color="gray"
-            />
+        <TextInput
+          {...inputProps}
+          secureTextEntry={securePassword}
+          style={styles.inputStyle}
+        />
+        {password && (
+          <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
+            {securePassword ? <Icons.eyeOff /> : <Icons.eye />}
           </TouchableOpacity>
         )}
       </View>

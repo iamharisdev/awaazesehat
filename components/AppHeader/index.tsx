@@ -1,15 +1,14 @@
 // components/AppHeader.tsx
 import { Icons } from "@/assets/svgs";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Text, View } from "react-native";
-import ReuseableButton from "../ReuseableButton";
 import { styles } from "./style";
-
+import Button from "../Button";
 
 type Props = {
   title?: string;
-  leftIcon?: boolean;
-  rightIcon?: boolean;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
   onLeftPress?: () => void;
   onRightPress?: () => void;
 };
@@ -21,29 +20,27 @@ const AppHeader: React.FC<Props> = ({
   onLeftPress,
   onRightPress,
 }) => {
+  const IconRender = (check: string) => {
+    if (leftIcon || rightIcon) {
+      return (
+        <Button
+          style={styles.btnStyle}
+          icon={check == "left" ? leftIcon : rightIcon}
+          btnProps={{ onPress: check == "left" ? onLeftPress : onRightPress }}
+        />
+      );
+    } else {
+      return <View style={styles.space} />;
+    }
+  };
+
   return (
     <View style={styles.container}>
-      {leftIcon ? (
-        <ReuseableButton
-          style={styles.btnStyle}
-          leftComponent={<Icons.left />}
-          btnProps={{ onPress: onLeftPress }}
-        />
-      ) : (
-        <View style={styles.space} />
-      )}
+      {IconRender("left")}
 
       {title ? <Text>{title}</Text> : null}
 
-      {rightIcon ? (
-        <ReuseableButton
-          style={styles.btnStyle}
-          leftComponent={<Icons.cross />}
-          btnProps={{ onPress: onRightPress }}
-        />
-      ) : (
-        <View style={styles.space} />
-      )}
+      {IconRender("right")}
     </View>
   );
 };

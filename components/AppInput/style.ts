@@ -5,8 +5,7 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
-    height: hp(pxToHp(48)),
+    marginBottom: hp(2),
   },
   title: {
     fontFamily: "Regular",

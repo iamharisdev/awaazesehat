@@ -1,6 +1,6 @@
 import { Icons } from "@/assets/svgs";
 import { Button } from "@/components";
-import { setIsStatus } from "@/features/userSlice";
+import { setStatusBar } from "@/features/userSlice";
 import { useAppDispatch } from "@/store";
 import { styles } from "@/styles/startupStyle";
 import { usePathname, useRouter } from "expo-router";
@@ -11,18 +11,18 @@ import { ImageBackground, Text, View } from "react-native";
 const Index = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
-  const route = useRouter();
+  const router = useRouter();
 
   const pathname = usePathname();
 
-  const switchToAuth = async () => {
-    dispatch(setIsStatus("auth"));
-    route.push("login");
+  const switchToAuth = async (route: string) => {
+    dispatch(setStatusBar("auth"));
+    router.push(route);
   };
 
   useEffect(() => {
     if (pathname == "/") {
-      dispatch(setIsStatus("startup"));
+      dispatch(setStatusBar("startup"));
     }
   }, [pathname]);
 
@@ -49,14 +49,15 @@ const Index = () => {
 
           <Button
             title={t("Create an account")}
-            btnProps={{ onPress: switchToAuth }}
             style={styles.btn1ViewStyle}
             textStyle={styles.btn1TextStyle}
+            btnProps={{ onPress: ()=>switchToAuth('signup') }}
           />
           <Button
             title={t("Log in")}
             style={styles.btn2ViewStyle}
             textStyle={[styles.btn1TextStyle, styles.btn2TextStyle]}
+           btnProps={{ onPress: ()=>switchToAuth('login') }}
           />
         </View>
       </View>

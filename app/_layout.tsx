@@ -29,7 +29,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent() {
-  const {isStatus} = useAppSelector((state) => state.user);
+  const {statusBar} = useAppSelector((state) => state.user);
 
 
   const [loaded] = useFonts({
@@ -51,7 +51,7 @@ function RootLayoutContent() {
     return null;
   }
 
-  const styles = MakeStyles(isStatus);
+  const styles = MakeStyles(statusBar);
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>

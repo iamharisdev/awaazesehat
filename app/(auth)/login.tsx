@@ -1,3 +1,4 @@
+import { Icons } from "@/assets/svgs";
 import {
   AppHeader,
   AppInput,
@@ -11,28 +12,27 @@ import { Text, View } from "react-native";
 
 const Login = () => {
   const { t } = useTranslation();
-  const [isEmail, setIsEmail] = useState("");
+  const [email, setEmail] = useState("");
   return (
     <KeyboardAvoidingWrapper>
-      <AppHeader
-        leftIcon={true}
-        rightIcon={true}
-        onLeftPress={() => console.log("Back pressed")}
-        onRightPress={() => console.log("Close pressed")}
-      />
+      <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
       <View style={styles.subContainer}>
-        <Text style={styles.heading}>{t("Create account with email")}</Text>
-        <Text style={styles.headingLight}>
-          {t(
-            "We will be sending you an OTP on this email, it helps us keep your account secure."
-          )}
-        </Text>
+        <Text style={styles.heading}>{t("Log in")}</Text>
+       
         <AppInput
           label={t("Your email *")}
           inputProps={{
-            value: isEmail,
-            onChangeText: setIsEmail,
-            placeholder: "Enter",
+            value: email,
+            onChangeText: setEmail,
+            placeholder: t("Enter Email"),
+          }}
+        />
+         <AppInput
+          label={t("Your Password *")}
+          inputProps={{
+            value: email,
+            onChangeText: setEmail,
+            placeholder: "*********",
           }}
         />
         <View style={styles.footerView}>
@@ -43,8 +43,8 @@ const Login = () => {
             <Text style={styles.underLineText}> {t("Privacy Policy")}</Text>
           </Text>
           <Button
-            disabled={isEmail ? false : true}
-            title={t("Send code")}
+            disabled={!email}
+            title={t("Log in")}
             style={styles.btnViewStyle}
           />
         </View>

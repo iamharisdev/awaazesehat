@@ -18,18 +18,16 @@ interface CustomButtonProps {
   variant?: "primary" | "secondary";
   disabled?: boolean;
   btnProps?: TouchableOpacityProps;
-  leftComponent?: ReactNode;
-  rightComponent?: ReactNode;
+  icon?: ReactNode;
 }
 
-const ReuseableButton: React.FC<CustomButtonProps> = ({
+const Button: React.FC<CustomButtonProps> = ({
   title,
   style,
   textStyle,
   disabled = false,
   btnProps,
-  leftComponent,
-  rightComponent,
+  icon,
 }) => {
   return (
     <TouchableOpacity
@@ -37,7 +35,7 @@ const ReuseableButton: React.FC<CustomButtonProps> = ({
       style={[
         styles.button,
         {
-          justifyContent: leftComponent ? "space-between" : "center",
+          justifyContent: icon ? "space-between" : "center",
           backgroundColor: disabled ? colors.green.g70 : colors.green.g20,
         },
         style,
@@ -45,11 +43,10 @@ const ReuseableButton: React.FC<CustomButtonProps> = ({
       disabled={disabled}
       activeOpacity={0.8}
     >
-      {leftComponent}
+      {icon}
       {title && <Text style={[styles.buttonText, textStyle]}>{title}</Text>}
-      {rightComponent}
     </TouchableOpacity>
   );
 };
 
-export default ReuseableButton;
+export default Button;

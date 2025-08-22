@@ -9,5 +9,8 @@
   "Create account with email":"Create account with email",
   "We will be sending you an OTP on this email, it helps us keep your account secure.":"We will be sending you an OTP on this email, it helps us keep your account secure.",
   "Your email *":"Your email *",
-  "Send code":"Send code"
+  "Enter Email":"Enter Email",
+  "Send code":"Send code",
+  "Your Password":"Your Password *",
+  "Forgot password?":"Forgot password?"
 }
