@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: normalizeFont(23),
     color: colors.black.b05,
-    marginVertical: hp(2),
+    marginVertical: hp(1),
   },
   headingLight: {
     fontFamily: "Regular",
     fontWeight: 500,
     fontSize: normalizeFont(14),
     color: colors.black.b40,
-    marginBottom: hp(5),
+    marginBottom: hp(3),
   },
   footerText: {
     color: colors.black.b05,

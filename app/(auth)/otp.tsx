@@ -16,7 +16,10 @@ const CELL_COUNT = 6;
 const Otp = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { email } = useLocalSearchParams<{ email: string }>();
+  const { email, check } = useLocalSearchParams<{
+    email: string;
+    check: string;
+  }>();
 
   const [value, setValue] = useState("");
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -40,13 +43,18 @@ const Otp = () => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
+      <AppHeader leftIcon={<Icons.left />} />
 
       <View style={styles.subContainer}>
-        <Text style={styles.heading}>{t("We just sent you a code")}</Text>
+        <Text style={styles.heading}>
+          {check == "signup" ? t("We just sent you a code") : t("Enter OTP")}
+        </Text>
         <Text style={styles.headingLight}>
-          {t("You will receive a mail with a verification pin at ")}
+          {check == "signup"
+            ? t("You will receive a mail with a verification pin at ")
+            : t("We sent you an email at ")}
           <Text style={styles.email}>{email}</Text>
+          {check == "login" ? t("with 6 digit OTP, enter it below.") : ""}
         </Text>
 
         <CodeField
@@ -89,7 +97,11 @@ const Otp = () => {
           title={t("Continue")}
           style={styles.btnViewStyle}
           btnProps={{
-            onPress: () => router.push("/createPassword"),
+            onPress: () =>
+              router.push({
+                pathname: "/createPassword",
+                params: { check },
+              }),
           }}
         />
       </View>

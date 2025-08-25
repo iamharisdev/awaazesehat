@@ -5,7 +5,7 @@ import {
   Button,
   KeyboardAvoidingWrapper,
 } from "@/components";
-import { styles } from "@/styles/login";
+import { styles } from "@/styles/signupStyle";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ const Signup = () => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
+      <AppHeader leftIcon={<Icons.left />}  />
       <View style={styles.subContainer}>
         <Text style={styles.heading}>{t("Create account with email")}</Text>
         <Text style={styles.headingLight}>
@@ -50,7 +50,7 @@ const Signup = () => {
               onPress: () =>
                 router.push({
                   pathname: "/otp",
-                  params: { email },
+                  params: { email,check:"signup" },
                 }),
             }}
           />

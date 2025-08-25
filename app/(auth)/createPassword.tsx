@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingWrapper,
 } from "@/components";
 import { styles } from "@/styles/createPasswordStyle";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
@@ -14,18 +14,27 @@ import { Text, View } from "react-native";
 const CreatePassword = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { check } = useLocalSearchParams<{
+    check: string;
+  }>();
 
   const [password, setPassword] = useState("");
 
   return (
     <KeyboardAvoidingWrapper>
-      <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
+      <AppHeader leftIcon={<Icons.left />} />
       <View style={styles.subContainer}>
-        <Text style={styles.heading}>{t("Create your password")}</Text>
+        <Text style={styles.heading}>
+          {check == "signup"
+            ? t("Create your password")
+            : t("Set new password")}
+        </Text>
         <Text style={styles.headingLight}>
-          {t(
-            "Your password should be 9 characters, containing a letter and a number"
-          )}
+          {check == "signup"
+            ? t(
+                "Your password should be 9 characters, containing a letter and a number"
+              )
+            : t("Your old password has been reset, set a new password now")}
         </Text>
         <AppInput
           label={t("Your Password")}
@@ -39,9 +48,8 @@ const CreatePassword = () => {
         <View style={styles.footerView}>
           <Button
             disabled={!password}
-            title={t("Register")}
+            title={check == "signup" ? t("Register") : t("Set password")}
             style={styles.btnViewStyle}
-           
           />
         </View>
       </View>

@@ -5,7 +5,8 @@ import {
   Button,
   KeyboardAvoidingWrapper,
 } from "@/components";
-import { styles } from "@/styles/login";
+import { styles } from "@/styles/loginStyle";
+import {  useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
@@ -13,9 +14,10 @@ import { Text, View } from "react-native";
 const Login = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
+  const router=useRouter()
   return (
     <KeyboardAvoidingWrapper>
-      <AppHeader leftIcon={<Icons.left />} rightIcon={<Icons.cross />} />
+      <AppHeader leftIcon={<Icons.left />}/>
       <View style={styles.subContainer}>
         <Text style={styles.heading}>{t("Log in")}</Text>
        
@@ -35,6 +37,7 @@ const Login = () => {
             placeholder: "*********",
           }}
         />
+        <Text style={styles.forgot} onPress={()=>router.push('forgot')}>{t("Forgot password?")}</Text>
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             {t("By Signing up, you agree to Awaaz-e-Sehat’s")}{" "}

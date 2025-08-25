@@ -15,5 +15,14 @@
   "Forgot password?":"Forgot password?",
   "Create your password":"Create your password",
   "Your password should be 9 characters, containing a letter and a number":"Your password should be 9 characters, containing a letter and a number",
-  "Register":"Register"
+  "Register":"Register",
+  "Reset your password":"Reset your password",
+  "Enter the email address you signed up with. We will send you an OTP to reset password.":"Enter the email address you signed up with. We will send you an OTP to reset password.",
+  "Reset password":"Reset password",
+  "Enter OTP":"Enter OTP",
+  "We sent you an email at":"We sent you an email at",
+  "with 6 digit OTP, enter it below.":" with 6 digit OTP, enter it below.",
+  "Set new password":"Set new password",
+  "Your old password has been reset, set a new password now":"Your old password has been reset, set a new password now",
+  "Set password":"Set password"
 }

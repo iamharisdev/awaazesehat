@@ -16,11 +16,9 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: hp(3),
   },
-
   headingText: {
     flex: 0.2,
     color: colors.white.w1,
- 
     fontFamily: "Medium",
     fontWeight: 500,
     fontSize: normalizeFont(19),
