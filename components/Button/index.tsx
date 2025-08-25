@@ -9,43 +9,44 @@ import {
   ViewStyle,
 } from "react-native";
 import { styles } from "./style";
+import { colors } from "@/utils/colors";
 
 interface CustomButtonProps {
-  title: string;
+  title?: string;
   style?: ViewStyle;
   textStyle?: StyleProp<TextStyle>;
   variant?: "primary" | "secondary";
   disabled?: boolean;
   btnProps?: TouchableOpacityProps;
-  leftComponent?: ReactNode;
-  rightComponent?: ReactNode;
+  icon?: ReactNode;
 }
 
-const ReuseableButton: React.FC<CustomButtonProps> = ({
+const Button: React.FC<CustomButtonProps> = ({
   title,
   style,
   textStyle,
   disabled = false,
   btnProps,
-  leftComponent,
-  rightComponent,
+  icon,
 }) => {
   return (
     <TouchableOpacity
       {...btnProps}
       style={[
         styles.button,
-        { justifyContent: leftComponent ? "space-between" : "center" },
+        {
+          justifyContent: icon ? "space-between" : "center",
+          backgroundColor: disabled ? colors.green.g70 : colors.green.g20,
+        },
         style,
       ]}
       disabled={disabled}
       activeOpacity={0.8}
     >
-      {leftComponent}
-      <Text style={[styles.buttonText, textStyle]}>{title}</Text>
-      {rightComponent}
+      {icon}
+      {title && <Text style={[styles.buttonText, textStyle]}>{title}</Text>}
     </TouchableOpacity>
   );
 };
 
-export default ReuseableButton;
+export default Button;

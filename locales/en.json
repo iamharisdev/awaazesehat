@@ -5,5 +5,15 @@
   "Terms of Services": "Terms of Services",
   "'and": "and",
   "Privacy Policy": "Privacy Policy",
-  "By Signing up, you agree to Awaaz-e-Sehat’s": "By Signing up, you agree to Awaaz-e-Sehat’s"
+  "By Signing up, you agree to Awaaz-e-Sehat’s": "By Signing up, you agree to Awaaz-e-Sehat’s",
+  "Create account with email":"Create account with email",
+  "We will be sending you an OTP on this email, it helps us keep your account secure.":"We will be sending you an OTP on this email, it helps us keep your account secure.",
+  "Your email *":"Your email *",
+  "Enter Email":"Enter Email",
+  "Send code":"Send code",
+  "Your Password":"Your Password *",
+  "Forgot password?":"Forgot password?",
+  "Create your password":"Create your password",
+  "Your password should be 9 characters, containing a letter and a number":"Your password should be 9 characters, containing a letter and a number",
+  "Register":"Register"
 }

@@ -1,23 +1,30 @@
 import { Icons } from "@/assets/svgs";
 import { Button } from "@/components";
+import { setStatusBar } from "@/features/userSlice";
+import { useAppDispatch } from "@/store";
 import { styles } from "@/styles/startupStyle";
-import React from "react";
+import { usePathname, useRouter } from "expo-router";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ImageBackground,
-  Text,
-  View
-} from "react-native";
-import { useDispatch } from "react-redux";
+import { ImageBackground, Text, View } from "react-native";
 
 const Index = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation();
+  const router = useRouter();
 
-  const switchLanguage = async () => {
-    const newLang = i18n.language === "en" ? "ur" : "en";
-    await i18n.changeLanguage(newLang);
+  const pathname = usePathname();
+
+  const switchToAuth = async (route: string) => {
+    dispatch(setStatusBar("auth"));
+    router.push(route);
   };
+
+  useEffect(() => {
+    if (pathname == "/") {
+      dispatch(setStatusBar("startup"));
+    }
+  }, [pathname]);
 
   return (
     <ImageBackground
@@ -42,15 +49,15 @@ const Index = () => {
 
           <Button
             title={t("Create an account")}
-            btnProps={{ onPress: () => switchLanguage() }}
             style={styles.btn1ViewStyle}
             textStyle={styles.btn1TextStyle}
+            btnProps={{ onPress: ()=>switchToAuth('signup') }}
           />
           <Button
             title={t("Log in")}
-            btnProps={{ onPress: () => console.log("hello") }}
             style={styles.btn2ViewStyle}
             textStyle={[styles.btn1TextStyle, styles.btn2TextStyle]}
+           btnProps={{ onPress: ()=>switchToAuth('login') }}
           />
         </View>
       </View>

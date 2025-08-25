@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
 
   headingText: {
     flex: 0.2,
-    color: colors.white,
+    color: colors.white.w1,
  
     fontFamily: "Medium",
     fontWeight: 500,
@@ -32,7 +32,7 @@ export const styles = StyleSheet.create({
   flex: { flex: 0.3 },
 
   footerText: {
-    color: colors.white,
+    color: colors.white.w1,
     fontFamily: "Regular",
     fontWeight: 500,
     fontSize: normalizeFont(13),
@@ -49,12 +49,12 @@ export const styles = StyleSheet.create({
     color: colors.green.g20,
   },
   btn2TextStyle: {
-    color: colors.white,
+    color: colors.white.w1,
   },
-  btn1ViewStyle: { backgroundColor: colors.white, marginBottom: hp(2) },
+  btn1ViewStyle: { backgroundColor: colors.white.w1, marginBottom: hp(2) },
   btn2ViewStyle: {
     backgroundColor: "transparent",
     borderWidth: 1,
-    borderColor: colors.white,
+    borderColor: colors.white.w1,
   },
 });
