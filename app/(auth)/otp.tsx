@@ -11,8 +11,6 @@ import {
   useClearByFocusCell,
 } from "react-native-confirmation-code-field";
 
-const CELL_COUNT = 6;
-
 const Otp = () => {
   const { t } = useTranslation();
   const router = useRouter();
@@ -61,7 +59,7 @@ const Otp = () => {
           {...props}
           value={value}
           onChangeText={setValue}
-          cellCount={CELL_COUNT}
+          cellCount={6}
           rootStyle={styles.codeFieldRoot}
           keyboardType="number-pad"
           textContentType="oneTimeCode"
@@ -80,7 +78,7 @@ const Otp = () => {
 
         {timer > 0 ? (
           <Text style={[styles.headingLight, styles.center]}>
-            {t("Resend code in ")} {String(timer).padStart(2, "0")}s
+            {t("Resend code in ")}00: {String(timer).padStart(2, "0")}
           </Text>
         ) : (
           <Text style={[styles.headingLight, styles.center]}>
