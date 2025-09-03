@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     fontFamily: "Medium",
     fontWeight: 400,
   },
-  btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
+  btnViewStyle: { marginBottom: hp(2),  width: wp(90)},
 
   footerView: {
     position: "absolute",

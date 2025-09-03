@@ -38,13 +38,13 @@ export const styles = StyleSheet.create({
     fontFamily: "Medium",
     fontWeight: 400,
   },
-  btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
+  btnViewStyle: { marginBottom: hp(2), width: wp(90) },
 
   footerView: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: hp(2), // keeps a little spacing from bottom
+    flex: 1,
+    justifyContent: "flex-end",
+    bottom: hp(2),
     alignItems: "center",
+    marginHorizontal: wp(5),
   },
 });

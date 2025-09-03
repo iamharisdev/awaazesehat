@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     borderColor: "#000",
   },
 
-  btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
+  btnViewStyle: { marginBottom: hp(2), width: wp(90)},
 
   absolute: {
     position: "absolute",

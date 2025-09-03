@@ -39,7 +39,7 @@ export const styles = StyleSheet.create({
     fontWeight: 400,
   },
   footerView: { position: "absolute", bottom: 10, alignSelf: "center" },
-  btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
+  btnViewStyle: { marginBottom: hp(2),  width: wp(90)},
   forgot: {
     color: colors.green.g20,
     fontFamily: "Bold",

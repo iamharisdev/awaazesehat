@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.Medium2,
     borderRadius: 8,
     alignItems: "center",
-    justifyContent: "space-between",
+ 
   },
 
   buttonText: {
