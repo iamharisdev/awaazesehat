@@ -4,16 +4,21 @@ import {
   AppInput,
   Button,
   KeyboardAvoidingWrapper,
+  NotificationSheet,
+  PasswordChangeSheet,
 } from "@/components";
 import { styles } from "@/styles/createPasswordStyle";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 const CreatePassword = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const sheetRef = useRef(null);
+  const ref = useRef(null);
+
   const { check } = useLocalSearchParams<{
     check: string;
   }>();
@@ -50,9 +55,26 @@ const CreatePassword = () => {
             disabled={!password}
             title={check == "signup" ? t("Register") : t("Set password")}
             style={styles.btnViewStyle}
+            btnProps={{
+              onPress: () =>
+                check == "signup"
+                  ? sheetRef?.current?.open()
+                  : ref?.current?.open(),
+            }}
           />
         </View>
       </View>
+
+      <NotificationSheet
+        ref={sheetRef}
+        onAllow={() => console.log("✅ Notifications allowed")}
+        onClose={() => console.log("❌ Closed")}
+      />
+      <PasswordChangeSheet
+        ref={ref}
+        onAllow={() => console.log("✅ Notifications allowed")}
+        onClose={() => console.log("❌ Closed")}
+      />
     </KeyboardAvoidingWrapper>
   );
 };

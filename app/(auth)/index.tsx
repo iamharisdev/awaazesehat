@@ -10,7 +10,7 @@ import { ImageBackground, Text, View } from "react-native";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
 
   const pathname = usePathname();
@@ -33,7 +33,7 @@ const Index = () => {
     >
       <View style={styles.subContainer}>
         <View style={styles.logo}>
-          <Icons.Logo />
+          <Icons.logo />
         </View>
         <Text style={styles.headingText}>
           {" "}
@@ -51,13 +51,13 @@ const Index = () => {
             title={t("Create an account")}
             style={styles.btn1ViewStyle}
             textStyle={styles.btn1TextStyle}
-            btnProps={{ onPress: ()=>switchToAuth('signup') }}
+            btnProps={{ onPress: () => switchToAuth("signup") }}
           />
           <Button
             title={t("Log in")}
             style={styles.btn2ViewStyle}
             textStyle={[styles.btn1TextStyle, styles.btn2TextStyle]}
-           btnProps={{ onPress: ()=>switchToAuth('login') }}
+            btnProps={{ onPress: () => switchToAuth("login") }}
           />
         </View>
       </View>

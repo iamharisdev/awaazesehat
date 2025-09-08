@@ -24,5 +24,12 @@
   "with 6 digit OTP, enter it below.":" with 6 digit OTP, enter it below.",
   "Set new password":"Set new password",
   "Your old password has been reset, set a new password now":"Your old password has been reset, set a new password now",
-  "Set password":"Set password"
+  "Set password":"Set password",
+  "Enable notifications to receive timely patient alerts, follow-up reminders, and important updates directly on your device.":"Enable notifications to receive timely patient alerts, follow-up reminders, and important updates directly on your device.",
+  "Turn on notifications":"Turn on notifications",
+  "Allow notifications":"Allow notifications",
+  "Not now":"Not now",
+  "Password changed":"Password changed",
+  "Your password has been changed successfully.":"Your password has been changed successfully.",
+  "Back to log in":"Back to log in"
 }
