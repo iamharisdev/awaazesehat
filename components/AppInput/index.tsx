@@ -15,10 +15,22 @@ type Props = {
   label?: string;
   inputProps?: TextInputProps;
   password?: boolean;
+  error?: string;
+  touched?: boolean;
 };
 
-const AppInput: React.FC<Props> = ({ label, inputProps, password = false }) => {
+const AppInput: React.FC<Props> = ({
+  label,
+  inputProps,
+  password = false,
+  error,
+  touched
+}) => {
   const [securePassword, setSecurePassword] = useState(password);
+  
+  const showError = touched && error;
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{label}</Text>
@@ -34,6 +46,7 @@ const AppInput: React.FC<Props> = ({ label, inputProps, password = false }) => {
           </TouchableOpacity>
         )}
       </View>
+       {showError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };

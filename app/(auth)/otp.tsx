@@ -91,7 +91,7 @@ const Otp = () => {
       </View>
       <View style={styles.absolute}>
         <Button
-          disabled={!value}
+          disabled={value.length !== 6}
           title={t("Continue")}
           style={styles.btnViewStyle}
           btnProps={{

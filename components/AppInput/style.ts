@@ -26,5 +26,10 @@ export const styles = StyleSheet.create({
   },
   inputStyle:{
     width:wp(78),
-  }
+  },
+   errorText: {
+    marginTop: 4,
+    color: colors.red.r40,
+    fontSize: 12,
+  },
 });
