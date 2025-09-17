@@ -1,5 +1,5 @@
 const loginSchema = () => {
-  return { email: "", password: "" };
+  return { email: "haris@gmail.com", password: "password" };
 };
 
 

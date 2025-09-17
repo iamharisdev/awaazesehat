@@ -50,5 +50,6 @@ export const colors = {
   white: {
     w1: "#FFFFFF",
     w2: "#FAFAFA",
+    w3:"#F2F2F2"
   },
 };

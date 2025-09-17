@@ -2,7 +2,7 @@
 import i18n from "@/i18n";
 import { MakeStyles } from "@/styles/rootStyle";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
@@ -30,7 +30,9 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent() {
-  const { statusBar } = useAppSelector((state) => state.user);
+  const { statusBar, token } = useAppSelector((state) => state.user);
+  const segments = useSegments();
+  const router = useRouter();
 
   const [loaded] = useFonts({
     Regular: require("../assets/fonts/Roboto-Regular.ttf"),
@@ -47,13 +49,21 @@ function RootLayoutContent() {
     }
   }, [loaded]);
 
+  const inAuthGroup = segments[0] === "(auth)";
+
+  useEffect(() => {
+    if (token && inAuthGroup) {
+      router.replace("/(tabs)");
+    } else if (!token && !inAuthGroup) {
+      router.replace("/(auth)");
+    }
+  }, [token, inAuthGroup]);
+
   if (!loaded) {
     return null;
   }
 
   const styles = MakeStyles(statusBar);
-
-
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
@@ -63,8 +73,8 @@ function RootLayoutContent() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(home)" />
       </Stack>
     </SafeAreaView>
   );

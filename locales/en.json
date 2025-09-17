@@ -37,5 +37,11 @@
   "Not now":"Not now",
   "Password changed":"Password changed",
   "Your password has been changed successfully.":"Your password has been changed successfully.",
-  "Back to log in":"Back to log in"
+  "Back to log in":"Back to log in",
+  "Home":"Home",
+  "Search":"Search",
+  "Patients":"Patients",
+  "Activity":"Activity",
+  "Let’s find your first patient":"Let’s find your first patient",
+  "Enter a patient’s CNIC or number to view their details and medical history.":"Enter a patient’s CNIC or number to view their details and medical history."
 }

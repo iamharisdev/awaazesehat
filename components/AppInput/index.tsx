@@ -1,15 +1,14 @@
 // components/AppInput.tsx
+import { Icons } from "@/assets/svgs";
 import React, { useState } from "react";
 import {
-  View,
   Text,
   TextInput,
-  TouchableOpacity,
   TextInputProps,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./style";
-import { Icons } from "@/assets/svgs";
 
 type Props = {
   label?: string;
@@ -24,12 +23,10 @@ const AppInput: React.FC<Props> = ({
   inputProps,
   password = false,
   error,
-  touched
+  touched,
 }) => {
   const [securePassword, setSecurePassword] = useState(password);
-  
   const showError = touched && error;
-
 
   return (
     <View style={styles.container}>
@@ -46,7 +43,7 @@ const AppInput: React.FC<Props> = ({
           </TouchableOpacity>
         )}
       </View>
-       {showError && <Text style={styles.errorText}>{error}</Text>}
+      {showError && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };
