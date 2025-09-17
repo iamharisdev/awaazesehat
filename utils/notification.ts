@@ -3,7 +3,7 @@ import * as Device from "expo-device";
 import { Platform, Linking } from "react-native";
 
 
-async function enableNotifications() {
+export async function enableNotifications() {
   if (!Device.isDevice) {
     alert("Must use physical device for push notifications");
     return;
@@ -38,4 +38,3 @@ async function enableNotifications() {
 }
 
 
-export {enableNotifications}
