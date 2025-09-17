@@ -1,5 +1,5 @@
 import { colors } from "@/utils/colors";
-import { hp, normalizeFont, wp } from "@/utils/responsive";
+import { hp, normalizeFont, pxToWp, wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: normalizeFont(23),
     color: colors.black.b05,
-    marginVertical: hp(2),
+    marginVertical: hp(1),
   },
   headingLight: {
     fontFamily: "Regular",
     fontWeight: 500,
     fontSize: normalizeFont(14),
     color: colors.black.b40,
-    marginBottom: hp(5),
+    marginBottom: hp(3),
   },
   footerText: {
     color: colors.black.b05,
@@ -39,5 +39,14 @@ export const styles = StyleSheet.create({
     fontWeight: 400,
   },
   footerView: { position: "absolute", bottom: 10, alignSelf: "center" },
-  btnViewStyle: { marginBottom: hp(2) },
+  btnViewStyle: { marginBottom: hp(2),  width: wp(90)},
+  forgot: {
+    color: colors.green.g20,
+    fontFamily: "Bold",
+    fontWeight: 600,
+    fontSize: normalizeFont(13),
+    height:hp(3),
+
+  
+  },
 });

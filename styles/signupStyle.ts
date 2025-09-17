@@ -16,14 +16,14 @@ export const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: normalizeFont(23),
     color: colors.black.b05,
-    marginVertical: hp(2),
+    marginVertical: hp(1),
   },
   headingLight: {
     fontFamily: "Regular",
     fontWeight: 500,
     fontSize: normalizeFont(14),
     color: colors.black.b40,
-    marginBottom: hp(5),
+    marginBottom: hp(3),
   },
   footerText: {
     color: colors.black.b05,
@@ -38,13 +38,13 @@ export const styles = StyleSheet.create({
     fontFamily: "Medium",
     fontWeight: 400,
   },
-  btnViewStyle: { marginBottom: hp(2), width: wp(pxToWp(380)) },
+  btnViewStyle: { marginBottom: hp(2), width: wp(90) },
 
   footerView: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: hp(2), // keeps a little spacing from bottom
+    flex: 1,
+    justifyContent: "flex-end",
+    bottom: hp(2),
     alignItems: "center",
+    marginHorizontal: wp(5),
   },
 });

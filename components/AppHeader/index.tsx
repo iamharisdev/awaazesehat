@@ -1,5 +1,3 @@
-// components/AppHeader.tsx
-import { Icons } from "@/assets/svgs";
 import React, { ReactNode } from "react";
 import { Text, View } from "react-native";
 import { styles } from "./style";
@@ -12,6 +10,8 @@ type Props = {
   rightIcon?: ReactNode;
   onLeftPress?: () => void;
   onRightPress?: () => void;
+  titleStyle?: object;
+  containerStyle?: object;
 };
 
 const AppHeader: React.FC<Props> = ({
@@ -20,37 +20,39 @@ const AppHeader: React.FC<Props> = ({
   rightIcon,
   onLeftPress,
   onRightPress,
+  titleStyle,
+  containerStyle,
 }) => {
-  const IconRender = (check: string) => {
-    const router = useRouter();
+  const router = useRouter();
 
-    if (leftIcon || rightIcon) {
+  const renderIconButton = (
+    icon?: ReactNode,
+    onPress?: () => void,
+    fallbackPress?: () => void,
+    accessibilityLabel?: string
+  ) => {
+    if (icon) {
       return (
         <Button
           style={styles.btnStyle}
-          icon={check == "left" ? leftIcon : rightIcon}
+          icon={icon}
           btnProps={{
-            onPress:
-              check === "left"
-                ? onLeftPress
-                  ? onLeftPress
-                  : () => router.back()
-                : onRightPress,
+            onPress: onPress || fallbackPress,
+            accessibilityLabel,
           }}
         />
       );
-    } else {
-      return <View style={styles.space} />;
     }
+    return <View style={styles.space} />;
   };
 
   return (
-    <View style={styles.container}>
-      {IconRender("left")}
+    <View style={[styles.container, containerStyle]}>
+      {renderIconButton(leftIcon, onLeftPress, () => router.back(), "Go back")}
 
-      {title ? <Text>{title}</Text> : null}
+      {title ? <Text style={[titleStyle]}>{title}</Text> : null}
 
-      {IconRender("right")}
+      {renderIconButton(rightIcon, onRightPress, undefined, "Right action")}
     </View>
   );
 };
