@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingWrapper,
 } from "@/components";
 import { styles } from "@/styles/signupStyle";
+import { ROUTES } from "@/utils/routes";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -49,7 +50,7 @@ const Signup = () => {
             btnProps={{
               onPress: () =>
                 router.push({
-                  pathname: "/otp",
+                  pathname: ROUTES.verifyOtp,
                   params: { email,check:"signup" },
                 }),
             }}
