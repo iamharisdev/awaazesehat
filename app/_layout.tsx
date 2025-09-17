@@ -6,6 +6,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
+
 import { I18nextProvider } from "react-i18next";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
@@ -51,6 +52,8 @@ function RootLayoutContent() {
   }
 
   const styles = MakeStyles(statusBar);
+
+
 
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>

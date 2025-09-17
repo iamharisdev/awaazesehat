@@ -2,3 +2,6 @@ export {default as Button} from './Button';
 export {default as AppHeader} from './AppHeader'
 export {default as AppInput} from './AppInput'
 export {default as KeyboardAvoidingWrapper} from './KeyboardAvoidingWrapper'
+export {default as BottomSheet} from './BottomSheet'
+export {default as NotificationPopup} from './NotificationPopup'
+export {default as PasswordChangePopup} from './PasswordChangePopup'

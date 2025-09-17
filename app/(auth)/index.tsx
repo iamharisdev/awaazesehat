@@ -11,7 +11,7 @@ import { ImageBackground, Text, View } from "react-native";
 
 const Index = () => {
   const dispatch = useAppDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const router = useRouter();
 
   const pathname = usePathname();
@@ -34,7 +34,7 @@ const Index = () => {
     >
       <View style={styles.subContainer}>
         <View style={styles.logo}>
-          <Icons.Logo />
+          <Icons.logo />
         </View>
         <Text style={styles.headingText}>
           {" "}
