@@ -4,14 +4,14 @@ import {
   AppInput,
   Button,
   KeyboardAvoidingWrapper,
-  NotificationSheet,
-  PasswordChangeSheet,
+  NotificationPopup,
+  PasswordChangePopup,
 } from "@/components";
 import { passwordValidation } from "@/schemas/authValidation";
 import { styles } from "@/styles/createPasswordStyle";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { Formik } from "formik";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
@@ -32,7 +32,6 @@ const CreatePassword = () => {
         validationSchema={passwordValidation}
         onSubmit={(values) => {
           check == "signup" ? sheetRef?.current?.open() : ref?.current?.open(),
-            console.log(values);
         }}
       >
         {({
@@ -82,17 +81,8 @@ const CreatePassword = () => {
                 />
               </View>
             </View>
-
-            <NotificationSheet
-              ref={sheetRef}
-              onAllow={() => console.log("✅ Notifications allowed")}
-              onClose={() => console.log("❌ Closed")}
-            />
-            <PasswordChangeSheet
-              ref={ref}
-              onAllow={() => console.log("✅ Notifications allowed")}
-              onClose={() => console.log("❌ Closed")}
-            />
+            <NotificationPopup ref={sheetRef} />
+            <PasswordChangePopup ref={ref} />
           </>
         )}
       </Formik>

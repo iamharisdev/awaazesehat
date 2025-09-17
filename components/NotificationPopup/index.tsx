@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./style";
 import BottomSheet from "../BottomSheet";
 import { Icons } from "@/assets/svgs";
-import { enableNotifications } from "@/utils/functions";
+import { enableNotifications } from "@/utils/notification";
 import Button from "../Button";
 import { useTranslation } from "react-i18next";
 
@@ -18,7 +18,7 @@ type Props = {
   onClose?: () => void;
 };
 
-const NotificationSheet = forwardRef<NotificationSheetRef, Props>(
+const NotificationPopup = forwardRef<NotificationSheetRef, Props>(
   ({ onAllow, onClose }, ref) => {
     const sheetRef = useRef(null);
     const { t } = useTranslation();
@@ -27,6 +27,13 @@ const NotificationSheet = forwardRef<NotificationSheetRef, Props>(
       open: () => sheetRef.current?.open(),
       close: () => sheetRef.current?.close(),
     }));
+
+    const AllowNotification = async () => {
+      const token = await enableNotifications();
+      console.log("✅ Notifications enabled, token:", token);
+      onAllow?.();
+      sheetRef.current?.close();
+    };
 
     return (
       <BottomSheet ref={sheetRef} sheetHeight={350}>
@@ -58,12 +65,7 @@ const NotificationSheet = forwardRef<NotificationSheetRef, Props>(
           title={t("Allow notifications")}
           style={styles.primaryBtn}
           btnProps={{
-            onPress: async () => {
-              const token = await enableNotifications();
-              console.log("✅ Notifications enabled, token:", token);
-              onAllow?.();
-              sheetRef.current?.close();
-            },
+            onPress: async () => AllowNotification,
           }}
         />
 
@@ -83,4 +85,4 @@ const NotificationSheet = forwardRef<NotificationSheetRef, Props>(
   }
 );
 
-export default NotificationSheet;
+export default NotificationPopup;

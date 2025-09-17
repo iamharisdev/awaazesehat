@@ -1,6 +1,7 @@
 import { Icons } from "@/assets/svgs";
 import { AppHeader, Button, KeyboardAvoidingWrapper } from "@/components";
 import { styles } from "@/styles/otpStyle";
+import { ROUTES } from "@/utils/routes";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -52,7 +53,7 @@ const Otp = () => {
             ? t("You will receive a mail with a verification pin at ")
             : t("We sent you an email at ")}
           <Text style={styles.email}>{email}</Text>
-          {check == "login" ? t("with 6 digit OTP, enter it below.") : ""}
+          {check == "login" && t("with 6 digit OTP, enter it below.")}
         </Text>
 
         <CodeField
@@ -78,7 +79,7 @@ const Otp = () => {
 
         {timer > 0 ? (
           <Text style={[styles.headingLight, styles.center]}>
-            {t("Resend code in ")}00: {String(timer).padStart(2, "0")}
+            {t("Resend code in 00:")}{String(timer).padStart(2, "0")}
           </Text>
         ) : (
           <Text style={[styles.headingLight, styles.center]}>
@@ -97,7 +98,7 @@ const Otp = () => {
           btnProps={{
             onPress: () =>
               router.push({
-                pathname: "/createPassword",
+                pathname: ROUTES.createPassword,
                 params: { check },
               }),
           }}

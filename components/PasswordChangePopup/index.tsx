@@ -1,11 +1,10 @@
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { View, Text } from "react-native";
-import { styles } from "./style";
-import BottomSheet from "../BottomSheet";
 import { Icons } from "@/assets/svgs";
-import { enableNotifications } from "@/utils/functions";
-import Button from "../Button";
+import React, { forwardRef, useImperativeHandle, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
+import BottomSheet from "../BottomSheet";
+import Button from "../Button";
+import { styles } from "./style";
 
 export type NotificationSheetRef = {
   open: () => void;
@@ -17,7 +16,7 @@ type Props = {
   onClose?: () => void;
 };
 
-const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
+const PasswordChangePopup = forwardRef<NotificationSheetRef, Props>(
   ({ onAllow, onClose }, ref) => {
     const sheetRef = useRef(null);
     const { t } = useTranslation();
@@ -51,23 +50,10 @@ const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
           {t("Your password has been changed successfully.")}
         </Text>
 
-        <Button
-          title={t("Back to log in")}
-          style={styles.primaryBtn}
-          btnProps={{
-            onPress: async () => {
-              const token = await enableNotifications();
-              console.log("✅ Notifications enabled, token:", token);
-              onAllow?.();
-              sheetRef.current?.close();
-            },
-          }}
-        />
-
-      
+        <Button title={t("Back to log in")} style={styles.primaryBtn} />
       </BottomSheet>
     );
   }
 );
 
-export default PasswordChangeSheet;
+export default PasswordChangePopup;

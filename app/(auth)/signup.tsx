@@ -7,6 +7,7 @@ import {
 } from "@/components";
 import { Formik } from "formik";
 import { styles } from "@/styles/signupStyle";
+import { ROUTES } from "@/utils/routes";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -26,7 +27,7 @@ const Signup = () => {
         validationSchema={SignupValidation}
         onSubmit={({ email }) => {
           router.push({
-            pathname: "/otp",
+            pathname: ROUTES.verifyOtp,
             params: { email, check: "signup" },
           });
         }}

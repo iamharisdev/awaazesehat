@@ -6,8 +6,8 @@ import {
   KeyboardAvoidingWrapper,
 } from "@/components";
 import { SignupValidation } from "@/schemas/authValidation";
-import { SignupSchema } from "@/schemas/schema";
 import { styles } from "@/styles/forgotStyle";
+import { ROUTES } from "@/utils/routes";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
 import React from "react";
@@ -22,11 +22,11 @@ const ForgotPassword = () => {
     <KeyboardAvoidingWrapper>
       <AppHeader leftIcon={<Icons.left />} />
       <Formik
-        initialValues={SignupSchema()}
+        initialValues={{ email: "" }}
         validationSchema={SignupValidation}
         onSubmit={({ email }) => {
           router.push({
-            pathname: "/otp",
+            pathname: ROUTES.verifyOtp,
             params: { email, check: "login" },
           });
         }}
