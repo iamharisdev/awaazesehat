@@ -17,8 +17,8 @@ import { Text, View } from "react-native";
 
 const CreatePassword = () => {
   const { t } = useTranslation();
-  const sheetRef = useRef(null);
-  const ref = useRef(null);
+  const notificationRef = useRef(null);
+  const passwordRef = useRef(null);
 
   const { check } = useLocalSearchParams<{
     check: string;
@@ -31,7 +31,7 @@ const CreatePassword = () => {
         initialValues={{ password: "" }}
         validationSchema={passwordValidation}
         onSubmit={(values) => {
-          check == "signup" ? sheetRef?.current?.open() : ref?.current?.open(),
+          check == "signup" ? notificationRef?.current?.open() : passwordRef?.current?.open(),
         }}
       >
         {({
@@ -81,8 +81,8 @@ const CreatePassword = () => {
                 />
               </View>
             </View>
-            <NotificationPopup ref={sheetRef} />
-            <PasswordChangePopup ref={ref} />
+            <NotificationPopup ref={notificationRef} />
+            <PasswordChangePopup ref={passwordRef} />
           </>
         )}
       </Formik>
