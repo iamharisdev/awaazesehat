@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+
 import { styles } from "./style";
 import BottomSheet from "../BottomSheet";
 import { Icons } from "@/assets/svgs";
@@ -17,7 +18,7 @@ type Props = {
   onClose?: () => void;
 };
 
-const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
+const NotificationPopup = forwardRef<NotificationSheetRef, Props>(
   ({ onAllow, onClose }, ref) => {
     const sheetRef = useRef(null);
     const { t } = useTranslation();
@@ -28,9 +29,9 @@ const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
     }));
 
     return (
-      <BottomSheet ref={sheetRef} sheetHeight={260}>
+      <BottomSheet ref={sheetRef} sheetHeight={350}>
         <View style={styles.flex}>
-          <Text style={styles.title}>{t("Password changed")}</Text>
+          <Text style={styles.title}>{t("Turn on notifications")}</Text>
           <Button
             style={styles.closeButton}
             icon={<Icons.cross />}
@@ -44,15 +45,17 @@ const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
         </View>
 
         <View style={styles.iconWrapper}>
-          <Icons.mobile />
+          <Icons.notification />
         </View>
 
         <Text style={styles.description}>
-          {t("Your password has been changed successfully.")}
+          {t(
+            "Enable notifications to receive timely patient alerts, follow-up reminders, and important updates directly on your device."
+          )}
         </Text>
 
         <Button
-          title={t("Back to log in")}
+          title={t("Allow notifications")}
           style={styles.primaryBtn}
           btnProps={{
             onPress: async () => {
@@ -64,10 +67,20 @@ const PasswordChangeSheet = forwardRef<NotificationSheetRef, Props>(
           }}
         />
 
-      
+        <Button
+          title={t("Not now")}
+          style={styles.linkButton}
+          textStyle={styles.link}
+          btnProps={{
+            onPress: async () => {
+              onClose?.();
+              sheetRef.current?.close();
+            },
+          }}
+        />
       </BottomSheet>
     );
   }
 );
 
-export default PasswordChangeSheet;
+export default NotificationPopup;

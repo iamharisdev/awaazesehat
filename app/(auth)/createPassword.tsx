@@ -4,7 +4,9 @@ import {
   AppInput,
   Button,
   KeyboardAvoidingWrapper,
+  NotificationPopup,
   NotificationSheet,
+  PasswordChangePopup,
   PasswordChangeSheet,
 } from "@/components";
 import { styles } from "@/styles/createPasswordStyle";
@@ -65,16 +67,8 @@ const CreatePassword = () => {
         </View>
       </View>
 
-      <NotificationSheet
-        ref={sheetRef}
-        onAllow={() => console.log("✅ Notifications allowed")}
-        onClose={() => console.log("❌ Closed")}
-      />
-      <PasswordChangeSheet
-        ref={ref}
-        onAllow={() => console.log("✅ Notifications allowed")}
-        onClose={() => console.log("❌ Closed")}
-      />
+      <NotificationPopup ref={sheetRef} />
+      <PasswordChangePopup ref={ref} />
     </KeyboardAvoidingWrapper>
   );
 };
