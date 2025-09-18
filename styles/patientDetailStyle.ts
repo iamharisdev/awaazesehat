@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
 
   subContainer: {
     flex: 1,
-    paddingHorizontal: wp(2),
+    paddingHorizontal: wp(3),
   },
 
 });

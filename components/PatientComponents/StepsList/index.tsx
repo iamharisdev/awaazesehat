@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { colors } from "@/utils/colors";
 import { StepItem } from "../StepItem";
 
-export const StepsList = () => {
+const StepsList = () => {
   return (
     <View>
       <Text style={styles.progress}>0/9 Steps completed</Text>
@@ -19,6 +19,9 @@ export const StepsList = () => {
     </View>
   );
 };
+
+
+export default StepsList
 
 const styles = StyleSheet.create({
   progress: {

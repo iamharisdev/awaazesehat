@@ -1,6 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { colors } from "@/utils/colors";
+import { Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./style";
 
 interface TabSwitcherProps {
   tabs: string[];
@@ -21,12 +21,7 @@ export const TabSwitcher: React.FC<TabSwitcherProps> = ({
           style={[styles.tab, activeIndex === i && styles.active]}
           onPress={() => onChange(i)}
         >
-          <Text
-            style={[
-              styles.label,
-              activeIndex === i && { color: colors.green.g80, fontWeight: "600" },
-            ]}
-          >
+          <Text style={[styles.label, activeIndex === i && styles.activeStyle]}>
             {tab}
           </Text>
         </TouchableOpacity>
@@ -34,24 +29,3 @@ export const TabSwitcher: React.FC<TabSwitcherProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: colors.black.b20,
-  },
-  tab: {
-    flex: 1,
-    paddingVertical: 10,
-    alignItems: "center",
-  },
-  active: {
-    borderBottomWidth: 2,
-    borderColor: colors.green.g80,
-  },
-  label: {
-    fontSize: 14,
-    color: colors.black.b60,
-  },
-});
