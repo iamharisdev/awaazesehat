@@ -1,5 +1,6 @@
 import { Icons } from "@/assets/svgs";
 import { TabBarIcon } from "@/components";
+import { styles } from "@/styles/bottomTabStyle";
 import { colors } from "@/utils/colors";
 import { Tabs } from "expo-router";
 import React from "react";
@@ -21,18 +22,8 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          backgroundColor: colors.white.w2,
-          borderTopWidth: 1,
-          height: 60,
-          elevation: 5,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontFamily: "Medium",
-          fontWeight: "500",
-          color: colors.black.b40,
-        },
+        tabBarStyle: styles.tabBarStyle,
+        tabBarLabelStyle: styles.tabBarLabelStyle,
         tabBarButton: (props) => (
           <TouchableOpacity activeOpacity={0} {...props} />
         ),

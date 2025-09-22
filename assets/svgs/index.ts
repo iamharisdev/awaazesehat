@@ -9,8 +9,13 @@ import home from "./home.svg";
 import search from "./search.svg";
 import patients from "./patients.svg";
 import activity from "./activity.svg";
-import fillSearch from './fillSearch.svg'
-import arrowRight from './arrowRight.svg'
+import fillSearch from "./fillSearch.svg";
+import arrowRight from "./arrowRight.svg";
+import bleeding from "./bleeding.svg";
+import bp from "./bp.svg";
+import backPain from "./backPain.svg";
+import flow from "./flow.svg";
+
 export const Icons = {
   logo: logo,
   cross: cross,
@@ -23,6 +28,10 @@ export const Icons = {
   search: search,
   patients: patients,
   activity: activity,
-  fillSearch:fillSearch,
-  arrowRight:arrowRight
+  fillSearch: fillSearch,
+  arrowRight: arrowRight,
+  bleeding: bleeding,
+  bp: bp,
+  backPain: backPain,
+  flow: flow,
 } as const;

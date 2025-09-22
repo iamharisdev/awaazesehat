@@ -17,7 +17,7 @@ const Index = () => {
           placeholder={t("Search for patient CNIC, number or name")}
         />
         <PatientCard
-          name="Momina"
+          name="Fatima Ahmed"
           ga="GA-WA"
           onPress={() => router.push("patientDetails")}
         />

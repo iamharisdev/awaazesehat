@@ -13,21 +13,20 @@ import { View } from "react-native";
 import { styles } from "@/styles/patientDetailStyle";
 
 const data = [
-  { icon: "🩸", title: "Bleeding", status: "Critical", time: "10h ago" },
+  { icon: <Icons.bleeding/>, title: "Bleeding", status: "Critical", time: "10h ago" },
   {
-    icon: "🧡",
+    icon: <Icons.bp/>,
     title: "High blood pressure",
     status: "Mild",
     time: "from start",
   },
   {
-    icon: "🌿",
+    icon: <Icons.backPain/>,
     title: "Back pain",
     status: "Normal",
     time: "since 1st trimester",
   },
-  { icon: "🩺", title: "Anemia", status: "Mild", time: "since 1st week" },
-];
+]
 
 export default function PatientDetail() {
   const [tab, setTab] = useState(0);
