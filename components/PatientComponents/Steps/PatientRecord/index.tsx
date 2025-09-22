@@ -1,14 +1,16 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { StepItem } from "../StepItem";
+
 import { styles } from "./style";
 import { useTranslation } from "react-i18next";
 import { steps } from "@/utils/Json";
+import StepItem from "../../StepItem";
 
-const StepsList = () => {
+
+const PatientRecord = () => {
   const { t } = useTranslation();
   return (
-    <View style={styles.container}>
+    <View >
       <Text style={styles.progress}>{t("0/9 Steps completed")}</Text>
       <Text style={styles.desc}>
         {t(
@@ -23,4 +25,4 @@ const StepsList = () => {
   );
 };
 
-export default StepsList;
+export default PatientRecord;

@@ -35,7 +35,7 @@ const Button: React.FC<CustomButtonProps> = ({
       style={[
         styles.button,
         {
-          justifyContent: icon ? "space-between" : "center",
+          justifyContent:  "center",
           backgroundColor: disabled ? colors.green.g70 : colors.green.g20,
         },
         style,

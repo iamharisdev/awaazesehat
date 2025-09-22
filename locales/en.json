@@ -55,5 +55,12 @@
   "Record gynecological history": "Record gynecological history",
   "Review past medical history": "Review past medical history",
   "Patient profile":"Patient profile",
-  "Patient red flags":"Patient red flags"
+  "Patient red flags":"Patient red flags",
+  "Follow-up questions help fill gaps in the patient’s record, capture ongoing concerns, and ensure you will have a complete picture before the visit.":"Follow-up questions help fill gaps in the patient’s record, capture ongoing concerns, and ensure you will have a complete picture before the visit.",
+  "Add visit details, prescriptions, and advice — all stored safely in the patient’s EMR.":"Add visit details, prescriptions, and advice — all stored safely in the patient’s EMR.",
+  "Add Visit":"Add Visit",
+  "Start now":"Start now",
+  "Upload reports here with a short voice note for your patient.":"Upload reports here with a short voice note for your patient.",
+  "Upload report":"Upload report"
+
 }
