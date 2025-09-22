@@ -1,10 +1,13 @@
 import { Icons } from "@/assets/svgs";
 import {
   AppHeader,
+  Emr,
+  FollowUpQuestion,
   KeyboardAvoidingWrapper,
   PatientHeader,
   PatientInfoCard,
-  StepsList,
+  PatientRecord,
+  Reports,
   SymptomItem,
 } from "@/components";
 import { TabSwitcher } from "@/components/PatientComponents/TabSwitcher";
@@ -21,6 +24,21 @@ export default function PatientDetail() {
   const router = useRouter();
 
   const restCount = Symptoms.length - 3;
+
+  const tabRendering = () => {
+    switch (tab) {
+      case 0:
+        return <PatientRecord />;
+      case 1:
+        return <FollowUpQuestion />;
+      case 2:
+        return <Reports />;
+      case 3:
+        return <Emr />;
+      default:
+        break;
+    }
+  };
 
   return (
     <KeyboardAvoidingWrapper>
@@ -56,8 +74,7 @@ export default function PatientDetail() {
         </TouchableOpacity>
 
         <TabSwitcher tabs={tabSwitcher} activeIndex={tab} onChange={setTab} />
-
-        {tab === 0 && <StepsList />}
+        <View style={styles.cardStyle}>{tabRendering()}</View>
       </View>
     </KeyboardAvoidingWrapper>
   );

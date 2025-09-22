@@ -1,20 +1,24 @@
 import { Icons } from "@/assets/svgs";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./style";
 
 interface StepItemProps {
   title: string;
   completed?: boolean;
+  icon?: ReactNode;
   onPress?: () => void;
 }
 
-export const StepItem: React.FC<StepItemProps> = ({ title, onPress }) => {
+const StepItem: React.FC<StepItemProps> = ({ title, icon, onPress }) => {
   return (
     <TouchableOpacity style={styles.row} onPress={onPress}>
-      <View style={styles.circle} />
+      {icon ? icon : <View style={styles.circle} />}
       <Text style={styles.title}>{title}</Text>
       <Icons.arrowRight />
     </TouchableOpacity>
   );
 };
+
+
+export default StepItem

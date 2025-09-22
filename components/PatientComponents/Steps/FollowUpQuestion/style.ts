@@ -2,16 +2,8 @@ import { colors } from '@/utils/colors';
 import { hp, wp } from '@/utils/responsive';
 import { StyleSheet } from 'react-native';
 
-export 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: colors.white.w1,
-    borderWidth: 1,
-    borderColor: colors.black.b80,
-    borderRadius: 10,
-    padding: 10,
-    marginTop: hp(2),
-  },
+export const styles = StyleSheet.create({
+
   progress: {
     fontSize: 14,
     color: colors.black.b40,
@@ -19,8 +11,6 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 6,
     width: wp(38),
-    marginHorizontal: 12,
-    marginTop: 12,
     borderWidth: 1,
     borderColor: colors.black.b70,
     fontFamily: "Medium",
@@ -29,10 +19,22 @@ const styles = StyleSheet.create({
   desc: {
     fontSize: 14,
     color: colors.black.b40,
-    marginHorizontal: 12,
     marginVertical: 6,
     fontFamily: "Regular",
     fontWeight: "400",
   },
+  row:{
+    flexDirection:'row',
+    alignItems:'center',
+       marginTop:hp(2)
+  },
+  textStyle:{
+    fontWeight:'600',
+    fontFamily:'Bold',
+    fontSize:14,
+    color:colors.green.g20,
+
+ 
+  }
 });
 
