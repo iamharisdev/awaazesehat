@@ -1,6 +1,6 @@
 export const ROUTES = {
-  signUp: 'signUp',
-  login: 'login',
+  signUp: '/signup',
+  login: '/login',
   forgotPassword: '/forgot',
   verifyOtp: '/otp',
   createPassword: '/createPassword',

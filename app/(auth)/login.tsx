@@ -13,17 +13,22 @@ import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { LoginValidation } from "@/schemas/authValidation";
 import { loginSchema } from "@/schemas/schema";
+import { useAppDispatch } from "@/store";
+import { setToken } from "@/features/userSlice";
 
 const Login = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
     <KeyboardAvoidingWrapper>
       <AppHeader leftIcon={<Icons.left />} />
       <Formik
         initialValues={loginSchema()}
         validationSchema={LoginValidation}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          dispatch(setToken("abc"));
+        }}
       >
         {({
           handleChange,
@@ -79,7 +84,7 @@ const Login = () => {
                   title={t("Log in")}
                   style={styles.btnViewStyle}
                   btnProps={{
-                    onPress:()=>handleSubmit()
+                    onPress: () => handleSubmit(),
                   }}
                 />
               </View>

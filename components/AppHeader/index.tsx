@@ -50,7 +50,7 @@ const AppHeader: React.FC<Props> = ({
     <View style={[styles.container, containerStyle]}>
       {renderIconButton(leftIcon, onLeftPress, () => router.back(), "Go back")}
 
-      {title ? <Text style={[titleStyle]}>{title}</Text> : null}
+      {title ? <Text style={[styles.title,titleStyle]}>{title}</Text> : null}
 
       {renderIconButton(rightIcon, onRightPress, undefined, "Right action")}
     </View>

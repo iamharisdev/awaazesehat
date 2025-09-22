@@ -31,7 +31,9 @@ const CreatePassword = () => {
         initialValues={{ password: "" }}
         validationSchema={passwordValidation}
         onSubmit={(values) => {
-          check == "signup" ? notificationRef?.current?.open() : passwordRef?.current?.open(),
+          check == "signup"
+            ? notificationRef?.current?.open()
+            : passwordRef?.current?.open();
         }}
       >
         {({

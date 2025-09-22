@@ -5,6 +5,17 @@ import eyeOff from "./eye-off.svg";
 import eye from "./eye.svg";
 import notification from "./notification.svg";
 import mobile from "./mobile.svg";
+import home from "./home.svg";
+import search from "./search.svg";
+import patients from "./patients.svg";
+import activity from "./activity.svg";
+import fillSearch from "./fillSearch.svg";
+import arrowRight from "./arrowRight.svg";
+import bleeding from "./bleeding.svg";
+import bp from "./bp.svg";
+import backPain from "./backPain.svg";
+import flow from "./flow.svg";
+import circlePlus from './circlePlus.svg'
 
 export const Icons = {
   logo: logo,
@@ -14,4 +25,15 @@ export const Icons = {
   eyeOff: eyeOff,
   notification: notification,
   mobile: mobile,
+  home: home,
+  search: search,
+  patients: patients,
+  activity: activity,
+  fillSearch: fillSearch,
+  arrowRight: arrowRight,
+  bleeding: bleeding,
+  bp: bp,
+  backPain: backPain,
+  flow: flow,
+  circlePlus:circlePlus
 } as const;
