@@ -1,7 +1,7 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { colors } from "@/utils/colors";
 import { Icons } from "@/assets/svgs";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { styles } from "./style";
 
 interface StepItemProps {
   title: string;
@@ -18,27 +18,3 @@ export const StepItem: React.FC<StepItemProps> = ({ title, completed, onPress })
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderColor: colors.black.b10,
-    paddingHorizontal: 12,
-  },
-  circle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.black.b40,
-    marginRight: 10,
-  },
-  title: {
-    flex: 1,
-    fontSize: 14,
-    color: colors.black.b100,
-  },
-});

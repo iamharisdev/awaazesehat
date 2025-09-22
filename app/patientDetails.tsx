@@ -9,24 +9,31 @@ import {
   StepsList,
   SymptomItem,
 } from "@/components";
-import { View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "@/styles/patientDetailStyle";
+import { colors } from "@/utils/colors";
+import { hp, wp } from "@/utils/responsive";
 
 const data = [
-  { icon: <Icons.bleeding/>, title: "Bleeding", status: "Critical", time: "10h ago" },
   {
-    icon: <Icons.bp/>,
+    icon: <Icons.bleeding />,
+    title: "Bleeding",
+    status: "Critical",
+    time: "10h ago",
+  },
+  {
+    icon: <Icons.bp />,
     title: "High blood pressure",
     status: "Mild",
     time: "from start",
   },
   {
-    icon: <Icons.backPain/>,
+    icon: <Icons.backPain />,
     title: "Back pain",
     status: "Normal",
     time: "since 1st trimester",
   },
-]
+];
 
 export default function PatientDetail() {
   const [tab, setTab] = useState(0);
@@ -44,7 +51,7 @@ export default function PatientDetail() {
 
         <PatientInfoCard ga="32 weeks, 4 days" edd="15 Dec 2025" />
 
-        <View style={{marginTop:20}}>
+        <View style={{ marginTop: 20 }}>
           {data.map((item, index) => (
             <SymptomItem
               key={index.toString()}
@@ -53,6 +60,11 @@ export default function PatientDetail() {
             />
           ))}
         </View>
+
+        <TouchableOpacity style={styles.moreContainer}>
+          <Icons.circlePlus />
+          <Text style={styles.moreTextStyle}>more red flags</Text>
+        </TouchableOpacity>
 
         <TabSwitcher
           tabs={["Patient record", "Follow-up questions", "Reports", "EMR"]}
