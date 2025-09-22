@@ -2,6 +2,7 @@ import { Icons } from "@/assets/svgs";
 import { TabBarIcon } from "@/components";
 import { styles } from "@/styles/bottomTabStyle";
 import { colors } from "@/utils/colors";
+import { tabConfig } from "@/utils/Json";
 import { Tabs } from "expo-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -9,14 +10,6 @@ import { TouchableOpacity } from "react-native";
 
 export default function TabLayout() {
   const { t } = useTranslation();
-
-
-  const tabConfig = [
-    { name: "index", title: t("Home"), icon: <Icons.home /> },
-    { name: "search", title: t("Search"), icon: <Icons.search /> },
-    { name: "patients", title: t("Patients"), icon: <Icons.patients /> },
-    { name: "activity", title: t("Activity"), icon: <Icons.activity /> },
-  ];
 
   return (
     <Tabs
@@ -32,18 +25,21 @@ export default function TabLayout() {
       }}
       backBehavior="history"
     >
-      {tabConfig.map((tab) => (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            tabBarIcon: ({ focused }) => (
-              <TabBarIcon focused={focused}>{tab.icon}</TabBarIcon>
-            ),
-          }}
-        />
-      ))}
+      {tabConfig.map((tab) => {
+        const icon = Icons[tab.icon];
+        return (
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{
+              title: t(tab.title),
+              tabBarIcon: ({ focused }) => (
+                <TabBarIcon focused={focused}>{icon()}</TabBarIcon>
+              ),
+            }}
+          />
+        );
+      })}
     </Tabs>
   );
 }

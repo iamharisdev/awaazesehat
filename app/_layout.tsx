@@ -50,6 +50,9 @@ function RootLayoutContent() {
   }, [loaded]);
 
   const inAuthGroup = segments[0] === "(auth)";
+  if (!loaded) {
+    return null;
+  }
 
   useEffect(() => {
     if (token && inAuthGroup) {
@@ -58,10 +61,6 @@ function RootLayoutContent() {
       router.replace("/(auth)");
     }
   }, [token, inAuthGroup]);
-
-  if (!loaded) {
-    return null;
-  }
 
   const styles = MakeStyles(statusBar);
 

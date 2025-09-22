@@ -2,25 +2,22 @@ import React from "react";
 import { Text, View } from "react-native";
 import { StepItem } from "../StepItem";
 import { styles } from "./style";
-
-const steps = [
-  "Add patient profile",
-  "Record obstetric history",
-  "Record gynecological history",
-  "Review past medical history",
-];
-
+import { useTranslation } from "react-i18next";
+import { steps } from "@/utils/Json";
 
 const StepsList = () => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text style={styles.progress}>0/9 Steps completed</Text>
+      <Text style={styles.progress}>{t("0/9 Steps completed")}</Text>
       <Text style={styles.desc}>
-        Review and verify patient details. Add missing information as needed.
+        {t(
+          "Review and verify patient details. Add missing information as needed."
+        )}
       </Text>
 
       {steps.map((title, index) => (
-        <StepItem key={index} title={title} />
+        <StepItem key={index} title={t(title)} />
       ))}
     </View>
   );

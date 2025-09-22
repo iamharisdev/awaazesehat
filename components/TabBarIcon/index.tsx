@@ -4,7 +4,7 @@ import { MakeStyles } from "./style";
 
 interface TabBarIconProps {
   focused: boolean;
-  children: React.ReactNode; // pass the icon
+  children: React.ReactNode;
 }
 
 const TabBarIcon: React.FC<TabBarIconProps> = ({ focused, children }) => {

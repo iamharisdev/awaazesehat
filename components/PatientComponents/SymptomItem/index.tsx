@@ -2,6 +2,7 @@ import React from "react";
 import { styles } from "./style";
 import { Text, View } from "react-native";
 import { colors } from "@/utils/colors";
+import { Icons } from "@/assets/svgs";
 
 type Status = "Critical" | "Mild" | "Normal";
 interface Props {
@@ -41,11 +42,13 @@ const SymptomItem = ({
       : status === "Mild"
       ? colors.orange.o90
       : colors.green.g90;
+      
+  const IconComponent = Icons[icon];
 
   return (
     <View style={styles.row}>
       <View style={styles.timeline}>
-        <Text style={styles.icon}>{icon}</Text>
+        <Text style={styles.icon}>{IconComponent()}</Text>
         {showConnector && <View style={styles.connector} />}
       </View>
 

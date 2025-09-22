@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./style";
+import { useTranslation } from "react-i18next";
 
 interface TabSwitcherProps {
   tabs: string[];
@@ -13,6 +14,7 @@ export const TabSwitcher: React.FC<TabSwitcherProps> = ({
   activeIndex,
   onChange,
 }) => {
+  const { t } = useTranslation();
   return (
     <View style={styles.row}>
       {tabs.map((tab, i) => (
@@ -22,7 +24,7 @@ export const TabSwitcher: React.FC<TabSwitcherProps> = ({
           onPress={() => onChange(i)}
         >
           <Text style={[styles.label, activeIndex === i && styles.activeStyle]}>
-            {tab}
+            {t(tab)}
           </Text>
         </TouchableOpacity>
       ))}
