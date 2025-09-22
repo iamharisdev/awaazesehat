@@ -9,7 +9,7 @@ interface StepItemProps {
   onPress?: () => void;
 }
 
-export const StepItem: React.FC<StepItemProps> = ({ title, completed, onPress }) => {
+export const StepItem: React.FC<StepItemProps> = ({ title, onPress }) => {
   return (
     <TouchableOpacity style={styles.row} onPress={onPress}>
       <View style={styles.circle} />
