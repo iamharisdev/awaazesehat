@@ -13,12 +13,11 @@ interface StepItemProps {
 const StepItem: React.FC<StepItemProps> = ({ title, icon, onPress }) => {
   return (
     <TouchableOpacity style={styles.row} onPress={onPress}>
-      {icon ? icon : <View style={styles.circle} />}
+      {icon ?? <View style={styles.circle} />}
       <Text style={styles.title}>{title}</Text>
       <Icons.arrowRight />
     </TouchableOpacity>
   );
 };
 
-
-export default StepItem
+export default StepItem;
