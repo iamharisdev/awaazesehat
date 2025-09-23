@@ -1,22 +1,53 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+interface PatientRecord {
+  profile?: Record<string, any>;
+  obstetricHistory?: Record<string, any>;
+  gynecologicalHistory?: Record<string, any>;
+  pastMedicalHistory?: Record<string, any>;
+  surgicalHistory?: Record<string, any>;
+  currentPregnancy?: Record<string, any>;
+  familyHistory?: Record<string, any>;
+  personalHistory?: Record<string, any>;
+  socioEconomicHistory?: Record<string, any>;
+}
+
 interface UserState {
-  patientRecord: object;
+  patientRecord: PatientRecord;
+  patientRecordSteps: number;
 }
 
 const initialState: UserState = {
   patientRecord: {},
+  patientRecordSteps: 0,
 };
 
 const patientSlice = createSlice({
   name: "patient",
   initialState,
   reducers: {
-    setPatientRecord: (state, action: PayloadAction<object>) => {
-      state.patientRecord = action.payload;
+    // ✅ merge step data instead of replacing
+    updatePatientRecord: (
+      state,
+      action: PayloadAction<{ step: keyof PatientRecord; key: string; value: any }>
+    ) => {
+      const { step, key, value } = action.payload;
+      if (!state.patientRecord[step]) {
+        state.patientRecord[step] = {};
+      }
+      state.patientRecord[step]![key] = value;
+    },
+    setPatientRecordSteps: (state, action: PayloadAction<number>) => {
+      state.patientRecordSteps = action.payload;
+    },
+    resetPatientRecord: (state) => {
+      state.patientRecord = {};
+      state.patientRecordSteps = 0;
     },
   },
 });
 
-export const { setPatientRecord } = patientSlice.actions;
+export const { updatePatientRecord, setPatientRecordSteps, resetPatientRecord } =
+  patientSlice.actions;
+
 export default patientSlice.reducer;

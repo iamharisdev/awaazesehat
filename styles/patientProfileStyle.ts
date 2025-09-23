@@ -3,11 +3,12 @@ import { hp, wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  footerContainer: { flex: 1, justifyContent: "flex-end" },
+  flex:{ flex: 1 },
+  footerContainer: { justifyContent: "flex-end" },
   subContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems:'center',
+    alignItems: "center",
     padding: 15,
   },
   stepText: {

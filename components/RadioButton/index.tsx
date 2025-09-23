@@ -1,4 +1,3 @@
-// components/RadioGroup.tsx
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { styles } from "./style";
@@ -17,36 +16,27 @@ interface RadioButtonProps {
 
 const RadioButton: React.FC<RadioButtonProps> = ({
   label,
-  options,
+  options = [],
   value,
   onChange,
 }) => (
   <View style={styles.container}>
-    <Text style={{ fontSize: 14, marginBottom: 6 }}>{label}</Text>
-    <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+    {label && <Text style={styles.title}>{label}</Text>}
+    <View style={styles.optionsWrapper}>
       {options.map((opt) => (
         <TouchableOpacity
-          key={opt.value}
-          onPress={() => onChange(opt.value)}
-          style={{ flexDirection: "row", alignItems: "center", marginRight: 16 }}
+          key={opt}
+          onPress={() => onChange && onChange(opt)}
+          style={styles.option}
         >
           <View
-            style={{
-              width: 18,
-              height: 18,
-              borderRadius: 9,
-              borderWidth: 1,
-              borderColor: "#333",
-              marginRight: 6,
-              backgroundColor: value === opt.value ? "green" : "white",
-            }}
+            style={[styles.circle, value === opt && styles.circleSelected]}
           />
-          <Text>{opt.label}</Text>
+          <Text style={styles.label}>{opt}</Text>
         </TouchableOpacity>
       ))}
     </View>
   </View>
 );
 
-
-export default RadioButton
+export default RadioButton;

@@ -64,3 +64,5 @@ export const tabConfig = [
   { name: "patients", title: "Patients", icon: "patients" },
   { name: "activity", title: "Activity", icon: "activity" },
 ];
+
+

@@ -20,6 +20,11 @@ import rightArrow from './rightArrow.svg';
 import upload from './upload.svg';
 import pdf from './pdf.svg';
 import plus from './plus.svg';
+import downArrow from './downArrow.svg';
+import whiteArrow from './whiteArrow.svg';
+import mins from './mins.svg';
+import blackPlus from './blackPlus.svg'
+
 
 export const Icons = {
   logo: logo,
@@ -43,5 +48,9 @@ export const Icons = {
   rightArrow:rightArrow,
   upload:upload,
   pdf:pdf,
-  plus:plus
+  plus:plus,
+  downArrow:downArrow,
+  whiteArrow:whiteArrow,
+  blackPlus:blackPlus,
+  mins:mins
 } as const;
