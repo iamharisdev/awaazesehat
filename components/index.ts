@@ -14,4 +14,8 @@ export { default as FollowUpQuestion } from "./PatientProfile/Steps/FollowUpQues
 export { default as Reports } from "./PatientProfile/Steps/Reports";
 export { default as Emr } from "./PatientProfile/Steps/Emr";
 export { default as SymptomItem } from "./PatientProfile/SymptomItem";
-export {default as StepItem } from './PatientProfile/StepItem'
+export {default as StepItem } from './PatientProfile/StepItem';
+export {default as RadioButton} from './RadioButton';
+export {default as StepItems} from './PatientRecord/StepItems';
+export {default as AddPatientProfile} from './PatientRecord/AddPatientProfile';
+export {default as StepProgressBar} from './StepProgressBar';

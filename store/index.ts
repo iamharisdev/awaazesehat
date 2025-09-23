@@ -1,12 +1,14 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { api } from '../services/api';
 import userReducer from '../features/userSlice';
+import patientReducer from '../features/patientSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 import { asyncStorage } from '../storage/asyncStorage';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 const rootReducer = combineReducers({
   user: userReducer,
+  patient:patientReducer,
   [api.reducerPath]: api.reducer,
 });
 
