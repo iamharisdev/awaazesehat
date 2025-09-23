@@ -10,7 +10,7 @@ import {
   Reports,
   SymptomItem,
 } from "@/components";
-import { TabSwitcher } from "@/components/PatientComponents/TabSwitcher";
+import { TabSwitcher } from "@/components/PatientProfile/TabSwitcher";
 import { styles } from "@/styles/patientDetailStyle";
 import { Symptoms, tabSwitcher } from "@/utils/Json";
 import { useRouter } from "expo-router";
