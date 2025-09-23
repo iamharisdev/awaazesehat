@@ -1,6 +1,6 @@
 import React from "react";
 import { styles } from "./style";
-import { Text, View } from "react-native";
+import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { colors } from "@/utils/colors";
 import { Icons } from "@/assets/svgs";
 
@@ -10,6 +10,7 @@ interface Props {
   title?: string;
   status?: Status;
   time?: string;
+  rowStyle?: StyleProp<ViewStyle>;
   inactive?: boolean;
   showConnector?: boolean;
 }
@@ -19,6 +20,7 @@ const SymptomItem = ({
   title,
   status,
   time,
+  rowStyle,
   inactive = false,
   showConnector = true,
 }: Props) => {
@@ -42,13 +44,13 @@ const SymptomItem = ({
       : status === "Mild"
       ? colors.orange.o90
       : colors.green.g90;
-      
+
   const IconComponent = Icons[icon];
 
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, rowStyle]}>
       <View style={styles.timeline}>
-        <Text style={styles.icon}>{IconComponent()}</Text>
+        {IconComponent()}
         {showConnector && <View style={styles.connector} />}
       </View>
 

@@ -15,7 +15,11 @@ import bleeding from "./bleeding.svg";
 import bp from "./bp.svg";
 import backPain from "./backPain.svg";
 import flow from "./flow.svg";
-import circlePlus from './circlePlus.svg'
+import circlePlus from './circlePlus.svg';
+import rightArrow from './rightArrow.svg';
+import upload from './upload.svg';
+import pdf from './pdf.svg';
+import plus from './plus.svg';
 
 export const Icons = {
   logo: logo,
@@ -35,5 +39,9 @@ export const Icons = {
   bp: bp,
   backPain: backPain,
   flow: flow,
-  circlePlus:circlePlus
+  circlePlus:circlePlus,
+  rightArrow:rightArrow,
+  upload:upload,
+  pdf:pdf,
+  plus:plus
 } as const;

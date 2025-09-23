@@ -50,9 +50,6 @@ function RootLayoutContent() {
   }, [loaded]);
 
   const inAuthGroup = segments[0] === "(auth)";
-  if (!loaded) {
-    return null;
-  }
 
   useEffect(() => {
     if (token && inAuthGroup) {
@@ -62,8 +59,12 @@ function RootLayoutContent() {
     }
   }, [token, inAuthGroup]);
 
-  const styles = MakeStyles(statusBar);
 
+
+  const styles = MakeStyles(statusBar);
+  if (!loaded) {
+    return null;
+  }
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <StatusBar style="dark" translucent />

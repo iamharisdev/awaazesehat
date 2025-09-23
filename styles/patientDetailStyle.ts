@@ -20,4 +20,13 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: wp(3),
   },
+  cardStyle: {
+    backgroundColor: colors.white.w1,
+    borderWidth: 1,
+    borderColor: colors.black.b80,
+    borderRadius: 10,
+    paddingVertical:25,
+    paddingHorizontal:10,
+    marginTop: hp(2),
+  },
 });
