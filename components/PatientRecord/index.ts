@@ -8,3 +8,4 @@ export {default as PersonalHistory} from "./PersonalHistory";
 export {default as SocioEconomicHistory} from "./SocioEconomicHistory";
 export {default as SurgicalHistory} from "./SurgicalHistory";
 export {default as CurrentPregnancy} from "./CurrentPregnancy";
+

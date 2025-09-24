@@ -65,4 +65,44 @@ export const tabConfig = [
   { name: "activity", title: "Activity", icon: "activity" },
 ];
 
+export const bloodGroup = [
+  { name: "A+" },
+  { name: "A-" },
+  { name: "B+" },
+  { name: "B-" },
+  { name: "AB+" },
+  { name: "AB-" },
+  { name: "O+" },
+  { name: "O-" },
+];
 
+export const healthCondition=[
+  {name:"Diabetes"},
+  {name:"Hypertension"},
+  {name:"Asthma"},
+  {name:"Jaundice"},
+  {name:"Cardiac"},
+  {name:"Fever"},
+  {name:"Renal"},
+  {name:"Headache / dizziness"},
+  {name:"Nausea / vomiting"},
+  {name:"Foul-smelling discharge"},
+  {name:"Burning urination / hematuria"},
+  {name:"Lower abdominal / leg pain"},
+
+]
+
+
+export const DietaryHabits=[
+  {name:"Fruits"},
+  {name:"Vegetables"},
+  {name:"Meat"},
+  {name:"Eggs"},
+  {name:"Milk"},
+]
+
+export const DomesticSituation=[
+  {name:"None"},
+  {name:"Verbal Abuse"},
+  {name:"Physical Abuse"},
+]

@@ -38,11 +38,11 @@ export const styles = StyleSheet.create({
     maxHeight: hp(20),
     backgroundColor: colors.white.w1,
     position: "absolute",
-    top: "100%", // directly below the field
+    top: "100%",
     left: 0,
     right: 0,
-    zIndex: 999, // ensures it stays above other UI
-    elevation: 5, // Android shadow
+    zIndex: 999, 
+    elevation: 5,
   },
   noRecordText: {
     alignSelf: "center",
@@ -54,9 +54,10 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: hp(1.5),
     paddingHorizontal: wp(3),
+    
   },
   itemText: {
-    color: colors.black.b10,
+    color: colors.black.b20,
     fontSize: normalizeFont(14),
   },
   errorText: {
@@ -64,4 +65,6 @@ export const styles = StyleSheet.create({
     color: colors.red.r40,
     fontSize: 12,
   },
+
+  
 });

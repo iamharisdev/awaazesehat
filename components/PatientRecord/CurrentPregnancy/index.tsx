@@ -6,6 +6,8 @@ import { updatePatientRecord } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import BottomSheet from "@/components/BottomSheet";
+import SelectionPopup from "@/components/SelectionPopup";
 
 
 const CurrentPregnancy = () => {
@@ -31,11 +33,7 @@ const CurrentPregnancy = () => {
         }}
       />
 
-      <DropDownPicker
-        label={t("Symptoms experienced?")}
-        value={currentPregnancy.symptoms || ""}
-        onChange={(val) => updateField("symptoms", val)}
-      />
+   
 
       <RadioButton
         label={t("Planned pregnancy?")}
@@ -72,6 +70,14 @@ const CurrentPregnancy = () => {
         value={currentPregnancy.folicAcid || ""}
         onChange={(val) => updateField("folicAcid", val)}
       />
+
+         <DropDownPicker
+        label={t("Symptoms experienced?")}
+        value={currentPregnancy.symptoms || ""}
+        onChange={(val) => updateField("symptoms", val)}
+      />
+       
+
     </StepItems>
   );
 };

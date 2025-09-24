@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialIcons } from "@expo/vector-icons";
+
 import { styles } from "./style";
+import { Icons } from "@/assets/svgs";
 
 interface Props {
   label?: string;
@@ -10,7 +11,7 @@ interface Props {
   onChange?: (date: Date) => void;
 }
 
-const DatePicker: React.FC<Props> = ({ label, value, onChange }) => {
+const DatePicker: React.FC<Props> = ({ label, value=new Date(), onChange }) => {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleChange = (_: any, selectedDate?: Date) => {
@@ -30,7 +31,7 @@ const DatePicker: React.FC<Props> = ({ label, value, onChange }) => {
         <Text style={styles.inputText}>
           {value.toLocaleDateString("en-GB")}
         </Text>
-        <MaterialIcons name="calendar-today" size={20} color="#555" />
+      <Icons.calender/>
       </TouchableOpacity>
 
       {showPicker && (
@@ -39,6 +40,8 @@ const DatePicker: React.FC<Props> = ({ label, value, onChange }) => {
           mode="date"
           display="calendar"
           onChange={handleChange}
+       
+          
         />
       )}
     </View>

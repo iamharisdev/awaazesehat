@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: colors.green.g20,
     height: hp(5),
-    width: wp(33),
+    maxWidth: wp(50),
     padding: 10,
     borderRadius: wp(3),
   },

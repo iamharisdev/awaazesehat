@@ -1,24 +1,22 @@
-import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
-import React from "react";
+import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
-
+import StepItems from "../StepItems";
 
 const SocioEconomicHistory = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const sheetRef = useRef<any>(null);
 
   // Access existing data from Redux
   const socioEconomicHistory = useAppSelector(
     (state) => state.patient.patientRecord.socioEconomicHistory ?? {}
   );
 
-  const {patientRecord} = useAppSelector(state=>state.patient)
-
-  console.log(patientRecord)
+  const { patientRecord } = useAppSelector((state) => state.patient);
 
   const updateField = (key: string, value: any) => {
     dispatch(updatePatientRecord({ step: "socioEconomicHistory", key, value }));
@@ -56,6 +54,7 @@ const SocioEconomicHistory = () => {
           onChangeText: (text) => updateField("householdIncome", text),
         }}
       />
+    
     </StepItems>
   );
 };

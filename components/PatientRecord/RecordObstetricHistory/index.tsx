@@ -1,5 +1,3 @@
-
-
 import CounterField from "@/components/CounterField";
 import StepItems from "../StepItems";
 import RadioButton from "@/components/RadioButton";

@@ -1,24 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 import { styles } from "./style";
 import { colors } from "@/utils/colors";
 import { Icons } from "@/assets/svgs";
 
 interface Item {
-  name?: string;
+  name: string;
   [key: string]: any;
 }
 
 interface Props {
   label?: string;
   data?: Item[];
-  value?: string;
+  value?: string | string[];
   placeholder?: string;
   disabled?: boolean;
   right?: React.ReactNode;
   error?: string;
   touched?: boolean;
-  onChange?: (item: Item) => void;
+  multiSelect?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
+  onChange?: (item: Item | Item[]) => void;
 }
 
 const DropDownPicker: React.FC<Props> = ({
@@ -30,21 +39,65 @@ const DropDownPicker: React.FC<Props> = ({
   right,
   error,
   touched,
+  multiSelect = false,
+  containerStyle,
   onChange,
 }) => {
-  const [isSelected, setIsSelected] = useState<string | undefined>(value);
+  const [selected, setSelected] = useState<string[]>(
+    Array.isArray(value) ? value : value ? [value] : []
+  );
   const [isOpen, setIsOpen] = useState(false);
   const showError = touched && error;
 
+  const flatListRef = useRef<FlatList<Item>>(null);
+
+  // sync with external value
   useEffect(() => {
-    setIsSelected(value);
-  }, [value]);
+    if (multiSelect) {
+      setSelected(Array.isArray(value) ? value : []);
+    } else {
+      setSelected(value ? [value as string] : []);
+    }
+  }, [value, multiSelect]);
+
+  // auto scroll when dropdown opens
+  useEffect(() => {
+    if (isOpen && selected.length > 0) {
+      const index = data.findIndex((d) => d.name === selected[0]);
+      if (index >= 0) {
+        setTimeout(() => {
+          flatListRef.current?.scrollToIndex({ index, animated: true });
+        }, 100);
+      }
+    }
+  }, [isOpen, selected, data]);
+
+  const handleSelect = (item: Item) => {
+    if (multiSelect) {
+      setSelected((prev) => {
+        const exists = prev.includes(item.name);
+        const updated = exists
+          ? prev.filter((v) => v !== item.name)
+          : [...prev, item.name];
+        onChange?.(data.filter((d) => updated.includes(d.name)));
+        return updated;
+      });
+    } else {
+      setSelected([item.name]);
+      setIsOpen(false);
+      onChange?.(item);
+    }
+  };
+
+  const displayText =
+    multiSelect && selected.length > 0
+      ? selected.join(", ")
+      : selected[0] || placeholder;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.title}>{label}</Text>}
 
-      {/* Input-like clickable field */}
       <TouchableOpacity
         disabled={disabled}
         onPress={() => setIsOpen(!isOpen)}
@@ -60,48 +113,57 @@ const DropDownPicker: React.FC<Props> = ({
         <Text
           style={[
             styles.inputStyle,
-            {
-              color: isSelected ? colors.black.b10 : colors.black.b70,
-            },
+            { color: selected.length ? colors.black.b10 : colors.black.b70 },
           ]}
+          numberOfLines={1}
         >
-          {isSelected || placeholder}
+          {displayText}
         </Text>
         <Icons.downArrow />
       </TouchableOpacity>
 
-      {/* Dropdown list */}
       {isOpen && (
-        <View style={[styles.dropdown]}>
+        <View style={styles.dropdown}>
           {data.length === 0 ? (
             <Text style={styles.noRecordText}>No record found</Text>
           ) : (
-            <ScrollView
+            <FlatList
+              ref={flatListRef}
+              data={data}
+              keyExtractor={(item, index) => index.toString()}
               nestedScrollEnabled
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="always"
-            >
-              {data.map((item, index) => {
+              renderItem={({ item }) => {
+                const isSelected = selected.includes(item.name);
                 return (
                   <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      setIsOpen(false);
-                      setIsSelected(item.name);
-                    }}
-                    style={styles.itemRow}
+                    onPress={() => handleSelect(item)}
+                    style={[
+                      styles.itemRow,
+                      isSelected && { backgroundColor: colors.green.g90 },
+                    ]}
                   >
-                    <Text style={styles.itemText}>{item.name}</Text>
-                    {right}
+                    <Text
+                      style={[
+                        styles.itemText,
+                        isSelected && {
+                          color: colors.black.b05,
+                          fontWeight: "bold",
+                        },
+                      ]}
+                    >
+                      {item.name}
+                    </Text>
+                    {isSelected &&
+                      (right ?? (
+                        <Icons.tick />
+                      ))}
                   </TouchableOpacity>
                 );
-              })}
-            </ScrollView>
+              }}
+            />
           )}
         </View>
       )}
-
-      {/* {showError && <Text style={styles.errorText}>{error}</Text>} */}
     </View>
   );
 };

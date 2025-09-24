@@ -24,6 +24,10 @@ import downArrow from './downArrow.svg';
 import whiteArrow from './whiteArrow.svg';
 import mins from './mins.svg';
 import blackPlus from './blackPlus.svg'
+import tick from './tick.svg'
+import whiteTick from './whiteTick.svg'
+import calender from './calender.svg'
+import patientRecord from './patientRecord.svg'
 
 
 export const Icons = {
@@ -52,5 +56,9 @@ export const Icons = {
   downArrow:downArrow,
   whiteArrow:whiteArrow,
   blackPlus:blackPlus,
-  mins:mins
+  mins:mins,
+  tick:tick,
+  whiteTick:whiteTick,
+  calender:calender,
+  patientRecord:patientRecord
 } as const;

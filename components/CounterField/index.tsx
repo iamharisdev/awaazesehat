@@ -16,7 +16,7 @@ const CounterField: React.FC<Props> = ({
   title,
   value,
   onChange,
-  min = 1,
+  min = 0,
   max = 99,
 }) => {
   const { t } = useTranslation();

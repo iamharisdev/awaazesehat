@@ -1,5 +1,5 @@
 // screens/PatientSteps.tsx
-import React from "react";
+import React, { useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -7,8 +7,10 @@ import { Icons } from "@/assets/svgs";
 import {
   AddPatientProfile,
   AppHeader,
+  BottomSheet,
   CurrentPregnancy,
   FamilyHistory,
+  GenericPopup,
   GynecologicalHistory,
   KeyboardAvoidingWrapper,
   PastMedicalHistory,
@@ -38,6 +40,7 @@ const stepScreens = [
 export default function PatientSteps() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const sheetRef = useRef(null);
   const { patientRecordSteps } = useAppSelector((state) => state.patient);
 
   const totalSteps = stepScreens.length;
@@ -45,6 +48,8 @@ export default function PatientSteps() {
   const onPressNext = () => {
     if (patientRecordSteps < totalSteps - 1) {
       dispatch(setPatientRecordSteps(patientRecordSteps + 1));
+    } else {
+      sheetRef?.current?.open();
     }
   };
 
@@ -60,7 +65,6 @@ export default function PatientSteps() {
     router.back();
   };
 
-
   return (
     <View style={styles.flex}>
       <KeyboardAvoidingWrapper>
@@ -74,22 +78,41 @@ export default function PatientSteps() {
         {stepScreens[patientRecordSteps]?.component}
       </KeyboardAvoidingWrapper>
 
-   
       <View style={styles.footerContainer}>
-        <StepProgressBar totalSteps={totalSteps} currentStep={patientRecordSteps} />
+        <StepProgressBar
+          totalSteps={totalSteps}
+          currentStep={patientRecordSteps}
+        />
         <View style={styles.subContainer}>
           <Text style={styles.stepText}>
             {t("Step {{current}} of {{total}}", {
-              current: patientRecordSteps+1 ,
+              current: patientRecordSteps + 1,
               total: totalSteps,
             })}
           </Text>
           <TouchableOpacity style={styles.buttonStyle} onPress={onPressNext}>
-            <Text style={styles.buttonText}>{t("Save & Next")}</Text>
-            <Icons.whiteArrow />
+            <Text style={styles.buttonText}>
+              {patientRecordSteps < 8
+                ? t("Save & Next")
+                : t("Save patient record")}
+            </Text>
+            {patientRecordSteps < 8 && <Icons.whiteArrow marginLeft={10} />}
           </TouchableOpacity>
         </View>
       </View>
+      <BottomSheet ref={sheetRef} sheetHeight={350}>
+        <GenericPopup
+          title={t("Patient record completed")}
+          description={t(
+            "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record."
+          )}
+          btnTitle1={t("Start follow-up questions")}
+          btnTitle2={t("Skip questions")}
+          icon={<Icons.patientRecord/>}
+          onCrossPress={() => sheetRef?.current.close()}
+          closePress={() => sheetRef?.current.close()}
+        />
+      </BottomSheet>
     </View>
   );
 }

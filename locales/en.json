@@ -123,5 +123,12 @@
   "Separate": "Separate",
   "Approximate household monthly income": "Approximate household monthly income",
   "Surgical history": "Surgical history",
-  "Past Surgeries": "Past Surgeries"
+  "Past Surgeries": "Past Surgeries",
+  "Patient record completed": "Patient record completed",
+  "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.": "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.",
+  "Start follow-up questions":"Start follow-up questions",
+  "Skip questions":"Skip questions",
+  "Save patient record":"Save patient record",
+ 
+
 }
