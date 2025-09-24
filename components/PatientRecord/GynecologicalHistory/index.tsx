@@ -1,4 +1,5 @@
-import { StepItems } from "@/components";
+
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
@@ -12,7 +13,7 @@ const GynecologicalHistory = () => {
 
   // Pull step data from Redux (default empty object if not present yet)
   const gynecological = useAppSelector(
-    (state) => state.patient.patientRecord.gynecologicalHistory || {}
+    (state) => state.patient.patientRecord.gynecologicalHistory ?? {}
   );
 
   const updateField = (key: string, value: any) => {

@@ -1,4 +1,5 @@
-import { DropDownPicker, StepItems } from "@/components";
+import DropDownPicker from "@/components/DropDownPicker";
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
@@ -13,7 +14,7 @@ const CurrentPregnancy = () => {
 
   // Select slice from Redux
   const currentPregnancy = useAppSelector(
-    (state) => state.patient.patientRecord.currentPregnancy || {}
+    (state) => state.patient.patientRecord.currentPregnancy ?? {}
   );
 
   const updateField = (key: string, value: any) => {

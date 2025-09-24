@@ -1,4 +1,5 @@
-import { DropDownPicker, StepItems } from "@/components";
+import DropDownPicker from "@/components/DropDownPicker";
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import { updatePatientRecord } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -12,7 +13,7 @@ const PastMedicalHistory = () => {
 
   // Get current state from Redux
   const pastMedicalHistory = useAppSelector(
-    (state) => state.patient.patientRecord.pastMedicalHistory || {}
+    (state) => state.patient.patientRecord.pastMedicalHistory ?? {}
   );
 
   const updateField = (key: string, value: any) => {

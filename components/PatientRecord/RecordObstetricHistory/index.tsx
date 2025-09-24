@@ -1,4 +1,7 @@
-import { CounterField, StepItems } from "@/components";
+
+
+import CounterField from "@/components/CounterField";
+import StepItems from "../StepItems";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -12,7 +15,7 @@ const RecordObstetricHistory = () => {
   const dispatch = useAppDispatch();
 
   const obstetricHistory = useAppSelector(
-    (state) => state.patient.patientRecord.obstetricHistory || {}
+    (state) => state.patient.patientRecord.obstetricHistory ?? {}
   );
 
   const updateField = (key: string, value: any) => {

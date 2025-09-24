@@ -1,4 +1,4 @@
-import { StepItems } from "@/components";
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import { updatePatientRecord } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -12,7 +12,7 @@ const SurgicalHistory = () => {
 
   // Access current surgical history data from Redux
   const surgicalHistory = useAppSelector(
-    (state) => state.patient.patientRecord.surgicalHistory || {}
+    (state) => state.patient.patientRecord.surgicalHistory ?? {}
   );
 
   const updateField = (key: string, value: any) => {

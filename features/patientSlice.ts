@@ -18,7 +18,17 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  patientRecord: {},
+  patientRecord: {
+    profile: {},
+    obstetricHistory: {},
+    gynecologicalHistory: {},
+    pastMedicalHistory: {},
+    surgicalHistory: {},
+    currentPregnancy: {},
+    familyHistory: {},
+    personalHistory: {},
+    socioEconomicHistory: {},
+  },
   patientRecordSteps: 0,
 };
 
@@ -29,7 +39,11 @@ const patientSlice = createSlice({
     // ✅ merge step data instead of replacing
     updatePatientRecord: (
       state,
-      action: PayloadAction<{ step: keyof PatientRecord; key: string; value: any }>
+      action: PayloadAction<{
+        step: keyof PatientRecord;
+        key: string;
+        value: any;
+      }>
     ) => {
       const { step, key, value } = action.payload;
       if (!state.patientRecord[step]) {
@@ -47,7 +61,10 @@ const patientSlice = createSlice({
   },
 });
 
-export const { updatePatientRecord, setPatientRecordSteps, resetPatientRecord } =
-  patientSlice.actions;
+export const {
+  updatePatientRecord,
+  setPatientRecordSteps,
+  resetPatientRecord,
+} = patientSlice.actions;
 
 export default patientSlice.reducer;

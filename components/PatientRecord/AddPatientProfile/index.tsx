@@ -1,4 +1,3 @@
-import { DropDownPicker, StepItems } from "@/components";
 import AppInput from "@/components/AppInput";
 import DatePicker from "@/components/DatePicker";
 import RadioButton from "@/components/RadioButton";
@@ -8,13 +7,16 @@ import { View } from "react-native";
 import { styles } from "./style";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updatePatientRecord } from "@/features/patientSlice";
-
+import DropDownPicker from "@/components/DropDownPicker";
+import StepItems from "../StepItems";
 
 const AddPatientProfile = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const profile = useAppSelector((state) => state.patient.patientRecord.profile || {});
+  const profile = useAppSelector(
+    (state) => state.patient.patientRecord.profile ?? {}
+  );
 
   const updateField = (key: string, value: any) => {
     dispatch(updatePatientRecord({ step: "profile", key, value }));

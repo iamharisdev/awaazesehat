@@ -1,4 +1,5 @@
-import { DropDownPicker, StepItems } from "@/components";
+import DropDownPicker from "@/components/DropDownPicker";
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
@@ -13,7 +14,7 @@ const PersonalHistory = () => {
 
   // Get current state from Redux
   const personalHistory = useAppSelector(
-    (state) => state.patient.patientRecord.personalHistory || {}
+    (state) => state.patient.patientRecord.personalHistory ?? {}
   );
 
   const updateField = (key: string, value: any) => {

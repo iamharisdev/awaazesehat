@@ -1,4 +1,4 @@
-import { StepItems } from "@/components";
+import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
 import { updatePatientRecord } from "@/features/patientSlice";
@@ -13,7 +13,7 @@ const SocioEconomicHistory = () => {
 
   // Access existing data from Redux
   const socioEconomicHistory = useAppSelector(
-    (state) => state.patient.patientRecord.socioEconomicHistory || {}
+    (state) => state.patient.patientRecord.socioEconomicHistory ?? {}
   );
 
   const {patientRecord} = useAppSelector(state=>state.patient)
