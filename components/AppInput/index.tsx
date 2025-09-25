@@ -33,6 +33,7 @@ const AppInput: React.FC<Props> = ({
       <Text style={styles.title}>{label}</Text>
       <View style={styles.inputContainer}>
         <TextInput
+        placeholder="Enter"
           {...inputProps}
           secureTextEntry={securePassword}
           style={styles.inputStyle}

@@ -3,7 +3,7 @@ export { default as AppHeader } from "./AppHeader";
 export { default as AppInput } from "./AppInput";
 export { default as KeyboardAvoidingWrapper } from "./KeyboardAvoidingWrapper";
 export { default as BottomSheet } from "./BottomSheet";
-export { default as NotificationPopup } from "./NotificationPopup";
+export { default as GenericPopup } from "./GenaricPopup";
 export { default as PasswordChangePopup } from "./PasswordChangePopup";
 export { default as TabBarIcon } from "./TabBarIcon";
 export { default as PatientCard } from "./PatientProfile/PatientCard";
@@ -17,5 +17,12 @@ export { default as SymptomItem } from "./PatientProfile/SymptomItem";
 export {default as StepItem } from './PatientProfile/StepItem';
 export {default as RadioButton} from './RadioButton';
 export {default as StepItems} from './PatientRecord/StepItems';
-export {default as AddPatientProfile} from './PatientRecord/AddPatientProfile';
 export {default as StepProgressBar} from './StepProgressBar';
+export {default as Datepicker} from './DatePicker';
+export {default as DropDownPicker} from './DropDownPicker';
+export {default as CounterField} from './CounterField'
+export * from "./PatientRecord";
+export {default as SelectionPopup} from './SelectionPopup'
+export {default as OpenBottomSheet} from './OpenBottomSheet'
+
+
