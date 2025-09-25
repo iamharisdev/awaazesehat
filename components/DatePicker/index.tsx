@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
 import { styles } from "./style";
 import { Icons } from "@/assets/svgs";
-
 interface Props {
   label?: string;
   value?: Date;
@@ -40,8 +38,6 @@ const DatePicker: React.FC<Props> = ({ label, value=new Date(), onChange }) => {
           mode="date"
           display="calendar"
           onChange={handleChange}
-       
-          
         />
       )}
     </View>
