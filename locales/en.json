@@ -126,9 +126,20 @@
   "Past Surgeries": "Past Surgeries",
   "Patient record completed": "Patient record completed",
   "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.": "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.",
-  "Start follow-up questions":"Start follow-up questions",
-  "Skip questions":"Skip questions",
-  "Save patient record":"Save patient record",
- 
-
+  "Start follow-up questions": "Start follow-up questions",
+  "Skip questions": "Skip questions",
+  "Save patient record": "Save patient record",
+  "All follow-up questions for this patient have been answered. You can now review or upload reports before proceeding to the visit details.": "All follow-up questions for this patient have been answered. You can now review or upload reports before proceeding to the visit details.",
+  "Follow-up questions completed": "Follow-up questions completed",
+  "Go to Reports": "Go to Reports",
+  "Save questions": "Save questions",
+  "Question": "Question",
+  "of": "of",
+  "What issues are you experiencing during this pregnancy that you feel need attention or discussion?": "What issues are you experiencing during this pregnancy that you feel need attention or discussion?",
+  "Have you noticed any symptoms like nausea, swelling, headaches, or unusual pain during this pregnancy?": "Have you noticed any symptoms like nausea, swelling, headaches, or unusual pain during this pregnancy?",
+  "Are you currently taking any medications, supplements, or treatments that your doctor should know about?": "Are you currently taking any medications, supplements, or treatments that your doctor should know about?",
+  "Do you have any concerns about your diet, nutrition, or weight gain during pregnancy?": "Do you have any concerns about your diet, nutrition, or weight gain during pregnancy?",
+  "Do you have any questions or worries about your delivery plan, such as normal delivery vs. C-section?": "Do you have any questions or worries about your delivery plan, such as normal delivery vs. C-section?",
+  "Enter your answer here": "Enter your answer here",
+  "Record answer":"Record answer"
 }

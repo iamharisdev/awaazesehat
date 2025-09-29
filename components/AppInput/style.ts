@@ -24,10 +24,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.SmallMedium,
     height: hp(pxToHp(48)),
   },
-  inputStyle:{
-    width:wp(78),
+  inputStyle: {
+    width: wp(78),
+    textAlignVertical: "top",
   },
-   errorText: {
+  errorText: {
     marginTop: 4,
     color: colors.red.r40,
     fontSize: 12,

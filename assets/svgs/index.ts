@@ -28,6 +28,7 @@ import tick from './tick.svg'
 import whiteTick from './whiteTick.svg'
 import calender from './calender.svg'
 import patientRecord from './patientRecord.svg'
+import mic from './mic.svg';
 
 
 export const Icons = {
@@ -60,5 +61,6 @@ export const Icons = {
   tick:tick,
   whiteTick:whiteTick,
   calender:calender,
-  patientRecord:patientRecord
+  patientRecord:patientRecord,
+  mic:mic
 } as const;

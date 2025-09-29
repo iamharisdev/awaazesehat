@@ -12,12 +12,24 @@ interface PatientRecord {
   socioEconomicHistory?: Record<string, any>;
 }
 
+interface FollowUpRecord {
+  question1?: Record<string, any>;
+  question2?: Record<string, any>;
+  question3?: Record<string, any>;
+  question4?: Record<string, any>;
+  question5?: Record<string, any>;
+}
+
 interface UserState {
   patientRecord: PatientRecord;
   patientRecordSteps: number;
+  followUpSteps: number;
+  followUpRecord: FollowUpRecord;
 }
 
 const initialState: UserState = {
+  patientRecordSteps: 0,
+  followUpSteps: 0,
   patientRecord: {
     profile: {},
     obstetricHistory: {},
@@ -29,14 +41,25 @@ const initialState: UserState = {
     personalHistory: {},
     socioEconomicHistory: {},
   },
-  patientRecordSteps: 0,
+  followUpRecord: {
+    question1: {},
+    question2: {},
+    question3: {},
+    question4: {},
+    question5: {},
+  },
 };
 
 const patientSlice = createSlice({
   name: "patient",
   initialState,
   reducers: {
-    // ✅ merge step data instead of replacing
+    setPatientRecordSteps: (state, action: PayloadAction<number>) => {
+      state.patientRecordSteps = action.payload;
+    },
+    setFollowUpSteps: (state, action: PayloadAction<number>) => {
+      state.followUpSteps = action.payload;
+    },
     updatePatientRecord: (
       state,
       action: PayloadAction<{
@@ -51,11 +74,24 @@ const patientSlice = createSlice({
       }
       state.patientRecord[step]![key] = value;
     },
-    setPatientRecordSteps: (state, action: PayloadAction<number>) => {
-      state.patientRecordSteps = action.payload;
+    updateFollowUpRecord: (
+      state,
+      action: PayloadAction<{
+        step: keyof FollowUpRecord;
+        key: string;
+        value: any;
+      }>
+    ) => {
+      const { step, key, value } = action.payload;
+      if (!state.followUpRecord[step]) {
+        state.followUpRecord[step] = {};
+      }
+      state.followUpRecord[step]![key] = value;
     },
+
     resetPatientRecord: (state) => {
       state.patientRecord = {};
+      state.followUpRecord = {};
       state.patientRecordSteps = 0;
     },
   },
@@ -63,7 +99,9 @@ const patientSlice = createSlice({
 
 export const {
   updatePatientRecord,
+  updateFollowUpRecord,
   setPatientRecordSteps,
+  setFollowUpSteps,
   resetPatientRecord,
 } = patientSlice.actions;
 

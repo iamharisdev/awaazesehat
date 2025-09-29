@@ -22,6 +22,7 @@ export {default as Datepicker} from './DatePicker';
 export {default as DropDownPicker} from './DropDownPicker';
 export {default as CounterField} from './CounterField'
 export * from "./PatientRecord";
+export * from './FollowUpQuestions';
 export {default as SelectionPopup} from './SelectionPopup'
 export {default as OpenBottomSheet} from './OpenBottomSheet'
 

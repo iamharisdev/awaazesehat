@@ -3,9 +3,11 @@ import React from "react";
 import { styles } from "./style";
 import { useTranslation } from "react-i18next";
 import { Icons } from "@/assets/svgs";
+import { useRouter } from "expo-router";
 
 const FollowUpQuestion = () => {
   const { t } = useTranslation();
+  const route=useRouter();
   return (
     <View>
       <Text style={styles.progress}>{t("0/5 completed")}</Text>
@@ -15,7 +17,7 @@ const FollowUpQuestion = () => {
         )}
       </Text>
 
-      <TouchableOpacity style={styles.row}>
+      <TouchableOpacity style={styles.row} onPress={()=>route.push('followUpQuestions')}>
         <Text style={styles.textStyle}>{t("Start now")}</Text>
         <Icons.rightArrow/>
       </TouchableOpacity>
