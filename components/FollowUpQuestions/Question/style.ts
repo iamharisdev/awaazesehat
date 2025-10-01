@@ -15,9 +15,16 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: colors.white.w1,
     borderColor: colors.black.b80,
-    borderWidth:1,
+    borderWidth: 1,
     flexDirection: "row-reverse",
     height: hp(pxToHp(48)),
   },
   buttonTitle: { color: colors.black.b05, marginRight: wp(3) },
+  timeText: {
+    fontSize: 14,
+    color: colors.black.b40,
+    textAlign: "center",
+    alignSelf: "center",
+    width: wp(10),
+  },
 });

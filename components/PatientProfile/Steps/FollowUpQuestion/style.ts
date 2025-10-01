@@ -1,9 +1,8 @@
-import { colors } from '@/utils/colors';
-import { hp, wp } from '@/utils/responsive';
-import { StyleSheet } from 'react-native';
+import { colors } from "@/utils/colors";
+import { hp, wp } from "@/utils/responsive";
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-
   progress: {
     fontSize: 14,
     color: colors.black.b40,
@@ -23,18 +22,16 @@ export const styles = StyleSheet.create({
     fontFamily: "Regular",
     fontWeight: "400",
   },
-  row:{
-    flexDirection:'row',
-    alignItems:'center',
-       marginTop:hp(2)
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: hp(2),
   },
-  textStyle:{
-    fontWeight:'600',
-    fontFamily:'Bold',
-    fontSize:14,
-    color:colors.green.g20,
-
- 
-  }
+  textStyle: {
+    fontWeight: "600",
+    fontFamily: "Bold",
+    fontSize: 14,
+    color: colors.green.g20,
+    marginRight: 10,
+  },
 });
-

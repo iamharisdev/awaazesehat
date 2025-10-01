@@ -1,81 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { Icons } from "@/assets/svgs";
+// Question.tsx
 import AppInput from "@/components/AppInput";
-import Button from "@/components/Button";
-import {
-  RecordingPresets,
-  setAudioModeAsync,
-  useAudioPlayer,
-  useAudioRecorder,
-  useAudioRecorderState,
-} from "expo-audio";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { styles } from "./style";
+import RecordingPlayerCard from "@/components/RecordingPlayerCard";
+import { useAudioRecording } from "@/utils/audioRecorder";
+import Button from "@/components/Button";
+import { Icons } from "@/assets/svgs";
 
 interface Props {
   question: string;
   index: number;
 }
 
-const Question = ({ question, index }: Props) => {
+const Question = ({ question }: Props) => {
   const { t } = useTranslation();
+  const { uri, recordingTime, recorderState, toggleRecording, formatTime } =
+    useAudioRecording();
 
-  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
-  const recorderState = useAudioRecorderState(audioRecorder);
-
-  const [recordedUri, setRecordedUri] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const player = useAudioPlayer(recordedUri ?? undefined);
-
-  useEffect(() => {
-    setAudioModeAsync({
-      playsInSilentMode: true,
-      allowsRecording: true,
-    });
-  }, []);
-
-  const startRecording = async () => {
-    try {
-      await audioRecorder.prepareToRecordAsync();
-      audioRecorder.record();
-    } catch (e) {
-      console.warn("Recording error:", e);
-    }
-  };
-
-  const stopRecording = async () => {
-    try {
-      await audioRecorder.stop();
-      if (audioRecorder.uri) {
-        setRecordedUri(audioRecorder.uri);
-        console.log("Recorded URI:", audioRecorder.uri);
-      }
-    } catch (e) {
-      console.warn("Stop recording error:", e);
-    }
-  };
-
-  const playRecording = async () => {
-    if (!recordedUri) return;
-    try {
-      setIsPlaying(true);
-      player.play();
-      setIsPlaying(false);
-    } catch (e) {
-      console.warn("Playback error:", e);
-      setIsPlaying(false);
-    }
-  };
-
-  const stopPlayback = async () => {
-    try {
-      await player.seekTo(0);
-      setIsPlaying(false);
-    } catch (e) {
-      console.warn("Stop playback error:", e);
-    }
+  const handleRecord = async () => {
+    await toggleRecording();
   };
 
   return (
@@ -94,12 +39,14 @@ const Question = ({ question, index }: Props) => {
         textStyle={styles.buttonTitle}
         icon={<Icons.mic />}
         title={
-          recorderState.isRecording ? "Stop Recording" : t("Record answer")
+          recorderState.isRecording ? t("Stop Recording") : t("Record Answer")
         }
-        btnProps={{
-          onPress: recorderState.isRecording ? stopRecording : startRecording,
-        }}
+        btnProps={{ onPress: handleRecord }}
       />
+      {recorderState.isRecording && (
+        <Text style={styles.timeText}>{formatTime(recordingTime)}</Text>
+      )}
+      {uri && <RecordingPlayerCard uri={uri} />}
     </View>
   );
 };
