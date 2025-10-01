@@ -2,6 +2,7 @@
 import { useRouter } from "expo-router";
 import React, { useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { t } from "i18next";
 
 import { Icons } from "@/assets/svgs";
 import {
@@ -9,33 +10,21 @@ import {
   BottomSheet,
   GenericPopup,
   KeyboardAvoidingWrapper,
-  Question1,
-  Question2,
-  Question3,
-  Question4,
-  Question5,
+  Question,
   StepProgressBar,
 } from "@/components";
 import { setFollowUpSteps } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { styles } from "@/styles/patientProfileStyle";
-import { t } from "i18next";
-
-const stepScreens = [
-  { key: "Question1", component: <Question1 /> },
-  { key: "Question2", component: <Question2 /> },
-  { key: "Question3", component: <Question3 /> },
-  { key: "Question4", component: <Question4 /> },
-  { key: "Question5", component: <Question5 /> },
-];
+import { followUpQuestions } from "@/utils/Json";
 
 export default function FollowUpQuestions() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const sheetRef = useRef(null);
+  const sheetRef = useRef<any>(null);
   const { followUpSteps } = useAppSelector((state) => state.patient);
 
-  const totalSteps = stepScreens.length;
+  const totalSteps = followUpQuestions.length;
 
   const onPressNext = () => {
     if (followUpSteps < totalSteps - 1) {
@@ -57,6 +46,8 @@ export default function FollowUpQuestions() {
     router.back();
   };
 
+  const currentQuestion = followUpQuestions[followUpSteps];
+
   return (
     <View style={styles.flex}>
       <AppHeader
@@ -66,8 +57,11 @@ export default function FollowUpQuestions() {
         onLeftPress={onPressLeft}
         onRightPress={onPressRight}
       />
+
       <KeyboardAvoidingWrapper>
-        {stepScreens[followUpSteps]?.component}
+        {currentQuestion && (
+          <Question question={currentQuestion.question} index={followUpSteps} />
+        )}
       </KeyboardAvoidingWrapper>
 
       <View style={styles.footerContainer}>
@@ -81,12 +75,17 @@ export default function FollowUpQuestions() {
           </Text>
           <TouchableOpacity style={styles.buttonStyle} onPress={onPressNext}>
             <Text style={styles.buttonText}>
-              {followUpSteps < 4 ? t("Save & Next") : t("Save questions")}
+              {followUpSteps < totalSteps - 1
+                ? t("Save & Next")
+                : t("Save questions")}
             </Text>
-            {followUpSteps < 4 && <Icons.whiteArrow marginLeft={10} />}
+            {followUpSteps < totalSteps - 1 && (
+              <Icons.whiteArrow marginLeft={10} />
+            )}
           </TouchableOpacity>
         </View>
       </View>
+
       <BottomSheet ref={sheetRef} sheetHeight={300}>
         <GenericPopup
           title={t("Follow-up questions completed")}

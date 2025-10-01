@@ -16,6 +16,7 @@
     "@react-navigation/native-stack": "^7.3.25",
     "@reduxjs/toolkit": "^2.8.2",
     "expo": "~53.0.20",
+    "expo-audio": "~0.4.9",
     "expo-device": "^7.1.4",
     "expo-file-system": "^19.0.15",
     "expo-font": "^13.3.2",

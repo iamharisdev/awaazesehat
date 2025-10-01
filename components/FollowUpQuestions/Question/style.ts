@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     borderColor: colors.black.b80,
     borderWidth:1,
     flexDirection: "row-reverse",
-    height: hp(pxToHp(44)),
+    height: hp(pxToHp(48)),
   },
   buttonTitle: { color: colors.black.b05, marginRight: wp(3) },
 });
