@@ -76,33 +76,49 @@ export const bloodGroup = [
   { name: "O-" },
 ];
 
-export const healthCondition=[
-  {name:"Diabetes"},
-  {name:"Hypertension"},
-  {name:"Asthma"},
-  {name:"Jaundice"},
-  {name:"Cardiac"},
-  {name:"Fever"},
-  {name:"Renal"},
-  {name:"Headache / dizziness"},
-  {name:"Nausea / vomiting"},
-  {name:"Foul-smelling discharge"},
-  {name:"Burning urination / hematuria"},
-  {name:"Lower abdominal / leg pain"},
+export const healthCondition = [
+  { name: "Diabetes" },
+  { name: "Hypertension" },
+  { name: "Asthma" },
+  { name: "Jaundice" },
+  { name: "Cardiac" },
+  { name: "Fever" },
+  { name: "Renal" },
+  { name: "Headache / dizziness" },
+  { name: "Nausea / vomiting" },
+  { name: "Foul-smelling discharge" },
+  { name: "Burning urination / hematuria" },
+  { name: "Lower abdominal / leg pain" },
+];
 
-]
+export const DietaryHabits = [
+  { name: "Fruits" },
+  { name: "Vegetables" },
+  { name: "Meat" },
+  { name: "Eggs" },
+  { name: "Milk" },
+];
 
+export const DomesticSituation = [
+  { name: "None" },
+  { name: "Verbal Abuse" },
+  { name: "Physical Abuse" },
+];
 
-export const DietaryHabits=[
-  {name:"Fruits"},
-  {name:"Vegetables"},
-  {name:"Meat"},
-  {name:"Eggs"},
-  {name:"Milk"},
-]
-
-export const DomesticSituation=[
-  {name:"None"},
-  {name:"Verbal Abuse"},
-  {name:"Physical Abuse"},
-]
+export const followUpQuestions = [
+  {
+    id: 1,
+    question:
+      "Do you have any questions or worries about your delivery plan, such as normal delivery vs. C-section?",
+  },
+  {
+    id: 2,
+    question:
+      "Have you noticed any symptoms like nausea, swelling, headaches, or unusual pain during this pregnancy?",
+  },
+  {
+    id: 3,
+    question:
+      "Are you currently taking any medications, supplements, or treatments that your doctor should know about?",
+  },
+];

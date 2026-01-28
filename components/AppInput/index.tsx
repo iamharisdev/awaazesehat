@@ -2,6 +2,7 @@
 import { Icons } from "@/assets/svgs";
 import React, { useState } from "react";
 import {
+  StyleProp,
   Text,
   TextInput,
   TextInputProps,
@@ -16,12 +17,14 @@ type Props = {
   password?: boolean;
   error?: string;
   touched?: boolean;
+  inputStyle?: any;
 };
 
 const AppInput: React.FC<Props> = ({
   label,
   inputProps,
   password = false,
+  inputStyle,
   error,
   touched,
 }) => {
@@ -31,12 +34,12 @@ const AppInput: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer,inputStyle]}>
         <TextInput
-        placeholder="Enter"
+          placeholder="Enter"
           {...inputProps}
           secureTextEntry={securePassword}
-          style={styles.inputStyle}
+          style={[styles.inputStyle, inputStyle]}
         />
         {password && (
           <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>

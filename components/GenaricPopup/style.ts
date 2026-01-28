@@ -22,8 +22,9 @@ export const styles = StyleSheet.create({
     color: colors.black.b05,
     fontSize: 20,
     fontWeight: "600",
-    textAlign: "right",
-    width: wp(70),
+
+   textAlign:"right",
+    width: wp(80),
   },
 
   iconWrapper: {

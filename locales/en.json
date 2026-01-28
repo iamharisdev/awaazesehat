@@ -126,9 +126,15 @@
   "Past Surgeries": "Past Surgeries",
   "Patient record completed": "Patient record completed",
   "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.": "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.",
-  "Start follow-up questions":"Start follow-up questions",
-  "Skip questions":"Skip questions",
-  "Save patient record":"Save patient record",
- 
-
+  "Start follow-up questions": "Start follow-up questions",
+  "Skip questions": "Skip questions",
+  "Save patient record": "Save patient record",
+  "All follow-up questions for this patient have been answered. You can now review or upload reports before proceeding to the visit details.": "All follow-up questions for this patient have been answered. You can now review or upload reports before proceeding to the visit details.",
+  "Follow-up questions completed": "Follow-up questions completed",
+  "Go to Reports": "Go to Reports",
+  "Save questions": "Save questions",
+  "Question": "Question",
+  "of": "of",
+  "Enter your answer here": "Enter your answer here",
+  "Record answer":"Record answer"
 }

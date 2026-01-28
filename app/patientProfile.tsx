@@ -67,7 +67,6 @@ export default function PatientSteps() {
 
   return (
     <View style={styles.flex}>
-      <KeyboardAvoidingWrapper>
         <AppHeader
           leftIcon={<Icons.left />}
           title={t("Patient Record")}
@@ -75,6 +74,8 @@ export default function PatientSteps() {
           onLeftPress={onPressLeft}
           onRightPress={onPressRight}
         />
+      <KeyboardAvoidingWrapper>
+      
         {stepScreens[patientRecordSteps]?.component}
       </KeyboardAvoidingWrapper>
 

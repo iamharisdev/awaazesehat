@@ -3,7 +3,7 @@ import { hp, wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  flex:{ flex: 1 },
+  flex:{ flex: 1 ,backgroundColor: colors.white.w2},
   footerContainer: { justifyContent: "flex-end" },
   subContainer: {
     flexDirection: "row",
