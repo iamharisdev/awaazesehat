@@ -15,11 +15,22 @@ import { LoginValidation } from "@/schemas/authValidation";
 import { loginSchema } from "@/schemas/schema";
 import { useAppDispatch } from "@/store";
 import { setToken } from "@/features/userSlice";
+import { useLoginUserMutation } from "@/services/modules/auth";
 
 const Login = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+
+  const handleLogin = async (v: any) => {
+    const response = await loginUser({
+      body: { email: v.email, password: v.password },
+    }).unwrap();
+    console.log("Login success:", response);
+  };
+
   return (
     <KeyboardAvoidingWrapper>
       <AppHeader leftIcon={<Icons.left />} />
@@ -27,7 +38,7 @@ const Login = () => {
         initialValues={loginSchema()}
         validationSchema={LoginValidation}
         onSubmit={(values) => {
-          dispatch(setToken("abc"));
+          handleLogin(values);
         }}
       >
         {({

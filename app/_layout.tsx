@@ -12,6 +12,8 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store, useAppSelector } from "../store";
+import Toast from "react-native-toast-message";
+import { Platform } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -22,6 +24,10 @@ export default function RootLayout() {
         <Provider store={store}>
           <PersistGate persistor={persistor}>
             <RootLayoutContent />
+            <Toast
+              position={"bottom"}
+              topOffset={Platform.OS == "android" ? 10 : 50}
+            />
           </PersistGate>
         </Provider>
       </I18nextProvider>
@@ -58,8 +64,6 @@ function RootLayoutContent() {
       router.replace("/(auth)");
     }
   }, [token, inAuthGroup]);
-
-
 
   const styles = MakeStyles(statusBar);
   if (!loaded) {
