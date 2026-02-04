@@ -2,23 +2,22 @@ import DropDownPicker from "@/components/DropDownPicker";
 import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
-import { updatePatientRecord } from "@/features/patientSlice";
+import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import React from "react";
 import { useTranslation } from "react-i18next";
-
 
 const PersonalHistory = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   // Get current state from Redux
-  const personalHistory = useAppSelector(
-    (state) => state.patient.patientRecord.personalHistory ?? {}
-  );
+  const pHistory = useAppSelector((state) => state.patient.emr.personalHistory);
+
+  const history = pHistory ?? {};
 
   const updateField = (key: string, value: any) => {
-    dispatch(updatePatientRecord({ step: "personalHistory", key, value }));
+    dispatch(updateEmr({ step: "personalHistory", key, value }));
   };
 
   return (
@@ -26,7 +25,7 @@ const PersonalHistory = () => {
       <AppInput
         label={t("Any allergies?")}
         inputProps={{
-          value: personalHistory.allergies || "",
+          value: history.allergies || "",
           onChangeText: (text) => updateField("allergies", text),
         }}
       />
@@ -34,34 +33,34 @@ const PersonalHistory = () => {
       <AppInput
         label={t("Any substance use?")}
         inputProps={{
-          value: personalHistory.substanceUse || "",
+          value: history.substanceUse || "",
           onChangeText: (text) => updateField("substanceUse", text),
         }}
       />
 
       <DropDownPicker
         label={t("Domestic situation?")}
-        value={personalHistory.domesticSituation || ""}
+        value={history.domesticSituation || ""}
         onChange={(val) => updateField("domesticSituation", val)}
       />
 
       <RadioButton
         label={t("Sleep quality?")}
         options={[t("Good"), t("Bad")]}
-        value={personalHistory.sleepQuality || ""}
+        value={history.sleepQuality || ""}
         onChange={(val) => updateField("sleepQuality", val)}
       />
 
       <RadioButton
         label={t("Appetite status?")}
         options={[t("Good"), t("Bad")]}
-        value={personalHistory.appetiteStatus || ""}
+        value={history.appetiteStatus || ""}
         onChange={(val) => updateField("appetiteStatus", val)}
       />
 
       <DropDownPicker
         label={t("Dietary habits?")}
-        value={personalHistory.dietaryHabits || ""}
+        value={history.dietaryHabits || ""}
         onChange={(val) => updateField("dietaryHabits", val)}
       />
     </StepItems>

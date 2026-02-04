@@ -12,8 +12,8 @@ const initialState: UserState = {
   statusBar:'startup',
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {
     setName: (state, action: PayloadAction<string>) => {
@@ -28,5 +28,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setName,setToken,setStatusBar} = userSlice.actions;
-export default userSlice.reducer;
+export const { setName,setToken,setStatusBar} = authSlice.actions;
+export default authSlice.reducer;

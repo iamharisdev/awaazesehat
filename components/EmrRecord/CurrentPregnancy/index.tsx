@@ -2,25 +2,26 @@ import DropDownPicker from "@/components/DropDownPicker";
 import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
-import { updatePatientRecord } from "@/features/patientSlice";
+import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import BottomSheet from "@/components/BottomSheet";
 import SelectionPopup from "@/components/SelectionPopup";
 
-
 const CurrentPregnancy = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   // Select slice from Redux
-  const currentPregnancy = useAppSelector(
-    (state) => state.patient.patientRecord.currentPregnancy ?? {}
+  const cPregnancy = useAppSelector(
+    (state) => state.patient.emr.currentPregnancy,
   );
 
+  const pregnancy = cPregnancy ?? {};
+
   const updateField = (key: string, value: any) => {
-    dispatch(updatePatientRecord({ step: "currentPregnancy", key, value }));
+    dispatch(updateEmr({ step: "currentPregnancy", key, value }));
   };
 
   return (
@@ -28,24 +29,22 @@ const CurrentPregnancy = () => {
       <AppInput
         label={t("Mode of conception")}
         inputProps={{
-          value: currentPregnancy.modeOfConception || "",
+          value: pregnancy.modeOfConception || "",
           onChangeText: (text) => updateField("modeOfConception", text),
         }}
       />
 
-   
-
       <RadioButton
         label={t("Planned pregnancy?")}
         options={[t("Yes"), t("No")]}
-        value={currentPregnancy.plannedPregnancy || ""}
+        value={pregnancy.plannedPregnancy || ""}
         onChange={(val) => updateField("plannedPregnancy", val)}
       />
 
       <AppInput
         label={t("How this pregnancy was confirmed?")}
         inputProps={{
-          value: currentPregnancy.confirmation || "",
+          value: pregnancy.confirmation || "",
           onChangeText: (text) => updateField("confirmation", text),
         }}
       />
@@ -53,31 +52,29 @@ const CurrentPregnancy = () => {
       <RadioButton
         label={t("Early urine test done?")}
         options={[t("Yes"), t("No")]}
-        value={currentPregnancy.urineTest || ""}
+        value={pregnancy.urineTest || ""}
         onChange={(val) => updateField("urineTest", val)}
       />
 
       <RadioButton
         label={t("Early ultrasound done?")}
         options={[t("Yes"), t("No")]}
-        value={currentPregnancy.ultrasound || ""}
+        value={pregnancy.ultrasound || ""}
         onChange={(val) => updateField("ultrasound", val)}
       />
 
       <RadioButton
         label={t("Folic acid intake?")}
         options={[t("Before pregnancy"), t("After pregnancy")]}
-        value={currentPregnancy.folicAcid || ""}
+        value={pregnancy.folicAcid || ""}
         onChange={(val) => updateField("folicAcid", val)}
       />
 
-         <DropDownPicker
+      <DropDownPicker
         label={t("Symptoms experienced?")}
-        value={currentPregnancy.symptoms || ""}
+        value={pregnancy.symptoms || ""}
         onChange={(val) => updateField("symptoms", val)}
       />
-       
-
     </StepItems>
   );
 };

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface PatientRecord {
+interface emr {
   profile?: Record<string, any>;
   obstetricHistory?: Record<string, any>;
   gynecologicalHistory?: Record<string, any>;
@@ -21,16 +21,18 @@ interface FollowUpRecord {
 }
 
 interface UserState {
-  patientRecord: PatientRecord;
-  patientRecordSteps: number;
+  currentPatient: any;
+  emr: emr;
+  emrSteps: number;
   followUpSteps: number;
   followUpRecord: FollowUpRecord;
 }
 
 const initialState: UserState = {
-  patientRecordSteps: 0,
+  currentPatient: null,
+  emrSteps: 0,
   followUpSteps: 0,
-  patientRecord: {
+  emr: {
     profile: {},
     obstetricHistory: {},
     gynecologicalHistory: {},
@@ -54,25 +56,31 @@ const patientSlice = createSlice({
   name: "patient",
   initialState,
   reducers: {
-    setPatientRecordSteps: (state, action: PayloadAction<number>) => {
-      state.patientRecordSteps = action.payload;
+    setCurrentPatient: (state, action: PayloadAction<any>) => {
+      state.currentPatient = action.payload;
+    },
+    setEmr: (state, action: PayloadAction<any>) => {
+      state.emr = action.payload;
+    },
+    setEmrSteps: (state, action: PayloadAction<number>) => {
+      state.emrSteps = action.payload;
     },
     setFollowUpSteps: (state, action: PayloadAction<number>) => {
       state.followUpSteps = action.payload;
     },
-    updatePatientRecord: (
+    updateEmr: (
       state,
       action: PayloadAction<{
-        step: keyof PatientRecord;
+        step: keyof emr;
         key: string;
         value: any;
-      }>
+      }>,
     ) => {
       const { step, key, value } = action.payload;
-      if (!state.patientRecord[step]) {
-        state.patientRecord[step] = {};
+      if (!state.emr[step]) {
+        state.emr[step] = {};
       }
-      state.patientRecord[step]![key] = value;
+      state.emr[step]![key] = value;
     },
     updateFollowUpRecord: (
       state,
@@ -80,7 +88,7 @@ const patientSlice = createSlice({
         step: keyof FollowUpRecord;
         key: string;
         value: any;
-      }>
+      }>,
     ) => {
       const { step, key, value } = action.payload;
       if (!state.followUpRecord[step]) {
@@ -89,20 +97,22 @@ const patientSlice = createSlice({
       state.followUpRecord[step]![key] = value;
     },
 
-    resetPatientRecord: (state) => {
-      state.patientRecord = {};
+    resetEmr: (state) => {
+      state.emr = {};
       state.followUpRecord = {};
-      state.patientRecordSteps = 0;
+      state.emrSteps = 0;
     },
   },
 });
 
 export const {
-  updatePatientRecord,
+  setCurrentPatient,
+  setEmr,
+  updateEmr,
   updateFollowUpRecord,
-  setPatientRecordSteps,
+  setEmrSteps,
   setFollowUpSteps,
-  resetPatientRecord,
+  resetEmr,
 } = patientSlice.actions;
 
 export default patientSlice.reducer;

@@ -1,26 +1,37 @@
-import { Icons } from "@/assets/svgs";
-import Button from "@/components/Button";
 import React from "react";
 import { Text, View } from "react-native";
-import { styles } from "./style";
 
+import { styles } from "./style";
 import { useTranslation } from "react-i18next";
+import { steps } from "@/utils/Json";
+import StepItem from "../../StepItem";
+import { useRouter } from "expo-router";
+import { useAppDispatch } from "@/store";
+import { setEmrSteps } from "@/features/patientSlice";
 
 const Emr = () => {
+  const router = useRouter();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   return (
     <View>
+      <Text style={styles.progress}>{t("0/9 Steps completed")}</Text>
       <Text style={styles.desc}>
         {t(
-          "Add visit details, prescriptions, and advice — all stored safely in the patient’s EMR."
+          "Review and verify patient details. Add missing information as needed.",
         )}
       </Text>
-      <Button
-        title={t("Add Visit")}
-        icon={<Icons.plus />}
-        textStyle={styles.textStyle}
-        style={styles.buttonContainer}
-      />
+
+      {steps.map((title, index) => (
+        <StepItem
+          key={index}
+          title={t(title)}
+          onPress={() => {
+            dispatch(setEmrSteps(index));
+            router.push("/patientProfile");
+          }}
+        />
+      ))}
     </View>
   );
 };

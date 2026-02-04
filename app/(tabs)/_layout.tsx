@@ -26,7 +26,8 @@ export default function TabLayout() {
       backBehavior="history"
     >
       {tabConfig.map((tab) => {
-        const icon = Icons[tab.icon];
+        const icon = Icons[tab.icon as keyof typeof Icons];
+
         return (
           <Tabs.Screen
             key={tab.name}

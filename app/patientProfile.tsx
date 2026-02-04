@@ -22,7 +22,7 @@ import {
 } from "@/components";
 import { styles } from "@/styles/patientProfileStyle";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setPatientRecordSteps } from "@/features/patientSlice";
+import { setEmrSteps } from "@/features/patientSlice";
 import { t } from "i18next";
 
 const stepScreens = [
@@ -41,24 +41,24 @@ export default function PatientSteps() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const sheetRef = useRef(null);
-  const { patientRecordSteps } = useAppSelector((state) => state.patient);
+  const { emrSteps, currentPatient } = useAppSelector((state) => state.patient);
 
   const totalSteps = stepScreens.length;
 
   const onPressNext = () => {
-    if (patientRecordSteps < totalSteps - 1) {
-      dispatch(setPatientRecordSteps(patientRecordSteps + 1));
+    if (emrSteps < totalSteps - 1) {
+      dispatch(setEmrSteps(emrSteps + 1));
     } else {
       sheetRef?.current?.open();
     }
   };
 
   const onPressLeft = () => {
-    if (patientRecordSteps === 0) {
+    if (emrSteps === 0) {
       router.back();
       return;
     }
-    dispatch(setPatientRecordSteps(patientRecordSteps - 1));
+    dispatch(setEmrSteps(emrSteps - 1));
   };
 
   const onPressRight = () => {
@@ -67,37 +67,31 @@ export default function PatientSteps() {
 
   return (
     <View style={styles.flex}>
-        <AppHeader
-          leftIcon={<Icons.left />}
-          title={t("Patient Record")}
-          rightIcon={<Icons.cross />}
-          onLeftPress={onPressLeft}
-          onRightPress={onPressRight}
-        />
+      <AppHeader
+        leftIcon={<Icons.left />}
+        title={t("Patient Record")}
+        rightIcon={<Icons.cross />}
+        onLeftPress={onPressLeft}
+        onRightPress={onPressRight}
+      />
       <KeyboardAvoidingWrapper>
-      
-        {stepScreens[patientRecordSteps]?.component}
+        {stepScreens[emrSteps]?.component}
       </KeyboardAvoidingWrapper>
 
       <View style={styles.footerContainer}>
-        <StepProgressBar
-          totalSteps={totalSteps}
-          currentStep={patientRecordSteps}
-        />
+        <StepProgressBar totalSteps={totalSteps} currentStep={emrSteps} />
         <View style={styles.subContainer}>
           <Text style={styles.stepText}>
             {t("Step {{current}} of {{total}}", {
-              current: patientRecordSteps + 1,
+              current: emrSteps + 1,
               total: totalSteps,
             })}
           </Text>
           <TouchableOpacity style={styles.buttonStyle} onPress={onPressNext}>
             <Text style={styles.buttonText}>
-              {patientRecordSteps < 8
-                ? t("Save & Next")
-                : t("Save patient record")}
+              {emrSteps < 8 ? t("Save & Next") : t("Save patient record")}
             </Text>
-            {patientRecordSteps < 8 && <Icons.whiteArrow marginLeft={10} />}
+            {emrSteps < 8 && <Icons.whiteArrow marginLeft={10} />}
           </TouchableOpacity>
         </View>
       </View>
@@ -105,11 +99,11 @@ export default function PatientSteps() {
         <GenericPopup
           title={t("Patient record completed")}
           description={t(
-            "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record."
+            "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.",
           )}
           btnTitle1={t("Start follow-up questions")}
           btnTitle2={t("Skip questions")}
-          icon={<Icons.patientRecord/>}
+          icon={<Icons.emr />}
           onCrossPress={() => sheetRef?.current.close()}
           closePress={() => sheetRef?.current.close()}
         />

@@ -8,7 +8,7 @@ type Status = "Critical" | "Mild" | "Normal";
 interface Props {
   icon?: any;
   title?: string;
-  status?: Status;
+  status?: string;
   time?: string;
   rowStyle?: StyleProp<ViewStyle>;
   inactive?: boolean;

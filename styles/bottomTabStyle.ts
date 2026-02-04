@@ -5,7 +5,8 @@ export const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: colors.white.w2,
     borderTopWidth: 1,
-    height: 60,
+    height: 1,
+    paddingTop:10,
     elevation: 5,
   },
   tabBarLabelStyle: {

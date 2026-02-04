@@ -36,7 +36,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent() {
-  const { statusBar, token } = useAppSelector((state) => state.user);
+  const { statusBar, token } = useAppSelector((state) => state.auth);
   const segments = useSegments();
   const router = useRouter();
 

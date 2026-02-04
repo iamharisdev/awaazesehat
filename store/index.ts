@@ -1,13 +1,13 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { api } from "../services/api";
-import authReducer from "../features/userSlice";
+import authReducer from "../features/authSlice";
 import patientReducer from "../features/patientSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import { asyncStorage } from "../storage/asyncStorage";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const rootReducer = combineReducers({
-  user: authReducer,
+  auth: authReducer,
   patient: patientReducer,
   [api.reducerPath]: api.reducer,
 });
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage: asyncStorage,
-  whitelist: [], // only persist this slice
+  whitelist: ['auth'], // only persist this slice
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

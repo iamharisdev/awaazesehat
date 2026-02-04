@@ -1,5 +1,5 @@
 const loginSchema = () => {
-  return { email: "haris@gmail.com", password: "password" };
+  return { email: "healthworker@awaazesehat.com", password: "health@worker@123" };
 };
 
 

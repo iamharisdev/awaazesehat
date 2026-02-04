@@ -11,16 +11,18 @@ interface PatientCardProps {
 
 const PatientCard: React.FC<PatientCardProps> = ({ name, ga, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.7}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <View style={styles.textContainer}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.ga}>GA: {ga}</Text>
       </View>
-      <Icons.arrowRight/>
+      <Icons.arrowRight />
     </TouchableOpacity>
   );
 };
 
-
-export default PatientCard
-
+export default PatientCard;

@@ -9,10 +9,10 @@ export const styles = StyleSheet.create({
   },
 
   subContainer: {
-    flex:1,
-    justifyContent:'center',
+    height: wp(200),
+    justifyContent: "center",
     alignSelf: "center",
-    alignItems:'center'
+    alignItems: "center",
   },
 
   headingStyle: {
@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFont(16),
     color: colors.black.b05,
     marginVertical: hp(1),
-    textAlign:'center'
+    textAlign: "center",
   },
   headingLight: {
     fontFamily: "Regular",
@@ -29,6 +29,6 @@ export const styles = StyleSheet.create({
     fontSize: normalizeFont(16),
     color: colors.black.b40,
     marginBottom: hp(3),
-    textAlign:'center'
+    textAlign: "center",
   },
 });

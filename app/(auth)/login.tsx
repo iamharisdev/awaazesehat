@@ -14,7 +14,7 @@ import { Text, View } from "react-native";
 import { LoginValidation } from "@/schemas/authValidation";
 import { loginSchema } from "@/schemas/schema";
 import { useAppDispatch } from "@/store";
-import { setToken } from "@/features/userSlice";
+import { setToken } from "@/features/authSlice";
 import { useLoginUserMutation } from "@/services/modules/auth";
 
 const Login = () => {
@@ -25,10 +25,10 @@ const Login = () => {
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const handleLogin = async (v: any) => {
-    const response = await loginUser({
+    const response: any = await loginUser({
       body: { email: v.email, password: v.password },
     }).unwrap();
-    console.log("Login success:", response);
+    dispatch(setToken(response?.token));
   };
 
   return (

@@ -1,6 +1,6 @@
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
-import { updatePatientRecord } from "@/features/patientSlice";
+import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,14 +12,14 @@ const SocioEconomicHistory = () => {
   const sheetRef = useRef<any>(null);
 
   // Access existing data from Redux
-  const socioEconomicHistory = useAppSelector(
-    (state) => state.patient.patientRecord.socioEconomicHistory ?? {}
+  const socioHistory = useAppSelector(
+    (state) => state.patient.emr.socioEconomicHistory,
   );
 
-  const { patientRecord } = useAppSelector((state) => state.patient);
+  const history = socioHistory ?? {};
 
   const updateField = (key: string, value: any) => {
-    dispatch(updatePatientRecord({ step: "socioEconomicHistory", key, value }));
+    dispatch(updateEmr({ step: "socioEconomicHistory", key, value }));
   };
 
   return (
@@ -27,7 +27,7 @@ const SocioEconomicHistory = () => {
       <AppInput
         label={t("Household size?")}
         inputProps={{
-          value: socioEconomicHistory.householdSize || "",
+          value: history.householdSize || "",
           onChangeText: (text) => updateField("householdSize", text),
         }}
       />
@@ -35,7 +35,7 @@ const SocioEconomicHistory = () => {
       <AppInput
         label={t("Husband occupation")}
         inputProps={{
-          value: socioEconomicHistory.husbandOccupation || "",
+          value: history.husbandOccupation || "",
           onChangeText: (text) => updateField("husbandOccupation", text),
         }}
       />
@@ -43,18 +43,17 @@ const SocioEconomicHistory = () => {
       <RadioButton
         label={t("Living arrangement?")}
         options={[t("With in-laws"), t("Separate")]}
-        value={socioEconomicHistory.livingArrangement || ""}
+        value={history.livingArrangement || ""}
         onChange={(val) => updateField("livingArrangement", val)}
       />
 
       <AppInput
         label={t("Approximate household monthly income")}
         inputProps={{
-          value: socioEconomicHistory.householdIncome || "",
+          value: history.householdIncome || "",
           onChangeText: (text) => updateField("householdIncome", text),
         }}
       />
-    
     </StepItems>
   );
 };

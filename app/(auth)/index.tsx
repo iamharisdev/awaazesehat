@@ -1,6 +1,6 @@
 import { Icons } from "@/assets/svgs";
 import { Button } from "@/components";
-import { setStatusBar } from "@/features/userSlice";
+import { setStatusBar } from "@/features/authSlice";
 import { useAppDispatch } from "@/store";
 import { styles } from "@/styles/startupStyle";
 import { ROUTES } from "@/utils/routes";

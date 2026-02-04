@@ -45,10 +45,10 @@ export const Symptoms: Symptom[] = [
 ];
 
 export const tabSwitcher = [
-  "Patient record",
-  "Follow-up questions",
-  "Reports",
   "EMR",
+  "Visits",
+  "Reports",
+  "Notes"
 ];
 
 export const steps = [

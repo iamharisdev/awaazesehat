@@ -5,10 +5,10 @@ import { styles } from "./style";
 
 interface PatientInfoCardProps {
   ga: string;
-  edd: string;
+  gpa: string;
 }
 
-const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ ga, edd }) => {
+const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ ga, gpa }) => {
   return (
     <View style={styles.row}>
       <View style={[styles.card, { backgroundColor: colors.green.g90 }]}>
@@ -16,8 +16,8 @@ const PatientInfoCard: React.FC<PatientInfoCardProps> = ({ ga, edd }) => {
         <Text style={styles.value}>{ga}</Text>
       </View>
       <View style={[styles.card, { backgroundColor: colors.green.g90 }]}>
-        <Text style={styles.label}>Estimated Delivery Date</Text>
-        <Text style={styles.value}>{edd}</Text>
+        <Text style={styles.label}>Gravida Para Abortion</Text>
+        <Text style={styles.value}>{gpa}</Text>
       </View>
     </View>
   );

@@ -1,7 +1,7 @@
 import DropDownPicker from "@/components/DropDownPicker";
 import StepItems from "../StepItems";
 import AppInput from "@/components/AppInput";
-import { updatePatientRecord } from "@/features/patientSlice";
+import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import React, { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,12 +15,14 @@ const PastMedicalHistory = () => {
   const dispatch = useAppDispatch();
   const sheetRef = useRef<any>(null);
 
-  const pastMedicalHistory = useAppSelector(
-    (state) => state.patient.patientRecord.pastMedicalHistory ?? {}
+  const medicalHistory = useAppSelector(
+    (state) => state.patient.emr.pastMedicalHistory,
   );
 
+  const history = medicalHistory ?? {};
+
   const updateField = (key: string, value: any) => {
-    dispatch(updatePatientRecord({ step: "pastMedicalHistory", key, value }));
+    dispatch(updateEmr({ step: "pastMedicalHistory", key, value }));
     sheetRef.current.close();
   };
 
@@ -33,13 +35,13 @@ const PastMedicalHistory = () => {
       <AppInput
         label={t("Current medication")}
         inputProps={{
-          value: pastMedicalHistory.currentMedication || "",
+          value: history.currentMedication || "",
           onChangeText: (text) => updateField("currentMedication", text),
         }}
       />
       <OpenBottomSheet
         label={t("Any medical condition?")}
-        value={pastMedicalHistory.medicalCondition || ""}
+        value={history.medicalCondition || ""}
         onPress={() => openSheet()}
       />
 
@@ -49,7 +51,7 @@ const PastMedicalHistory = () => {
           data={healthCondition}
           multiSelect={true}
           sheetHeight={400}
-          value={pastMedicalHistory.medicalCondition}
+          value={history.medicalCondition}
           onSave={(val) => updateField("medicalCondition", val)}
           onCrossPress={() => sheetRef.current?.close()}
         />

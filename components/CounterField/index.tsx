@@ -6,10 +6,11 @@ import { styles } from "./style";
 
 interface Props {
   title: string;
-  value?: number; // optional controlled value
+  value?: number | string;          // ✅ string bhi accept
   onChange?: (newValue: number) => void;
   min?: number;
   max?: number;
+  disabled?: boolean;               // ✅ added
 }
 
 const CounterField: React.FC<Props> = ({
@@ -18,49 +19,90 @@ const CounterField: React.FC<Props> = ({
   onChange,
   min = 0,
   max = 99,
+  disabled = false,
 }) => {
   const { t } = useTranslation();
-  const [count, setCount] = useState(value ?? min);
 
-  // keep internal state in sync if parent controls the value
+  // ✅ parse string → number safely
+  const parseValue = (val?: number | string) => {
+    if (val === undefined || val === null) return min;
+    const parsed =
+      typeof val === "string" ? parseInt(val, 10) : val;
+    return isNaN(parsed) ? min : parsed;
+  };
+
+  const [count, setCount] = useState<number>(parseValue(value));
+
+  // ✅ sync with parent value
   useEffect(() => {
-    if (value !== undefined && value !== count) {
-      setCount(value);
+    const parsed = parseValue(value);
+    if (parsed !== count) {
+      setCount(parsed);
     }
   }, [value]);
 
   const updateValue = (newValue: number) => {
     setCount(newValue);
-    onChange?.(newValue); // notify parent
+    onChange?.(newValue);
   };
 
   const handleDecrease = () => {
-    if (count > min) updateValue(count - 1);
+    if (disabled) return;
+    if (count > min) {
+      updateValue(count - 1);
+    }
   };
 
   const handleIncrease = () => {
-    if (count < max) updateValue(count + 1);
+    if (disabled) return;
+    if (count < max) {
+      updateValue(count + 1);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t(title)}</Text>
+      <Text
+        style={[
+          styles.title,
+          disabled && styles.disabledText, // 👈 optional if exists
+        ]}
+      >
+        {t(title)}
+      </Text>
 
       <View style={styles.subContainer}>
         <TouchableOpacity
-          style={[styles.button, styles.leftButton]}
+          style={[
+            styles.button,
+            styles.leftButton,
+            disabled && styles.disabledButton, // 👈 optional
+          ]}
           onPress={handleDecrease}
+          disabled={disabled}
         >
           <Icons.mins />
         </TouchableOpacity>
 
         <View style={styles.valueBox}>
-          <Text style={styles.valueText}>{count}</Text>
+          <Text
+            style={[
+              styles.valueText,
+              disabled && styles.disabledText,
+            ]}
+          >
+            {count}
+          </Text>
         </View>
 
         <TouchableOpacity
-          style={[styles.button, styles.rightButton]}
+          style={[
+            styles.button,
+            styles.rightButton,
+            disabled && styles.disabledButton,
+          ]}
           onPress={handleIncrease}
+          disabled={disabled}
         >
           <Icons.blackPlus />
         </TouchableOpacity>
