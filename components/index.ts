@@ -2,6 +2,8 @@ export { default as Button } from "./Button";
 export { default as AppHeader } from "./AppHeader";
 export { default as AppInput } from "./AppInput";
 export { default as AppLoader } from "./AppLoader";
+export { default as AppMultiSelect } from "./AppMultiSelect";
+export { default as TextAreaWithMic } from "./TextAreaWithMic";
 export { default as KeyboardAvoidingWrapper } from "./KeyboardAvoidingWrapper";
 export { default as BottomSheet } from "./BottomSheet";
 export { default as GenericPopup } from "./GenaricPopup";
@@ -15,17 +17,15 @@ export { default as FollowUpQuestion } from "./PatientProfile/Steps/FollowUpQues
 export { default as Reports } from "./PatientProfile/Steps/Reports";
 export { default as Visit } from "./PatientProfile/Steps/Visit";
 export { default as SymptomItem } from "./PatientProfile/SymptomItem";
-export {default as StepItem } from './PatientProfile/StepItem';
-export {default as RadioButton} from './RadioButton';
+export { default as StepItem } from "./PatientProfile/StepItem";
+export { default as RadioButton } from "./RadioButton";
 
-export {default as StepProgressBar} from './StepProgressBar';
-export {default as Datepicker} from './DatePicker';
-export {default as DropDownPicker} from './DropDownPicker';
-export {default as CounterField} from './CounterField'
-export * from './EmrRecord';
-export * from './FollowUpQuestions';
-export {default as SelectionPopup} from './SelectionPopup'
-export {default as OpenBottomSheet} from './OpenBottomSheet'
-export {default as RecordingPlayerCard} from './RecordingPlayerCard'
-
-
+export { default as StepProgressBar } from "./StepProgressBar";
+export { default as Datepicker } from "./DatePicker";
+export { default as DropDownPicker } from "./DropDownPicker";
+export { default as CounterField } from "./CounterField";
+export * from "./EmrRecord";
+export * from "./FollowUpQuestions";
+export { default as SelectionPopup } from "./SelectionPopup";
+export { default as OpenBottomSheet } from "./OpenBottomSheet";
+export { default as RecordingPlayerCard } from "./RecordingPlayerCard";

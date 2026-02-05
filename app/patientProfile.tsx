@@ -37,13 +37,15 @@ const stepScreens = [
   { key: "Socioeconomic History", component: <SocioEconomicHistory /> },
 ];
 
-export default function PatientSteps() {
+export default function PatientProfile() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const sheetRef = useRef(null);
-  const { emrSteps, currentPatient } = useAppSelector((state) => state.patient);
+  const { emrSteps, emr } = useAppSelector((state) => state.patient);
 
   const totalSteps = stepScreens.length;
+
+  console.log(emr);
 
   const onPressNext = () => {
     if (emrSteps < totalSteps - 1) {
@@ -103,7 +105,7 @@ export default function PatientSteps() {
           )}
           btnTitle1={t("Start follow-up questions")}
           btnTitle2={t("Skip questions")}
-          icon={<Icons.emr />}
+          // icon={<Icons.emr />}
           onCrossPress={() => sheetRef?.current.close()}
           closePress={() => sheetRef?.current.close()}
         />

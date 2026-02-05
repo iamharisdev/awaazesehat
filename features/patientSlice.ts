@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface emr {
-  profile?: Record<string, any>;
-  obstetricHistory?: Record<string, any>;
+  patient?: Record<string, any>;
+  obsHistory?: Record<string, any>;
   gynecologicalHistory?: Record<string, any>;
   pastMedicalHistory?: Record<string, any>;
   surgicalHistory?: Record<string, any>;
@@ -33,8 +33,8 @@ const initialState: UserState = {
   emrSteps: 0,
   followUpSteps: 0,
   emr: {
-    profile: {},
-    obstetricHistory: {},
+    patient: {},
+    obsHistory: {},
     gynecologicalHistory: {},
     pastMedicalHistory: {},
     surgicalHistory: {},

@@ -34,7 +34,10 @@ export default function PatientDetail() {
   // Fetch EMRs
   const { data, isLoading, isFetching, error } = useListEMRsQuery(
     { phoneNumber: phoneNumber! },
-    { skip: !phoneNumber },
+    {
+      skip: !phoneNumber,
+      refetchOnMountOrArgChange: true,
+    },
   );
 
   const [tab, setTab] = useState(0);

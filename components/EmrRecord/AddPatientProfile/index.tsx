@@ -16,17 +16,15 @@ const AddPatientProfile = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const patientProfile = useAppSelector((state) => state.patient.emr.profile);
-
-  const profile = patientProfile ?? {};
+  const patient = useAppSelector((state) => state.patient.emr.patient) ?? {};
 
   const updateField = (key: string, value: any) => {
-    dispatch(updateEmr({ step: "profile", key, value }));
+    dispatch(updateEmr({ step: "patient", key, value }));
   };
 
-  const ga = profile?.lastMenstruationDate
-    ? getWeeksAndDays(profile.lastMenstruationDate)
-    : profile?.gestationalAge || "0 weeks, 0 days";
+  const ga = patient?.lastMenstruationDate
+    ? getWeeksAndDays(patient.lastMenstruationDate)
+    : patient?.gestationalAge || "0 weeks, 0 days";
 
   const { weeks, days } = parseWeeksAndDays(ga);
 
@@ -52,22 +50,22 @@ const AddPatientProfile = () => {
   }, [formData]);
 
   return (
-    <StepItems title={t("Add Patient Profile")}>
+    <StepItems title={t("Add Patient patient")}>
       {/* Row 1: LMP + Pregnancy Month */}
       <View style={styles.row}>
         <View style={styles.flexItem}>
-          <DatePicker
+          {/* <DatePicker
             label={t("LMP")}
-            value={profile.lastMenstruationDate || new Date()}
+            value={patient.lastMenstruationDate || new Date()}
             onChange={(date) => updateField("lastMenstruationDate", date)}
-          />
+          /> */}
         </View>
         <View style={styles.flexItem}>
           <AppInput
             label={t("Pregnancy Month")}
             inputProps={{
-              value: profile.pregnancyMonth || "",
-              onChangeText: (text) => updateField("pregnancyMonth", text),
+              value: patient.pregnancyMonths || "",
+              onChangeText: (text) => updateField("pregnancyMonths", text),
             }}
           />
         </View>
@@ -103,46 +101,57 @@ const AddPatientProfile = () => {
       <RadioButton
         label={t("First Pregnancy?")}
         options={[t("Yes"), t("No")]}
-        value={profile.firstPregnancy === "true" ? "Yes" : "No"}
+        value={
+          patient?.firstPregnancy === "true"
+            ? "Yes"
+            : patient?.firstPregnancy === "false"
+              ? "No"
+              : patient?.firstPregnancy
+        }
         onChange={(val) =>
           updateField("firstPregnancy", val === "Yes" ? "true" : "false")
         }
       />
 
       {/* Conditional Fields */}
-      {profile?.firstPregnancy === "false" && (
+      {patient?.firstPregnancy === "false" && (
         <View>
           {/* Previous pregnancies */}
           <CounterField
             title="Total number of previous pregnancies?"
-            value={profile.total_pregnancies}
+            value={patient.total_pregnancies}
             onChange={(val) => updateField("total_pregnancies", val)}
           />
           <CounterField
             title="Number of living children?"
-            value={profile.living_children}
+            value={patient.living_children}
             onChange={(val) => updateField("living_children", val)}
           />
           <CounterField
             title="Number of miscarriages?"
-            value={profile.miscarriageCount}
+            value={patient.miscarriageCount}
             onChange={(val) => updateField("miscarriageCount", val)}
           />
           <AppInput
             label={t("Miscarriages detail")}
             inputProps={{
-              value: profile.miscarriages || "",
+              value: patient.miscarriages || "",
               onChangeText: (text) => updateField("miscarriages", text),
             }}
           />
           <CounterField
             title="Total number of stillbirths?"
-            value={profile.stillbirthCount}
+            value={patient.stillbirthCount}
             onChange={(val) => updateField("stillbirthCount", val)}
           />
           <CounterField
+            title="Total no. of neonatal deaths?"
+            initialValue={patient?.neonatalDeathCount || 0}
+            onChange={(val) => updateField("neonatalDeathCount", val)}
+          />
+          <CounterField
             title="Total number of pre-term births?"
-            value={profile.pretermBirths}
+            value={patient.pretermBirths}
             onChange={(val) => updateField("pretermBirths", val)}
           />
         </View>
@@ -150,7 +159,7 @@ const AddPatientProfile = () => {
       <AppInput
         label={t("Area of residence")}
         inputProps={{
-          value: profile.location || "",
+          value: patient.location || "",
           onChangeText: (text) => updateField("location", text),
         }}
       />
@@ -159,15 +168,15 @@ const AddPatientProfile = () => {
         label="Patient education level"
         inputProps={{
           placeholder: "Enter",
-          value: profile?.education || "",
-          onChange: (text) => updateField("education", text),
+          value: patient?.education || "",
+          onChangeText: (text) => updateField("education", text),
         }}
       />
 
       <RadioButton
         label={t("Patient occupation?")}
         options={[t("Working Woman"), t("HouseWife"), "Both"]}
-        value={profile.occupation || ""}
+        value={patient.occupation || ""}
         onChange={(val) => updateField("occupation", val)}
       />
 
@@ -175,7 +184,7 @@ const AddPatientProfile = () => {
       <AppInput
         label={t("Duration of marriage")}
         inputProps={{
-          value: profile.married_years || "",
+          value: patient.married_years || "",
           onChangeText: (text) => updateField("married_years", text),
         }}
       />
@@ -183,8 +192,8 @@ const AddPatientProfile = () => {
         label="Is husband her cousin?"
         inputProps={{
           placeholder: "Enter",
-          value: profile?.husbandRelation || "",
-          onChange: (text) => updateField("husbandRelation", text),
+          value: patient?.husbandRelation || "",
+          onChangeText: (text) => updateField("husbandRelation", text),
         }}
       />
     </StepItems>

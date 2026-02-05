@@ -1,7 +1,7 @@
 import { Icons } from "@/assets/svgs";
 import { AppLoader, KeyboardAvoidingWrapper, PatientCard } from "@/components";
 import { SearchInput } from "@/components/SearchInput";
-import { setCurrentPatient } from "@/features/patientSlice";
+import { setCurrentPatient, setEmr } from "@/features/patientSlice";
 import { useListPatientsQuery } from "@/services/modules/patient";
 import { useAppDispatch } from "@/store";
 import { styles } from "@/styles/homeScreenStyle";
@@ -111,6 +111,7 @@ const Index = () => {
             ga={item.phoneNumber}
             onPress={() => {
               dispatch(setCurrentPatient(item));
+              dispatch(setEmr(null));
               router.push({
                 pathname: "patientDetails",
                 params: { id: item.id },
