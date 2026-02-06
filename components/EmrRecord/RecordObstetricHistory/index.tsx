@@ -32,31 +32,33 @@ const RecordObstetricHistory = () => {
     Number(useAppSelector((s) => s.patient.emr?.patient?.living_children)) || 0;
 
   const updateField = (key: string, value: any) => {
-    dispatch(updateEmr({ step: "obstetricHistory", key, value }));
+    dispatch(updateEmr({ step: "obsHistory", key, value }));
   };
 
   return (
     <ScrollView>
       <StepItems title={t("Record Obstetric History")}>
         {/* Previous pregnancy conditions */}
-        <AppMultiSelect
+        {/* <AppMultiSelect
           label={t("Health condition in previous pregnancy")}
           options={CONDITIONS}
-          value={history?.previousPregnancyConditions}
+          value={history?.previousPregnancyConditions || ""}
           onChange={(items) =>
             updateField(
               "previousPregnancyConditions",
               items.map((i) => i.name),
             )
           }
-        />
+        /> */}
 
         <AppInput
-          label={t("Any complications in previous pregnancy")}
+          label={t(
+            "Any complications in previous pregnancy (e.g., blood transfusion or other issues)",
+          )}
           inputProps={{
-            value: history?.previousPregnancyComplications || "",
+            value: history?.previousPregnancycomplications || "",
             onChangeText: (text) =>
-              updateField("previousPregnancyComplications", text),
+              updateField("previousPregnancycomplications", text),
           }}
         />
 
@@ -69,7 +71,6 @@ const RecordObstetricHistory = () => {
               value={history?.birthMethod || ""}
               onChange={(val) => updateField("birthMethod", val)}
             />
-
             {history.birthMethod === "Normal delivery" && (
               <>
                 <RadioButton
@@ -88,7 +89,6 @@ const RecordObstetricHistory = () => {
                 />
               </>
             )}
-
             {history.birthMethod === "C-section" && (
               <AppInput
                 label={t("Reason for C-section")}
@@ -98,20 +98,17 @@ const RecordObstetricHistory = () => {
                 }}
               />
             )}
-
             <CounterField
               title={t("Age of the child")}
               value={Number(history?.childAge) || 0}
               onChange={(v) => updateField("childAge", v)}
             />
-
             <RadioButton
               label={t("Sex of the child")}
               options={[t("Male"), t("Female")]}
               value={history?.childGender || ""}
               onChange={(val) => updateField("childGender", val)}
             />
-
             <AppInput
               label={t("Was the child born full-term?")}
               inputProps={{
@@ -119,7 +116,6 @@ const RecordObstetricHistory = () => {
                 onChangeText: (text) => updateField("fullTermBirth", text),
               }}
             />
-
             <AppInput
               label={t("Place of delivery")}
               inputProps={{
@@ -127,21 +123,29 @@ const RecordObstetricHistory = () => {
                 onChangeText: (text) => updateField("birthPlace", text),
               }}
             />
-
             <AppInput
-              label={t("Birth weight of the child")}
+              label={t("Birth weight of the child (IBs)")}
               inputProps={{
                 value: history?.birthWeight || "",
                 onChangeText: (text) => updateField("birthWeight", text),
               }}
             />
-
             <TextAreaWithMic
               label={t("Any complications after birth for mother or child?")}
               value={history?.childHealthStatus || ""}
               onChange={(text) => updateField("childHealthStatus", text)}
               placeholder="Enter findings here..."
               onAudioSave={(text) => updateField("childHealthStatus", text)} // updates value when audio is converted
+              height={120} // multi-line textarea
+            />
+            <TextAreaWithMic
+              label={t(
+                "Child Health. Specify if the child goes to school or not?",
+              )}
+              value={history?.childHealthStatus || ""}
+              onChange={(text) => updateField("childrenSchoolStatus ", text)}
+              placeholder="Enter findings here..."
+              onAudioSave={(text) => updateField("childrenSchoolStatus ", text)} // updates value when audio is converted
               height={120} // multi-line textarea
             />
           </>

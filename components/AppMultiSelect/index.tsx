@@ -20,7 +20,7 @@ const AppMultiSelect: React.FC<Props> = ({
   label,
   addMore = "",
   options: defaultOptions,
-  value,
+  value = "",
   editable = true,
   onChange,
 }) => {

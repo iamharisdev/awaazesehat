@@ -54,11 +54,11 @@ const AddPatientProfile = () => {
       {/* Row 1: LMP + Pregnancy Month */}
       <View style={styles.row}>
         <View style={styles.flexItem}>
-          {/* <DatePicker
+          <DatePicker
             label={t("LMP")}
-            value={patient.lastMenstruationDate || new Date()}
+            value={new Date(patient?.lastMenstruationDate) || new Date()}
             onChange={(date) => updateField("lastMenstruationDate", date)}
-          /> */}
+          />
         </View>
         <View style={styles.flexItem}>
           <AppInput

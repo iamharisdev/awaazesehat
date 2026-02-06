@@ -28,10 +28,10 @@ import { t } from "i18next";
 const stepScreens = [
   { key: "Patient Profile", component: <AddPatientProfile /> },
   { key: "Obstetric History", component: <RecordObstetricHistory /> },
+  { key: "Current Pregnancy", component: <CurrentPregnancy /> },
   { key: "Gynecological History", component: <GynecologicalHistory /> },
   { key: "Past Medical History", component: <PastMedicalHistory /> },
   { key: "Surgical History", component: <SurgicalHistory /> },
-  { key: "Current Pregnancy", component: <CurrentPregnancy /> },
   { key: "Family History", component: <FamilyHistory /> },
   { key: "Personal History", component: <PersonalHistory /> },
   { key: "Socioeconomic History", component: <SocioEconomicHistory /> },
@@ -44,8 +44,6 @@ export default function PatientProfile() {
   const { emrSteps, emr } = useAppSelector((state) => state.patient);
 
   const totalSteps = stepScreens.length;
-
-  console.log(emr);
 
   const onPressNext = () => {
     if (emrSteps < totalSteps - 1) {

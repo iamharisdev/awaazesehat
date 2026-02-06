@@ -8,6 +8,7 @@ interface emr {
   surgicalHistory?: Record<string, any>;
   currentPregnancy?: Record<string, any>;
   familyHistory?: Record<string, any>;
+  trimester?: Record<string, any>;
   personalHistory?: Record<string, any>;
   socioEconomicHistory?: Record<string, any>;
 }
