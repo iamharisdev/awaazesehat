@@ -1,13 +1,13 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { useTranslation } from "react-i18next";
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
-import DropDownPicker from "@/components/DropDownPicker";
-import StepItems from "../StepItems";
-import { useAppDispatch, useAppSelector } from "@/store";
-import { updateEmr } from "@/features/patientSlice";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
 import AppMultiSelect from "@/components/AppMultiSelect";
+import { updateEmr } from "@/features/patientSlice";
+import { useAppDispatch, useAppSelector } from "@/store";
+import StepItems from "../StepItems";
+import { styles } from "./styles";
 
 /* -----------------------------
    Field configs (same as web)
@@ -61,52 +61,15 @@ const DEFAULT_SYMPTOMS: any = [
 ];
 
 /* -----------------------------
-   View row component
------------------------------- */
-
-const ViewRow = ({ label, value }: { label: string; value: string }) => {
-  if (!value) return null;
-
-  return (
-    <View style={{ marginBottom: 10 }}>
-      <Text style={{ fontSize: 14, color: "#0D0D0D" }}>{label}</Text>
-      <Text style={{ fontSize: 14, color: "#707070", marginTop: 2 }}>
-        {value}
-      </Text>
-    </View>
-  );
-};
-
-/* -----------------------------
-   Render view helper
------------------------------- */
-
-const renderView = (fields: any[], data: Record<string, any>, t: any) => {
-  return fields.map((field) => {
-    let value = data?.[field.key];
-
-    if (!value) return null;
-
-    if (field.type === "list") {
-      value = value
-        .split(",")
-        .map((v: string) => v.trim())
-        .join(", ");
-    }
-
-    return <ViewRow key={field.key} label={t(field.label)} value={value} />;
-  });
-};
-
-/* -----------------------------
    Main component
 ------------------------------ */
 
 interface Props {
+  title: string;
   editable?: boolean;
 }
 
-const CurrentPregnancy: React.FC<Props> = ({ editable = true }) => {
+const CurrentPregnancy = ({ title, editable = true }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -128,134 +91,181 @@ const CurrentPregnancy: React.FC<Props> = ({ editable = true }) => {
      VIEW MODE
   ------------------------------ */
 
-  if (!editable) {
+  const renderViewMode = () => {
+    if (!currentPregnancy && !trimester) {
+      return (
+        <p className="text-sm text-gray-500 italic">
+          No pregnancy data available.
+        </p>
+      );
+    }
+
+ 
+const renderSection = (fields: any[], data: any) =>
+  fields.map((field) => {
+    const value = data?.[field.key];
+
+    if (value === null || value === undefined || value === "") return null;
+
+    let displayValue = value;
+    if (field.type === "list") {
+      displayValue = value.split(",").join(", ");
+    }
+
     return (
-      <StepItems title={t("Current Pregnancy")}>
-        {!currentPregnancy && !trimester ? (
-          <Text style={{ color: "#999", fontStyle: "italic" }}>
-            {t("No pregnancy data available")}
-          </Text>
-        ) : (
-          <>
-            {renderView(CURRENT_PREGNANCY_FIELDS, currentPregnancy, t)}
-            {renderView(TRIMESTER_FIELDS, trimester, t)}
-          </>
-        )}
-      </StepItems>
+      <View key={field.key} style={styles.viewRow}>
+        <Text style={styles.viewLabel}>
+          {field.label}:
+        </Text>
+        <Text style={styles.viewValue}>
+          {displayValue}
+        </Text>
+      </View>
     );
+  });
+
+return (
+  <View style={styles.container}>
+    {renderSection(CURRENT_PREGNANCY_FIELDS, currentPregnancy)}
+    {renderSection(TRIMESTER_FIELDS, trimester)}
+  </View>
+);
   }
 
-  /* -----------------------------
-     EDIT MODE
-  ------------------------------ */
+  
 
   return (
-    <StepItems title={t("Current Pregnancy")}>
-      <AppInput
-        label={t("How was this pregnancy confirmed?")}
-        inputProps={{
-          value: currentPregnancy?.pregnancyDetectionMethod || "",
-          onChangeText: (text) =>
-            updateCurrentPregnancy("pregnancyDetectionMethod", text),
-        }}
-      />
+    <StepItems title={title}>
+      {editable ? (
+        <>
+          <AppInput
+            label={t("How was this pregnancy confirmed?")}
+            inputProps={{
+              value: currentPregnancy?.pregnancyDetectionMethod || "",
+              onChangeText: (text) =>
+                updateCurrentPregnancy("pregnancyDetectionMethod", text),
+            }}
+          />
 
-      <AppMultiSelect
-        label={t("Early pregnancy symptoms")}
-        options={DEFAULT_SYMPTOMS}
-        value={currentPregnancy?.earlyPregnancySymptoms || ""}
-        onChange={(val) =>
-          updateCurrentPregnancy("earlyPregnancySymptoms", val)
-        }
-      />
+          <AppMultiSelect
+            label={t("Early pregnancy symptoms")}
+            options={DEFAULT_SYMPTOMS}
+            value={currentPregnancy?.earlyPregnancySymptoms || ""}
+            onChange={(val) =>
+              updateCurrentPregnancy(
+                "earlyPregnancySymptoms",
+                val.map((i) => i.name).join(","),
+              )
+            }
+          />
 
-      <AppInput
-        label={t("Early ultrasound findings (if conducted)")}
-        inputProps={{
-          value: currentPregnancy?.earlyUltrasound || "",
-          onChangeText: (text) =>
-            updateCurrentPregnancy("earlyUltrasound", text),
-        }}
-      />
+          <AppInput
+            label={t("Early ultrasound findings (if conducted)")}
+            inputProps={{
+              placeholder: "Enter Result",
+              value: currentPregnancy?.earlyUltrasound || "",
+              onChangeText: (text) =>
+                updateCurrentPregnancy("earlyUltrasound", text),
+            }}
+          />
 
-      <RadioButton
-        label={t("Folic acid intake")}
-        options={[t("Before pregnancy"), t("After pregnancy"), t("None")]}
-        value={currentPregnancy?.folicAcid || ""}
-        onChange={(val) => updateCurrentPregnancy("folicAcid", val)}
-      />
+          <RadioButton
+            label={t("Folic acid intake")}
+            options={[t("Before pregnancy"), t("After pregnancy"), t("None")]}
+            value={currentPregnancy?.folicAcid || ""}
+            onChange={(val) => updateCurrentPregnancy("folicAcid", val)}
+          />
 
-      <AppInput
-        label={t("Blood and urine tests results (if conducted)")}
-        inputProps={{
-          value: currentPregnancy?.bloodUrineTests || "",
-          onChangeText: (text) =>
-            updateCurrentPregnancy("bloodUrineTests", text),
-        }}
-      />
+          <AppInput
+            label={t("Blood and urine tests results (if conducted)")}
+            inputProps={{
+              placeholder: "Enter in detail if other tests were conducted too",
+              value: currentPregnancy?.bloodUrineTests || "",
+              onChangeText: (text) =>
+                updateCurrentPregnancy("bloodUrineTests", text),
+            }}
+          />
 
-      <AppMultiSelect
-        label={t("Current symptoms")}
-        options={DEFAULT_SYMPTOMS}
-        value={currentPregnancy?.currentProblems || ""}
-        onChange={(val) => updateCurrentPregnancy("currentProblems", val)}
-      />
+          <AppMultiSelect
+            label={t("Current symptoms")}
+            options={DEFAULT_SYMPTOMS}
+            value={currentPregnancy?.currentProblems || ""}
+            onChange={(val) =>
+              updateCurrentPregnancy(
+                "currentProblems",
+                val.map((i) => i.name).join(","),
+              )
+            }
+          />
 
-      <AppInput
-        label={t("Experienced any fetal movements")}
-        inputProps={{
-          value: trimester?.fetusMovement || "",
-          onChangeText: (text) => updateTrimester("fetusMovement", text),
-        }}
-      />
+          <AppInput
+            label={t("Experienced any fetal movements")}
+            inputProps={{
+              placeholder: "Enter detail about baby movements",
+              value: trimester?.fetusMovement || "",
+              onChangeText: (text) => updateTrimester("fetusMovement", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Anomaly scan results (if conducted)")}
-        inputProps={{
-          value: trimester?.scanResults || "",
-          onChangeText: (text) => updateTrimester("scanResults", text),
-        }}
-      />
+          <AppInput
+            label={t("Anomaly scan results (if conducted)")}
+            inputProps={{
+              placeholder: "Enter detail if baby reported as normal",
+              value: trimester?.scanResults || "",
+              onChangeText: (text) => updateTrimester("scanResults", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Regular antenatal checkups")}
-        inputProps={{
-          value: trimester?.checkupVisits || "",
-          onChangeText: (text) => updateTrimester("checkupVisits", text),
-        }}
-      />
+          <AppInput
+            label={t("Regular antenatal checkups")}
+            inputProps={{
+              placeholder: "How many visits has she completed so far?",
+              value: trimester?.checkupVisits || "",
+              onChangeText: (text) => updateTrimester("checkupVisits", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Glucose screening results (if conducted)")}
-        inputProps={{
-          value: trimester?.sugarTestResult || "",
-          onChangeText: (text) => updateTrimester("sugarTestResult", text),
-        }}
-      />
+          <AppInput
+            label={t("Glucose screening results (if conducted)")}
+            inputProps={{
+              placeholder: "Enter results and any related medications",
+              value: trimester?.sugarTestResult || "",
+              onChangeText: (text) => updateTrimester("sugarTestResult", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Blood pressure monitoring (if conducted)")}
-        inputProps={{
-          value: trimester?.bloodPressureResult || "",
-          onChangeText: (text) => updateTrimester("bloodPressureResult", text),
-        }}
-      />
+          <AppInput
+            label={t("Blood pressure monitoring (if conducted)")}
+            inputProps={{
+              placeholder: "Enter results and any related medications",
+              value: trimester?.bloodPressureResult || "",
+              onChangeText: (text) =>
+                updateTrimester("bloodPressureResult", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Most recent ultrasound (if conducted)")}
-        inputProps={{
-          value: trimester?.recentUltrasound || "",
-          onChangeText: (text) => updateTrimester("recentUltrasound", text),
-        }}
-      />
+          <AppInput
+            label={t("Most recent ultrasound (if conducted)")}
+            inputProps={{
+              placeholder: "Enter findings",
+              value: trimester?.recentUltrasound || "",
+              onChangeText: (text) => updateTrimester("recentUltrasound", text),
+            }}
+          />
 
-      <AppInput
-        label={t("Additional pregnancy concerns")}
-        inputProps={{
-          value: currentPregnancy?.otherConcerns || "",
-          onChangeText: (text) => updateCurrentPregnancy("otherConcerns", text),
-        }}
-      />
+          <AppInput
+            label={t("Additional pregnancy concerns")}
+            inputProps={{
+              placeholder: "Enter",
+              value: currentPregnancy?.otherConcerns || "",
+              onChangeText: (text) =>
+                updateCurrentPregnancy("otherConcerns", text),
+            }}
+          />
+        </>
+      ) : (
+        renderViewMode()
+      )}
     </StepItems>
   );
 };

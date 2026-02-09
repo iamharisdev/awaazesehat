@@ -19,6 +19,7 @@ export const EmrApi = api.injectEndpoints({
       ) {
         try {
           const { data } = await queryFulfilled;
+    
 
           dispatch(setEmr(data.emrs[0]));
         } catch (err: any) {

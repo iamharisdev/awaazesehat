@@ -11,6 +11,8 @@ interface emr {
   trimester?: Record<string, any>;
   personalHistory?: Record<string, any>;
   socioEconomicHistory?: Record<string, any>;
+  createdAt?: string | Date | null;
+  updatedAt?: string | Date | null;
 }
 
 interface FollowUpRecord {
@@ -43,6 +45,8 @@ const initialState: UserState = {
     familyHistory: {},
     personalHistory: {},
     socioEconomicHistory: {},
+    createdAt: null,
+    updatedAt: null,
   },
   followUpRecord: {
     question1: {},
@@ -60,9 +64,23 @@ const patientSlice = createSlice({
     setCurrentPatient: (state, action: PayloadAction<any>) => {
       state.currentPatient = action.payload;
     },
+
     setEmr: (state, action: PayloadAction<any>) => {
-      state.emr = action.payload;
+      state.emr = {
+        patient: action.payload?.patient ?? {},
+        obsHistory: action.payload?.obsHistory ?? {},
+        gynecologicalHistory: action.payload?.gynecologicalHistory ?? {},
+        pastMedicalHistory: action.payload?.pastMedicalHistory ?? {},
+        surgicalHistory: action.payload?.surgicalHistory ?? {},
+        currentPregnancy: action.payload?.currentPregnancy ?? {},
+        familyHistory: action.payload?.familyHistory ?? {},
+        personalHistory: action.payload?.personalHistory ?? {},
+        socioEconomicHistory: action.payload?.socioEconomicHistory ?? {},
+        createdAt: action.payload?.createdAt ?? null,
+        updatedAt: action.payload?.updatedAt ?? null,
+      };
     },
+
     setEmrSteps: (state, action: PayloadAction<number>) => {
       state.emrSteps = action.payload;
     },
@@ -99,7 +117,6 @@ const patientSlice = createSlice({
     },
 
     resetEmr: (state) => {
-      state.emr = {};
       state.followUpRecord = {};
       state.emrSteps = 0;
     },

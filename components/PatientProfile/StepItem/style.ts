@@ -1,4 +1,5 @@
 import { colors } from "@/utils/colors";
+import { wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
@@ -9,6 +10,15 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.black.b90,
   },
+  startBtn: {
+  
+    backgroundColor: "#0B6E27",
+    textAlign: "center",
+    paddingVertical: 4,
+    paddingHorizontal:8,
+    borderRadius: 8,
+    color: "white",
+  },
   circle: {
     width: 20,
     height: 20,
@@ -16,9 +26,11 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: "dashed",
     borderColor: colors.black.b40,
-
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: colors.black.b90,
   },
+  greenCircle: { backgroundColor: "#0B6E27", borderColor: "#0B6E27" },
   title: {
     flex: 1,
     fontSize: 14,

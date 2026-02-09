@@ -1,5 +1,5 @@
 // screens/PatientSteps.tsx
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 
@@ -26,15 +26,15 @@ import { setEmrSteps } from "@/features/patientSlice";
 import { t } from "i18next";
 
 const stepScreens = [
-  { key: "Patient Profile", component: <AddPatientProfile /> },
-  { key: "Obstetric History", component: <RecordObstetricHistory /> },
-  { key: "Current Pregnancy", component: <CurrentPregnancy /> },
-  { key: "Gynecological History", component: <GynecologicalHistory /> },
-  { key: "Past Medical History", component: <PastMedicalHistory /> },
-  { key: "Surgical History", component: <SurgicalHistory /> },
-  { key: "Family History", component: <FamilyHistory /> },
-  { key: "Personal History", component: <PersonalHistory /> },
-  { key: "Socioeconomic History", component: <SocioEconomicHistory /> },
+  { key: "Patient Profile", component: AddPatientProfile },
+  { key: "Obstetric History", component: RecordObstetricHistory },
+  { key: "Current Pregnancy", component: CurrentPregnancy },
+  { key: "Gynecological History", component: GynecologicalHistory },
+  { key: "Past Medical History", component: PastMedicalHistory },
+  { key: "Surgical History", component: SurgicalHistory },
+  { key: "Family History", component: FamilyHistory },
+  { key: "Personal History", component: PersonalHistory },
+  { key: "Socio-economic History", component: SocioEconomicHistory },
 ];
 
 export default function PatientProfile() {
@@ -46,6 +46,7 @@ export default function PatientProfile() {
   const totalSteps = stepScreens.length;
 
   const onPressNext = () => {
+    console.log(emr)
     if (emrSteps < totalSteps - 1) {
       dispatch(setEmrSteps(emrSteps + 1));
     } else {
@@ -65,6 +66,23 @@ export default function PatientProfile() {
     router.back();
   };
 
+  const getSteps = () => {
+    if (emr?.patient?.firstPregnancy === "true") {
+      return stepScreens.filter((_, i) => i !== 1);
+    }
+    return stepScreens;
+  };
+
+  const [steps, setSteps] = useState(getSteps());
+
+  useEffect(() => {
+    setSteps(getSteps());
+  }, [emr?.patient?.firstPregnancy]);
+
+  const CurrentStepComponent = steps[emrSteps]?.component;
+  const check =
+    !emr?.createdAt || emr?.createdAt == emr?.updatedAt ? true : false;
+
   return (
     <View style={styles.flex}>
       <AppHeader
@@ -75,7 +93,7 @@ export default function PatientProfile() {
         onRightPress={onPressRight}
       />
       <KeyboardAvoidingWrapper>
-        {stepScreens[emrSteps]?.component}
+        <CurrentStepComponent title={steps[emrSteps].key} editable={check} />
       </KeyboardAvoidingWrapper>
 
       <View style={styles.footerContainer}>

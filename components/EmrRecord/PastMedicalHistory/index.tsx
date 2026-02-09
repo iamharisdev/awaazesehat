@@ -1,61 +1,111 @@
-import DropDownPicker from "@/components/DropDownPicker";
+import React, { useRef } from "react";
+import { useTranslation } from "react-i18next";
+import { Text, View } from "react-native";
+
 import StepItems from "../StepItems";
-import AppInput from "@/components/AppInput";
+
+import AppMultiSelect from "@/components/AppMultiSelect";
+import TextAreaWithMic from "@/components/TextAreaWithMic";
 import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
-import React, { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
-import OpenBottomSheet from "@/components/OpenBottomSheet";
-import BottomSheet from "@/components/BottomSheet";
-import SelectionPopup from "@/components/SelectionPopup";
 import { healthCondition } from "@/utils/Json";
+import { styles } from "./style";
 
-const PastMedicalHistory = () => {
+const MEDICAL_HISTORY_VIEW_FIELDS = [
+  {
+    key: "medicalCondition",
+    label: "Any health conditions",
+    type: "list",
+  },
+  {
+    key: "currentMedication",
+    label: "Any current medications",
+    type: "text",
+  },
+];
+
+interface Props {
+  title: string;
+  editable?: boolean;
+}
+
+const PastMedicalHistory = ({ title, editable = true }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const sheetRef = useRef<any>(null);
 
-  const medicalHistory = useAppSelector(
-    (state) => state.patient.emr.pastMedicalHistory,
-  );
-
-  const history = medicalHistory ?? {};
+  const medicalHistory =
+    useAppSelector((state) => state.patient.emr.pastMedicalHistory) ?? {};
 
   const updateField = (key: string, value: any) => {
     dispatch(updateEmr({ step: "pastMedicalHistory", key, value }));
-    sheetRef.current.close();
+    sheetRef.current?.close();
   };
 
-  const openSheet = () => {
-    sheetRef.current?.open();
+  /* ---------------- View Mode ---------------- */
+  const renderViewMode = () => {
+    const hasAnyValue = MEDICAL_HISTORY_VIEW_FIELDS.some((f) => {
+      const v = (medicalHistory as any)[f.key];
+      return v !== null && v !== undefined && v !== "" && v?.length !== 0;
+    });
+
+    if (!hasAnyValue) {
+      return (
+        <Text style={styles.emptyText}>
+          {t("No medical history data available.")}
+        </Text>
+      );
+    }
+
+    return (
+      <View style={styles.viewContainer}>
+        {MEDICAL_HISTORY_VIEW_FIELDS.map((field) => {
+          const value = (medicalHistory as any)[field.key];
+          if (!value || value.length === 0) return null;
+
+          let displayValue = value;
+
+          // Format multi-select values
+          if (field.type === "list") {
+            displayValue = Array.isArray(value) ? value.join(", ") : value;
+          }
+
+          return (
+            <View key={field.key} style={styles.viewRow}>
+              <Text style={styles.viewLabel}>{field.label}:</Text>
+              <Text style={styles.viewValue}>{displayValue}</Text>
+            </View>
+          );
+        })}
+      </View>
+    );
   };
+
+  /* ---------------- Edit Mode ---------------- */
+  const renderEditMode = () => (
+    <View style={styles.formContainer}>
+      <AppMultiSelect
+        label={t("Any health conditions")}
+        options={healthCondition}
+        value={medicalHistory?.medicalConditions}
+        onChange={(val) =>
+          updateField("medicalConditions", val.map((i) => i.name).join(","))
+        }
+      />
+      <TextAreaWithMic
+        label={t("Any current medications")}
+        value={medicalHistory?.currentMedications || ""}
+        onChange={(text) => updateField("currentMedications", text)}
+        placeholder="Enter findings here..."
+        onAudioSave={(text) => updateField("currentMedications", text)} // updates value when audio is converted
+        height={120} // multi-line textarea
+      />
+    </View>
+  );
 
   return (
-    <StepItems title={t("Past Medical history")}>
-      <AppInput
-        label={t("Current medication")}
-        inputProps={{
-          value: history.currentMedication || "",
-          onChangeText: (text) => updateField("currentMedication", text),
-        }}
-      />
-      <OpenBottomSheet
-        label={t("Any medical condition?")}
-        value={history.medicalCondition || ""}
-        onPress={() => openSheet()}
-      />
-
-      <BottomSheet ref={sheetRef} sheetHeight={400}>
-        <SelectionPopup
-          title={t("Any health condition?")}
-          data={healthCondition}
-          multiSelect={true}
-          sheetHeight={400}
-          value={history.medicalCondition}
-          onSave={(val) => updateField("medicalCondition", val)}
-          onCrossPress={() => sheetRef.current?.close()}
-        />
-      </BottomSheet>
+    <StepItems title={title}>
+      {editable ? renderEditMode() : renderViewMode()}
     </StepItems>
   );
 };

@@ -44,18 +44,18 @@ export const Symptoms: Symptom[] = [
   },
 ];
 
-export const tabSwitcher = [
-  "EMR",
-  "Visits",
-  "Reports",
-  "Notes"
-];
+export const tabSwitcher = ["EMR", "Visits", "Reports", "Notes"];
 
 export const steps = [
-  "Add patient profile",
-  "Record obstetric history",
-  "Record gynecological history",
-  "Review past medical history",
+  "Patient profile",
+  "Obstetric History",
+  "Current Pregnancy Detail",
+  "Gynecological History",
+  "Past Medical History",
+  "Surgical History",
+  "Family History",
+  "Personal History",
+  "Socio-economic History",
 ];
 
 export const tabConfig = [

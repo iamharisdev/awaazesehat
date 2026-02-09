@@ -6,7 +6,7 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 
-const dev_url = "http://192.168.192.28:8000/";
+const dev_url = "http://192.168.18.84:8000/";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: dev_url,

@@ -22,4 +22,25 @@ export const styles = StyleSheet.create({
     fontFamily: "Regular",
     fontWeight: "400",
   },
+   stepsBadge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#F2F2F2",
+    borderColor: "#BDBDBD",
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginBottom: 4,
+  },
+  stepsText: {
+    color: "#707070",
+    fontSize: 12,
+    fontWeight: "500",
+    textAlign: "center",
+  },
+  statusText: {
+    color: "#707070",
+    fontSize: 14,
+    marginVertical: 4,
+  },
 });

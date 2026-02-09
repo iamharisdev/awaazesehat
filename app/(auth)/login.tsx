@@ -66,9 +66,11 @@ const Login = () => {
               />
               <AppInput
                 label={t("Your Password *")}
+                password
                 inputProps={{
                   placeholder: "*********",
                   value: password,
+                  
                   onChangeText: handleChange("password"),
                   onBlur: handleBlur("password"),
                 }}

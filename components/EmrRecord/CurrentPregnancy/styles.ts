@@ -1,15 +1,9 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    gap: 10,
-   
+  container: {
+    gap: 12, // same as space-y-3
   },
-  flexItem: {
-    flex: 1,
-  },
-  
   viewRow: {
     flexDirection: "row",
     minHeight: 28,

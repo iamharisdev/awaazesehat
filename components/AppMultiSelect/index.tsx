@@ -20,7 +20,7 @@ const AppMultiSelect: React.FC<Props> = ({
   label,
   addMore = "",
   options: defaultOptions,
-  value = "",
+  value,
   editable = true,
   onChange,
 }) => {
@@ -31,8 +31,9 @@ const AppMultiSelect: React.FC<Props> = ({
 
   const [options, setOptions] = useState<Item[]>(defaultOptions);
   const [selected, setSelected] = useState<Item[]>(
-    value ? value.split(",").map((n) => ({ name: n })) : [],
+    value ? value.split(",").map((name) => ({ name })) : [],
   );
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMore, setIsMore] = useState(false);
   const [newValue, setNewValue] = useState("");
@@ -75,8 +76,10 @@ const AppMultiSelect: React.FC<Props> = ({
 
     if (!exists) {
       const item = { name: val };
-      setOptions((p) => [...p, item]);
-      setSelected((p) => [...p, item]);
+      const updatedSelected = [...selected, item];
+
+      setSelected(updatedSelected);
+      onChange(updatedSelected);
     }
 
     setNewValue("");
@@ -84,7 +87,9 @@ const AppMultiSelect: React.FC<Props> = ({
   };
 
   const handleRemoveTag = (index: number) => {
-    setSelected((p) => p.filter((_, i) => i !== index));
+    const updated = selected.filter((_, i) => i !== index);
+    setSelected(updated);
+    onChange(updated);
   };
 
   return (
@@ -127,6 +132,7 @@ const AppMultiSelect: React.FC<Props> = ({
             <FlatList
               data={listWithAddMore}
               keyExtractor={(_, i) => i.toString()}
+              nestedScrollEnabled
               renderItem={({ item }) => {
                 const isSelected = selected.some((s) => s.name === item.name);
 
