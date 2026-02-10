@@ -102,7 +102,7 @@ const CurrentPregnancy = ({ title, editable = true }: Props) => {
 
  
 const renderSection = (fields: any[], data: any) =>
-  fields.map((field) => {
+  fields?.map((field) => {
     const value = data?.[field.key];
 
     if (value === null || value === undefined || value === "") return null;

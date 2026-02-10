@@ -1,5 +1,6 @@
 import { setEmr } from "@/features/patientSlice";
 import { api } from "../api";
+import { errorMessage } from "@/utils/helperFunction";
 
 export const EmrApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,11 +20,51 @@ export const EmrApi = api.injectEndpoints({
       ) {
         try {
           const { data } = await queryFulfilled;
-    
+        
 
           dispatch(setEmr(data.emrs[0]));
-        } catch (err: any) {
-          console.error("❌ EMR fetch error:", err?.error || err?.message);
+        } catch (e: any) {
+          errorMessage(e?.error.message || e?.error || "❌ EMR fetch error");
+        }
+      },
+    }),
+    createEmr: builder.mutation({
+      query: (body: any) => ({
+        url: "emr/create", // your backend login route
+        method: "POST",
+        body,
+      }),
+      transformResponse: (result: any) => result,
+      invalidatesTags: ["emr"],
+      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          return data;
+        } catch (e: any) {
+          errorMessage(
+            e?.error?.data?.message || e?.error?.error || "Create new faild",
+          );
+        }
+      },
+    }),
+    updateEmr: builder.mutation({
+      query: (body: any) => ({
+        url: "/emr/update", // your backend login route
+        method: "Patch",
+        body,
+      }),
+      transformResponse: (result: any) => result,
+      invalidatesTags: ["emr"],
+      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          return data;
+        } catch (e: any) {
+          errorMessage(
+            e?.error?.data?.message || e?.error?.error || "Update emr failed",
+          );
         }
       },
     }),
@@ -32,4 +73,5 @@ export const EmrApi = api.injectEndpoints({
 });
 
 // Hooks
-export const { useListEMRsQuery } = EmrApi;
+export const { useListEMRsQuery, useCreateEmrMutation, useUpdateEmrMutation } =
+  EmrApi;

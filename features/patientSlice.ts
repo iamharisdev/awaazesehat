@@ -1,10 +1,23 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type EmrObjectSteps =
+  | "patient"
+  | "obsHistory"
+  | "gynecologicalHistory"
+  | "medicalHistory"
+  | "surgicalHistory"
+  | "currentPregnancy"
+  | "familyHistory"
+  | "personalHistory"
+  | "socioEconomicHistory"
+  | "trimester";
+
 interface emr {
+  id?: string | null;
   patient?: Record<string, any>;
   obsHistory?: Record<string, any>;
   gynecologicalHistory?: Record<string, any>;
-  pastMedicalHistory?: Record<string, any>;
+  medicalHistory?: Record<string, any>;
   surgicalHistory?: Record<string, any>;
   currentPregnancy?: Record<string, any>;
   familyHistory?: Record<string, any>;
@@ -36,15 +49,17 @@ const initialState: UserState = {
   emrSteps: 0,
   followUpSteps: 0,
   emr: {
+    id: null,
     patient: {},
     obsHistory: {},
     gynecologicalHistory: {},
-    pastMedicalHistory: {},
+    medicalHistory: {},
     surgicalHistory: {},
     currentPregnancy: {},
     familyHistory: {},
     personalHistory: {},
     socioEconomicHistory: {},
+    trimester: {},
     createdAt: null,
     updatedAt: null,
   },
@@ -67,15 +82,17 @@ const patientSlice = createSlice({
 
     setEmr: (state, action: PayloadAction<any>) => {
       state.emr = {
+        id: action.payload?.id ?? null,
         patient: action.payload?.patient ?? {},
         obsHistory: action.payload?.obsHistory ?? {},
         gynecologicalHistory: action.payload?.gynecologicalHistory ?? {},
-        pastMedicalHistory: action.payload?.pastMedicalHistory ?? {},
+        medicalHistory: action.payload?.medicalHistory ?? {},
         surgicalHistory: action.payload?.surgicalHistory ?? {},
         currentPregnancy: action.payload?.currentPregnancy ?? {},
         familyHistory: action.payload?.familyHistory ?? {},
         personalHistory: action.payload?.personalHistory ?? {},
         socioEconomicHistory: action.payload?.socioEconomicHistory ?? {},
+        trimester: action.payload?.trimester ?? {},
         createdAt: action.payload?.createdAt ?? null,
         updatedAt: action.payload?.updatedAt ?? null,
       };
@@ -90,17 +107,20 @@ const patientSlice = createSlice({
     updateEmr: (
       state,
       action: PayloadAction<{
-        step: keyof emr;
+        step: EmrObjectSteps;
         key: string;
         value: any;
       }>,
     ) => {
       const { step, key, value } = action.payload;
+
       if (!state.emr[step]) {
         state.emr[step] = {};
       }
+
       state.emr[step]![key] = value;
     },
+
     updateFollowUpRecord: (
       state,
       action: PayloadAction<{

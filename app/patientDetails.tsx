@@ -3,39 +3,34 @@ import {
   AppHeader,
   AppLoader,
   Emr,
-  FollowUpQuestion,
   KeyboardAvoidingWrapper,
   PatientHeader,
   PatientInfoCard,
-  Visit,
   Reports,
+  Visit,
 } from "@/components";
 import { TabSwitcher } from "@/components/PatientProfile/TabSwitcher";
 import { useListEMRsQuery } from "@/services/modules/emr";
 import { useAppSelector } from "@/store";
 import { styles } from "@/styles/patientDetailStyle";
 import { Symptoms, tabSwitcher } from "@/utils/Json";
-import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export default function PatientDetail() {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const patientState: any = useAppSelector((state) => state.patient);
 
-  // Safe extraction
-  const phoneNumber = patientState.currentPatient?.phoneNumber;
-  const patient = patientState.emr?.patient;
+  const patient = patientState?.currentPatient;
   const obs = patientState?.emr?.obsHistory;
 
   // Fetch EMRs
   const { data, isLoading, isFetching, error } = useListEMRsQuery(
-    { phoneNumber: phoneNumber! },
+    { phoneNumber: patient?.phoneNumber! },
     {
-      skip: !phoneNumber,
+      skip: !patient?.phoneNumber,
       refetchOnMountOrArgChange: true,
     },
   );
@@ -66,17 +61,7 @@ export default function PatientDetail() {
 
       <View style={styles.subContainer}>
         {/* Patient Info - default values while API loading */}
-        <PatientHeader
-          name={patient?.name || "N/A"}
-          age={`${patient?.age}y/o` || "N/A"}
-          phone={phoneNumber || "N/A"}
-          cnic={patient?.cnic || "N/A"}
-        />
-
-        <PatientInfoCard
-          ga={patient?.gestationalAge || "--"}
-          gpa={obs?.gravidaPara || "--"}
-        />
+        <PatientHeader />
 
         {/* Tabs */}
         <TabSwitcher tabs={tabSwitcher} activeIndex={tab} onChange={setTab} />

@@ -11,7 +11,7 @@ export { default as PasswordChangePopup } from "./PasswordChangePopup";
 export { default as TabBarIcon } from "./TabBarIcon";
 export { default as PatientCard } from "./PatientProfile/PatientCard";
 export { default as PatientHeader } from "./PatientProfile/PatientHeader";
-export { default as PatientInfoCard } from "./PatientProfile/PatientInfoCard";
+
 export { default as Emr } from "./PatientProfile/Steps/Emr";
 export { default as FollowUpQuestion } from "./PatientProfile/Steps/FollowUpQuestion";
 export { default as Reports } from "./PatientProfile/Steps/Reports";

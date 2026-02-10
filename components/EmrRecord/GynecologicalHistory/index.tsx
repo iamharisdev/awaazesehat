@@ -55,7 +55,7 @@ const GynecologicalHistory =({ title,editable = true }:Props) => {
 
     return (
       <View style={styles.viewContainer}>
-        {GYN_VIEW_FIELDS.map((field) => {
+        {GYN_VIEW_FIELDS?.map((field) => {
           const value = (gynecological as any)[field.key];
           if (!value) return null;
 

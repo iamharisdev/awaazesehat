@@ -50,7 +50,7 @@ const SurgicalHistory = ({ title, editable = true }: Props) => {
 
     return (
       <View style={styles.viewContainer}>
-        {SURGICAL_HISTORY_VIEW_FIELDS.map((field) => {
+        {SURGICAL_HISTORY_VIEW_FIELDS?.map((field) => {
           const value = (surgicalHistory as any)[field.key];
           if (!value || value.length === 0) return null;
 

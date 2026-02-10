@@ -56,7 +56,7 @@ const FamilyHistory = ({ title, editable = true }: Props) => {
 
     return (
       <View style={styles.viewContainer}>
-        {FAMILY_HISTORY_VIEW_FIELDS.map((field) => {
+        {FAMILY_HISTORY_VIEW_FIELDS?.map((field) => {
           const value = (familyHistory as any)[field.key];
           if (!value || value.length === 0) return null;
 

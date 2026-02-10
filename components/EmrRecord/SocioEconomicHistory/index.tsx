@@ -1,11 +1,10 @@
 import AppInput from "@/components/AppInput";
-import RadioButton from "@/components/RadioButton";
 import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
-import React, { useRef } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import StepItems from "../StepItems";
 import { Text, View } from "react-native";
+import StepItems from "../StepItems";
 import { styles } from "./style";
 
 const VIEW_FIELDS = [
@@ -35,8 +34,8 @@ const SocioEconomicHistory = ({ title, editable = true }: Props) => {
 
   /* ---------------- View Mode ---------------- */
   const renderViewMode = () => {
-    const hasAnyValue = VIEW_FIELDS.some((f) => {
-      const v = (socioEconomicHistor as any)[f.key];
+    const hasAnyValue = VIEW_FIELDS?.some((f) => {
+      const v = (socioEconomicHistor as any)[f?.key];
       return v !== null && v !== undefined && v !== "" && v?.length !== 0;
     });
 
@@ -50,8 +49,8 @@ const SocioEconomicHistory = ({ title, editable = true }: Props) => {
 
     return (
       <View style={styles.viewContainer}>
-        {socioEconomicHistor.map((field: any) => {
-          const value = (socioEconomicHistor as any)[field.key];
+        {VIEW_FIELDS?.map((field: any) => {
+          const value = (socioEconomicHistor as any)[field?.key];
           if (!value || value.length === 0) return null;
 
           let displayValue = value;
@@ -60,7 +59,7 @@ const SocioEconomicHistory = ({ title, editable = true }: Props) => {
           }
 
           return (
-            <View key={field.key} style={styles.viewRow}>
+            <View key={field?.key} style={styles.viewRow}>
               <Text style={styles.viewLabel}>{field.label}:</Text>
               <Text style={styles.viewValue}>{displayValue}</Text>
             </View>

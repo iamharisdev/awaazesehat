@@ -13,12 +13,12 @@ import { styles } from "./style";
 
 const MEDICAL_HISTORY_VIEW_FIELDS = [
   {
-    key: "medicalCondition",
+    key: "medicalConditions",
     label: "Any health conditions",
     type: "list",
   },
   {
-    key: "currentMedication",
+    key: "currentMedications",
     label: "Any current medications",
     type: "text",
   },
@@ -35,16 +35,16 @@ const PastMedicalHistory = ({ title, editable = true }: Props) => {
   const sheetRef = useRef<any>(null);
 
   const medicalHistory =
-    useAppSelector((state) => state.patient.emr.pastMedicalHistory) ?? {};
+    useAppSelector((state) => state.patient.emr.medicalHistory) ?? {};
 
   const updateField = (key: string, value: any) => {
-    dispatch(updateEmr({ step: "pastMedicalHistory", key, value }));
+    dispatch(updateEmr({ step: "medicalHistory", key, value }));
     sheetRef.current?.close();
   };
 
   /* ---------------- View Mode ---------------- */
   const renderViewMode = () => {
-    const hasAnyValue = MEDICAL_HISTORY_VIEW_FIELDS.some((f) => {
+    const hasAnyValue = MEDICAL_HISTORY_VIEW_FIELDS?.some((f) => {
       const v = (medicalHistory as any)[f.key];
       return v !== null && v !== undefined && v !== "" && v?.length !== 0;
     });
@@ -59,7 +59,7 @@ const PastMedicalHistory = ({ title, editable = true }: Props) => {
 
     return (
       <View style={styles.viewContainer}>
-        {MEDICAL_HISTORY_VIEW_FIELDS.map((field) => {
+        {MEDICAL_HISTORY_VIEW_FIELDS?.map((field) => {
           const value = (medicalHistory as any)[field.key];
           if (!value || value.length === 0) return null;
 

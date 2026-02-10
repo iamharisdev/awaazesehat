@@ -1,6 +1,4 @@
-import { persistor, store } from "@/store";
-import { api, formHeader } from "../api";
-import { errorMessage } from "@/utils/helperFunction";
+import { api } from "../api";
 
 export const PatientApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -36,7 +34,7 @@ export const PatientApi = api.injectEndpoints({
     >({
       query: ({ file }) => {
         const formData = new FormData();
-        console.log("Audio file:", file);
+     
         formData.append("file", file as any); // RN file format
         return {
           url: "/audio-to-text",

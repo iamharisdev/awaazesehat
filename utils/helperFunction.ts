@@ -10,6 +10,37 @@ export const errorMessage = (message: string) => {
 export const infoMessage = (message: string) => {
   return Toast.show({ type: "info", text1: "Information", text2: message });
 };
+export function getUpdatedGestationalAge(
+  pregnancyMonths: string,
+  createdAt: string | Date,
+  format: "full" | "short" = "full"
+): string {
+  const parsed = parseWeeksAndDays(pregnancyMonths);
+
+  const pregWeeks = Number(parsed.weeks || 0);
+  const pregDays = Number(parsed.days || 0);
+
+  const start = new Date(createdAt);
+  const today = new Date();
+
+  const diffMs = today.getTime() - start.getTime();
+  let diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  // Total days including pregWeeks and pregDays
+  let totalDays = pregWeeks * 7 + pregDays + diffDays;
+ if (format === "short") {
+    const weeks = Math.floor(totalDays / 7);
+    const days = totalDays % 7;
+    return `${weeks} weeks, ${days} days`;
+  } else {
+    const months = Math.floor(totalDays / 30); // months = totalDays / 30
+    totalDays -= months * 30;
+    const weeks = Math.floor(totalDays / 7);
+    const days = totalDays - weeks * 7;
+    return `${months} months, ${weeks} weeks, ${days} days`;
+  }
+}
+
 
 
 export function getWeeksAndDays(fromDate: string | Date): string {
@@ -41,4 +72,21 @@ export function parseWeeksAndDays(str: string) {
   if (daysMatch) result.days = daysMatch[1];
 
   return result;
+}
+
+type GPAInput = {
+  prev: number;
+  miscarriages: number;
+};
+
+export function calculateGPA({ prev, miscarriages }: GPAInput) {
+  if (prev && miscarriages) {
+    const G = prev + 1; // Gravida (including current)
+    const P = prev - miscarriages; // Para (pregnancies reaching viability)
+    const A = miscarriages; // Abortions (miscarriages)
+    return `G${G}P${P}A${A}`;
+  }
+  else{
+    return "--"
+  }
 }

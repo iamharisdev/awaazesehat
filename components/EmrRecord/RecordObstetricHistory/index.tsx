@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ScrollView, View } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -14,6 +14,7 @@ import { updateEmr } from "@/features/patientSlice";
 import TextAreaWithMic from "@/components/TextAreaWithMic";
 import { Text } from "react-native";
 import { styles } from "./style";
+import { calculateGPA } from "@/utils/helperFunction";
 
 const DELIVERY_OPTIONS = ["Normal delivery", "C-section"];
 const CONTRACTION_OPTIONS = ["Spontaneous", "Induced"];
@@ -171,9 +172,18 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
   const dispatch = useAppDispatch();
 
   const history = useAppSelector((s) => s.patient.emr.obsHistory) ?? {};
+  const patient = useAppSelector((s) => s.patient?.emr?.patient) ?? {};
 
-  const livingChildren: any =
-    Number(useAppSelector((s) => s.patient.emr?.patient?.living_children)) || 0;
+  const livingChildren: any = Number(patient?.living_children) || 0;
+
+  useEffect(() => {
+    let gpa = calculateGPA({
+      prev: Number(patient?.total_pregnancies),
+      miscarriages: Number(patient?.miscarriageCount),
+    });
+
+    updateField("gravidaPara", gpa);
+  }, []);
 
   const updateField = (key: string, value: any) => {
     dispatch(updateEmr({ step: "obsHistory", key, value }));
@@ -190,7 +200,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
 
     return (
       <View style={{ gap: 8 }}>
-        {OBS_VIEW_FIELDS.map((field) => {
+        {OBS_VIEW_FIELDS?.map((field) => {
           const value = (history as any)[field.key];
           if (!value) return null;
 
@@ -249,6 +259,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
               "Any complications in previous pregnancy (e.g., blood transfusion or other issues)",
             )}
             inputProps={{
+              placeholder: "Enter",
               value: history?.previousPregnancycomplications || "",
               onChangeText: (text) =>
                 updateField("previousPregnancycomplications", text),
@@ -276,6 +287,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
                   <AppInput
                     label={t("Duration of labor")}
                     inputProps={{
+                      placeholder: "Enter",
                       value: history?.birthDuration || "",
                       onChangeText: (text) =>
                         updateField("birthDuration", text),
@@ -287,6 +299,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
                 <AppInput
                   label={t("Reason for C-section")}
                   inputProps={{
+                    placeholder: "Enter",
                     value: history?.operationReason || "",
                     onChangeText: (text) =>
                       updateField("operationReason", text),
@@ -307,6 +320,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
               <AppInput
                 label={t("Was the child born full-term?")}
                 inputProps={{
+                  placeholder: "Enter",
                   value: history?.fullTermBirth || "",
                   onChangeText: (text) => updateField("fullTermBirth", text),
                 }}
@@ -314,6 +328,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
               <AppInput
                 label={t("Place of delivery")}
                 inputProps={{
+                  placeholder: "Enter",
                   value: history?.birthPlace || "",
                   onChangeText: (text) => updateField("birthPlace", text),
                 }}
@@ -321,6 +336,7 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
               <AppInput
                 label={t("Birth weight of the child (IBs)")}
                 inputProps={{
+                  placeholder: "Enter",
                   value: history?.birthWeight || "",
                   onChangeText: (text) => updateField("birthWeight", text),
                 }}
@@ -329,21 +345,19 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
                 label={t("Any complications after birth for mother or child?")}
                 value={history?.childHealthStatus || ""}
                 onChange={(text) => updateField("childHealthStatus", text)}
-                placeholder="Enter findings here..."
-                onAudioSave={(text) => updateField("childHealthStatus", text)} // updates value when audio is converted
-                height={120} // multi-line textarea
+                placeholder="Enter"
+                onAudioSave={(text) => updateField("childHealthStatus", text)}
+                height={120}
               />
               <TextAreaWithMic
                 label={t(
                   "Child Health. Specify if the child goes to school or not?",
                 )}
-                value={history?.childHealthStatus || ""}
-                onChange={(text) => updateField("childrenSchoolStatus ", text)}
-                placeholder="Enter findings here..."
-                onAudioSave={(text) =>
-                  updateField("childrenSchoolStatus ", text)
-                } // updates value when audio is converted
-                height={120} // multi-line textarea
+                value={history?.childSchoolStatus || ""}
+                onChange={(text) => updateField("childSchoolStatus", text)}
+                placeholder="Enter"
+                onAudioSave={(text) => updateField("childSchoolStatus", text)}
+                height={120}
               />
             </>
           )}

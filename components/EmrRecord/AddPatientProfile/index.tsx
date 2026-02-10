@@ -94,7 +94,7 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
 
     return (
       <View style={{ gap: 8 }}>
-        {VIEW_FIELDS.map((field) => {
+        {VIEW_FIELDS?.map((field) => {
           const value = (patient as any)[field.key];
           if (!value) return null;
 

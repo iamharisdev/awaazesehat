@@ -89,7 +89,7 @@ const PersonalHistory = ({ title, editable = true }: Props) => {
       fields: typeof VIEW_FIELDS | typeof FIELDS,
       data: any,
     ) =>
-      fields.map((field) => {
+      fields?.map((field) => {
         const value = data?.[field.key];
         if (!value) return null;
 
