@@ -31,4 +31,22 @@ export const styles = StyleSheet.create({
     marginBottom: hp(3),
     textAlign: "center",
   },
+  fabContainer: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+  },
+  fab: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor:colors.green.g20,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5, // Android shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
 });

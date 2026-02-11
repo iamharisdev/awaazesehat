@@ -13,7 +13,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
-import { SignupValidation } from "@/schemas/authValidation";
+import { SignupValidation } from "@/schemas/validations";
 
 const Signup = () => {
   const { t } = useTranslation();

@@ -13,7 +13,7 @@ export const infoMessage = (message: string) => {
 export function getUpdatedGestationalAge(
   pregnancyMonths: string,
   createdAt: string | Date,
-  format: "full" | "short" = "full"
+  format: "full" | "short" = "full",
 ): string {
   const parsed = parseWeeksAndDays(pregnancyMonths);
 
@@ -28,7 +28,7 @@ export function getUpdatedGestationalAge(
 
   // Total days including pregWeeks and pregDays
   let totalDays = pregWeeks * 7 + pregDays + diffDays;
- if (format === "short") {
+  if (format === "short") {
     const weeks = Math.floor(totalDays / 7);
     const days = totalDays % 7;
     return `${weeks} weeks, ${days} days`;
@@ -40,8 +40,6 @@ export function getUpdatedGestationalAge(
     return `${months} months, ${weeks} weeks, ${days} days`;
   }
 }
-
-
 
 export function getWeeksAndDays(fromDate: string | Date): string {
   const start = new Date(fromDate);
@@ -56,8 +54,6 @@ export function getWeeksAndDays(fromDate: string | Date): string {
   const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
   const weeks = Math.floor(totalDays / 7);
   const days = totalDays % 7;
-
-
 
   return `${weeks} weeks, ${days} days`;
 }
@@ -85,8 +81,22 @@ export function calculateGPA({ prev, miscarriages }: GPAInput) {
     const P = prev - miscarriages; // Para (pregnancies reaching viability)
     const A = miscarriages; // Abortions (miscarriages)
     return `G${G}P${P}A${A}`;
-  }
-  else{
-    return "--"
+  } else {
+    return "--";
   }
 }
+
+export const onlyDigits = (value: string) => value.replace(/\D/g, "");
+
+export const formatCNIC = (value: string) => {
+  const digits = onlyDigits(value).slice(0, 13);
+
+  if (digits.length <= 5) return digits;
+  if (digits.length <= 12) return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+  return `${digits.slice(0, 5)}-${digits.slice(5, 12)}-${digits.slice(12)}`;
+};
+
+export const removeCountryCode = (patient: any) => {
+  let number = patient?.phoneNumber;
+  return number?.startsWith("+92") ? number?.slice(3) : number;
+};

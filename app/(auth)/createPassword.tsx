@@ -6,10 +6,9 @@ import {
   Button,
   GenericPopup,
   KeyboardAvoidingWrapper,
-  NotificationPopup,
-  PasswordChangePopup,
+  PasswordChangePopup
 } from "@/components";
-import { passwordValidation } from "@/schemas/authValidation";
+import { passwordValidation } from "@/schemas/validations";
 import { styles } from "@/styles/createPasswordStyle";
 import { enableNotifications } from "@/utils/notification";
 import { useLocalSearchParams } from "expo-router";

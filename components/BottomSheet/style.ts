@@ -5,6 +5,6 @@ export const styles = StyleSheet.create({
   containerStyle: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 16,
+    padding: 2,
   },
 });

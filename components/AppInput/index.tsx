@@ -18,6 +18,7 @@ type Props = {
   error?: string;
   touched?: boolean;
   inputStyle?: any;
+  containerStyle?:any;
 };
 
 const AppInput: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const AppInput: React.FC<Props> = ({
   inputProps,
   password = false,
   inputStyle,
+  containerStyle,
   error,
   touched,
 }) => {
@@ -38,7 +40,7 @@ const AppInput: React.FC<Props> = ({
       : inputProps?.value;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,containerStyle]}>
       {label && <Text style={styles.title}>{label}</Text>}
       <View style={[styles.inputContainer, inputStyle]}>
         <TextInput

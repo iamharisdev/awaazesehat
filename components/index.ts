@@ -29,3 +29,4 @@ export * from "./FollowUpQuestions";
 export { default as SelectionPopup } from "./SelectionPopup";
 export { default as OpenBottomSheet } from "./OpenBottomSheet";
 export { default as RecordingPlayerCard } from "./RecordingPlayerCard";
+export { default as NewPatient } from "./NewPatient";

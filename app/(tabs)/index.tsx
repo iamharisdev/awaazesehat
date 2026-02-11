@@ -1,5 +1,5 @@
 import { Icons } from "@/assets/svgs";
-import { AppLoader, KeyboardAvoidingWrapper, PatientCard } from "@/components";
+import { AppLoader, BottomSheet, NewPatient, PatientCard } from "@/components";
 import { SearchInput } from "@/components/SearchInput";
 import { setCurrentPatient, setEmr } from "@/features/patientSlice";
 import { useListPatientsQuery } from "@/services/modules/patient";
@@ -8,8 +8,8 @@ import { styles } from "@/styles/homeScreenStyle";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FlatList, Text, View } from "react-native";
-import { useDispatch } from "react-redux";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 /* ✅ Define patient type (matches API) */
 interface Patient {
@@ -21,6 +21,7 @@ interface Patient {
 }
 
 const Index = () => {
+  const sheetRef = useRef<any>(null);
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -135,6 +136,22 @@ const Index = () => {
           ) : null
         }
       />
+      <View style={styles.fabContainer}>
+        <TouchableOpacity
+          style={styles.fab}
+          activeOpacity={0.7}
+          onPress={() => {
+            dispatch(setCurrentPatient(null));
+            sheetRef?.current.open();
+          }}
+        >
+          <Icon name="add" size={30} color="#fff" />
+        </TouchableOpacity>
+      </View>
+
+      <BottomSheet ref={sheetRef} sheetHeight={1000}>
+        <NewPatient ref={sheetRef} />
+      </BottomSheet>
 
       {/* ❌ Error */}
       {error && (

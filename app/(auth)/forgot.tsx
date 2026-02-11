@@ -5,7 +5,7 @@ import {
   Button,
   KeyboardAvoidingWrapper,
 } from "@/components";
-import { SignupValidation } from "@/schemas/authValidation";
+import { SignupValidation } from "@/schemas/validations";
 import { styles } from "@/styles/forgotStyle";
 import { ROUTES } from "@/utils/routes";
 import { useRouter } from "expo-router";

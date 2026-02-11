@@ -140,7 +140,7 @@ export default function PatientProfile() {
     }
   };
 
-  console.log(steps[emrSteps]?.key,emrSteps)
+
   return (
     <View style={styles.flex}>
       <AppHeader

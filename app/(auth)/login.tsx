@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
-import { LoginValidation } from "@/schemas/authValidation";
+import { LoginValidation } from "@/schemas/validations";
 import { loginSchema } from "@/schemas/schema";
 import { useAppDispatch } from "@/store";
 import { setToken } from "@/features/authSlice";

@@ -11,7 +11,7 @@ type BottomSheetProps = {
 };
 
 const BottomSheet = forwardRef<RBSheet, BottomSheetProps>(
-  ({ children, sheetHeight = height * 0.4 }, ref) => {
+  ({ children, sheetHeight = height }, ref) => {
     return (
       <RBSheet
         ref={ref} // ✅ forward ref to RBSheet

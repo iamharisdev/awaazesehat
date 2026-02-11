@@ -27,7 +27,7 @@ const PatientHeader = () => {
     <View style={styles.container}>
       <View style={styles.flex}>
         <Text style={styles.name}>{patient?.name}</Text>
-        <MaterialIcon name="edit" size={18} color="#0B6E27" />
+        {/* <MaterialIcon name="edit" size={18} color="#0B6E27" /> */}
       </View>
 
       <Text style={styles.sub}>
