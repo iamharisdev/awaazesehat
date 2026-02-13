@@ -17,7 +17,6 @@ interface Patient {
   name: string;
   phoneNumber: string;
   cnic?: string;
-  voiceNotes?: string[];
 }
 
 const Index = () => {
@@ -56,6 +55,8 @@ const Index = () => {
       skip: debouncedSearch.length > 0 && debouncedSearch.length < 3,
     },
   );
+
+
 
   // Append new patients
   useEffect(() => {

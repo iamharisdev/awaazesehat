@@ -84,10 +84,9 @@ export default function PatientProfile() {
     router.back();
   };
 
- useEffect(() => {
-  setSteps(getSteps(emr));
-}, [emr?.patient?.firstPregnancy]);
-
+  useEffect(() => {
+    setSteps(getSteps(emr));
+  }, [emr?.patient?.firstPregnancy]);
 
   const CurrentStepComponent = steps[emrSteps]?.component;
   const check =
@@ -103,13 +102,12 @@ export default function PatientProfile() {
         name: currentPatient?.name,
         age: currentPatient?.age,
         cnic: currentPatient?.cnic,
-        gestationalAge:
-          currentPatient?.gestationalAge ?? emr?.patient?.gestationalAge,
         phoneNumber: currentPatient?.phoneNumber || currentPatient?.phone,
         husbandName: currentPatient?.husbandName,
       },
       patientId: currentPatient?.id,
       phone: currentPatient?.phoneNumber,
+      visit: 1,
     };
 
     try {
@@ -130,6 +128,9 @@ export default function PatientProfile() {
       // ➕ CREATE EMR
       else {
         const res = await createEmr(updatedPayload).unwrap();
+        if (res?.emrId) {
+          onPressRight();
+        }
 
         console.log("✅ EMR created successfully:", res);
       }
@@ -139,7 +140,6 @@ export default function PatientProfile() {
       setIsLoading(false); // 🛑 stop loader
     }
   };
-
 
   return (
     <View style={styles.flex}>

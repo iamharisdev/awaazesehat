@@ -7,9 +7,15 @@ interface Props {
   label?: string;
   value?: Date;
   onChange?: (date: Date) => void;
+  minDate?: Date;
 }
 
-const DatePicker: React.FC<Props> = ({ label, value=new Date(), onChange }) => {
+const DatePicker: React.FC<Props> = ({
+  label,
+  value = new Date(),
+  onChange,
+  minDate,
+}) => {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleChange = (_: any, selectedDate?: Date) => {
@@ -29,7 +35,7 @@ const DatePicker: React.FC<Props> = ({ label, value=new Date(), onChange }) => {
         <Text style={styles.inputText}>
           {value.toLocaleDateString("en-GB")}
         </Text>
-      <Icons.calender/>
+        <Icons.calender />
       </TouchableOpacity>
 
       {showPicker && (
@@ -38,12 +44,11 @@ const DatePicker: React.FC<Props> = ({ label, value=new Date(), onChange }) => {
           mode="date"
           display="calendar"
           onChange={handleChange}
+          minimumDate={minDate}
         />
       )}
     </View>
   );
 };
-
-
 
 export default DatePicker;
