@@ -14,7 +14,9 @@ import Button from "@/components/Button";
 import {
   setActiveVisit,
   setViewVisit,
+  setVisit,
   setVisitSteps,
+  updateVisit,
 } from "@/features/patientSlice";
 import {
   useLazyVisitDetailQuery,
@@ -117,9 +119,10 @@ const VisitList = ({ ref }: Props) => {
           title="Add Visit"
           btnProps={{
             onPress: () => {
+              dispatch(setVisit(null));
               dispatch(setVisitSteps(0));
-              ref?.current?.open();
               dispatch(setActiveVisit(true));
+              ref?.current?.open();
             },
           }}
           icon={<Ionicons name="add" size={20} color="#FFFFFF" />}
@@ -130,7 +133,6 @@ const VisitList = ({ ref }: Props) => {
       {status === "pending" && (
         <View style={styles.loadingOverlay}>
           <AppLoader />
-        
         </View>
       )}
 

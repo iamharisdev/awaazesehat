@@ -1,7 +1,9 @@
 import React, { useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-
+import { Icons } from "@/assets/svgs";
+import AppHeader from "@/components/AppHeader";
 import BottomSheet from "@/components/BottomSheet";
+import KeyboardAvoidingWrapper from "@/components/KeyboardAvoidingWrapper";
 import StepProgressBar from "@/components/StepProgressBar";
 import {
   Diagnostics,
@@ -10,13 +12,17 @@ import {
   TreatmentPlan,
   VisitList,
 } from "@/components/VisitSteps";
-import { setVisitSteps } from "@/features/patientSlice";
+import {
+  Examination,
+  Examination,
+  ProposedPlan,
+  setVisitSteps,
+  Vitals,
+} from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useTranslation } from "react-i18next";
-import { Icons } from "@/assets/svgs";
 import { styles } from "./style";
-import AppHeader from "@/components/AppHeader";
-import KeyboardAvoidingWrapper from "@/components/KeyboardAvoidingWrapper";
+import { useCreateVisitMutation } from "@/services/modules/visit";
 
 const stepScreens = [
   { key: "Vitials", component: PatientVital },
@@ -29,36 +35,68 @@ const Visit = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const sheetRef = useRef<any>(null);
+
   const totalSteps = stepScreens.length;
 
-  const { visitSteps } = useAppSelector((s) => s.patient);
+  const {
+    visitSteps,
+    visit,
+    currentPatient: { id },
+  } = useAppSelector((s) => s.patient);
+
+  const [createVisit] = useCreateVisitMutation();
+  // const [updateVisit] = useUpdateVisitMutation();
+
+  const handleCreate = () => {
+    createVisit({
+      patientId: id ?? null,
+      visitDate: new Date().toISOString(),
+      vitals: visit?.vitals,
+      examination: visit?.examination,
+      diagnostics: visit?.diagnostics,
+      proposedPlan: visit?.proposedPlan,
+    });
+  };
+
+  // const handleUpdate = () => {
+  //   updateVisit({
+  //     visitId: visit.id,
+  //     patientId: id ?? null,
+  //     visitDate: new Date().toISOString(),
+  //     vitals: visit?.vitals,
+  //     examination: visit?.examination,
+  //     diagnostics: visit?.diagnostics,
+  //     proposedPlan: visit?.proposedPlan,
+  //   });
+  // };
 
   const onPressNext = () => {
     if (visitSteps < totalSteps - 1) {
       dispatch(setVisitSteps(visitSteps + 1));
     } else {
-      sheetRef?.current?.open();
+      console.log(visit);
     }
   };
 
   const onPressLeft = () => {
     if (visitSteps === 0) {
+      sheetRef?.current.close();
       return;
     }
     dispatch(setVisitSteps(visitSteps - 1));
   };
 
-  const onPressRight = () => {};
+  const onPressRight = () => {
+    sheetRef?.current.close();
+  };
 
   const CurrentStepComponent = stepScreens[visitSteps]?.component;
 
   return (
     <View>
       <VisitList ref={sheetRef} />
-
       <BottomSheet ref={sheetRef} sheetHeight={1000}>
         {/* header */}
-
         <AppHeader
           leftIcon={<Icons.left />}
           title={t("Visit")}
@@ -66,13 +104,10 @@ const Visit = () => {
           onLeftPress={onPressLeft}
           onRightPress={onPressRight}
         />
-
         {/* main */}
-
         <KeyboardAvoidingWrapper>
           <CurrentStepComponent title={stepScreens[visitSteps]?.key} />
         </KeyboardAvoidingWrapper>
-
         {/* footer */}
         <View style={styles.footerContainer}>
           <StepProgressBar totalSteps={totalSteps} currentStep={visitSteps} />

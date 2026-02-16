@@ -16,7 +16,6 @@ const BottomSheet = forwardRef<RBSheet, BottomSheetProps>(
       <RBSheet
         ref={ref} // ✅ forward ref to RBSheet
         height={sheetHeight}
-        closeOnDragDown={true}
         closeOnPressMask={true}
         customStyles={{
           wrapper: { backgroundColor: "rgba(0,0,0,0.5)" },
@@ -27,8 +26,7 @@ const BottomSheet = forwardRef<RBSheet, BottomSheetProps>(
         <View style={styles.container}>{children}</View>
       </RBSheet>
     );
-  }
+  },
 );
 
 export default BottomSheet;
-

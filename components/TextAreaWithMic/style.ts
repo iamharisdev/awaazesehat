@@ -1,3 +1,4 @@
+import { colors } from "@/utils/colors";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
@@ -44,7 +45,7 @@ export default StyleSheet.create({
     padding: 6,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#0D0D0D",
+    borderColor: colors.black.b70,
     backgroundColor: "#FFFFFF",
   },
 

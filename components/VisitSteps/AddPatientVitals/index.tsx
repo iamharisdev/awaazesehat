@@ -31,7 +31,6 @@ const AddPatientVitals: React.FC = () => {
       <DatePicker
         label="Visit Date"
         value={vitals?.visitDate ? new Date(vitals.visitDate) : new Date()}
-        disabled={editable}
         onChange={(date) => updateField("visitDate", date)}
         maxDate={new Date()}
       />

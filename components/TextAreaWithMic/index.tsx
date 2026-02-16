@@ -10,6 +10,7 @@ import {
 import { Audio } from "expo-av";
 import styles from "./style";
 import { useAudioToTextMutation } from "@/services/modules/patient";
+import Icon  from "react-native-vector-icons/Feather";
 
 interface Props {
   label?: string;
@@ -112,8 +113,11 @@ const TextAreaWithMic: React.FC<Props> = ({
           onPress={isRecording ? stopRecording : startRecording}
           style={[styles.micButton, isRecording && styles.micRecording]}
           disabled={disabled}
-        >
-          <Text style={styles.micIcon}>{isRecording ? "■" : "🎤"}</Text>
+        >{isRecording?
+          <Icon name="square" size={20}  />
+          :
+            <Icon name="mic" size={20}  />}
+          
         </Pressable>
 
         {/* ⏳ Loader overlay */}

@@ -91,7 +91,7 @@ export interface Examination {
 
 export interface ProposedPlan {
   diagnosisPregnency: string;
-  advisedLabTests: labTestEnum[];
+  advisedLabTests: string;
   doctorNotes: string;
   nextFollowUpTiming: Date;
   additionalNotes: string;

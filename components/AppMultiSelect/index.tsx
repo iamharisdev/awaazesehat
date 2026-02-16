@@ -41,7 +41,9 @@ const AppMultiSelect: React.FC<Props> = ({
   const listWithAddMore = [...options, ADD_MORE_ITEM];
 
   useEffect(() => {
-    onChange(selected);
+    if (selected.length > 0) {
+      onChange(selected);
+    }
   }, [selected]);
 
   const toggleDropdown = () => {
