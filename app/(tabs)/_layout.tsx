@@ -17,9 +17,17 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: styles.tabBarStyle,
         tabBarLabelStyle: styles.tabBarLabelStyle,
-        tabBarButton: (props) => (
-          <TouchableOpacity activeOpacity={0} {...props} />
-        ),
+        tabBarButton: (props: any) => {
+          const { delayLongPress, ...rest } = props;
+
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              delayLongPress={delayLongPress ?? undefined}
+              {...rest}
+            />
+          );
+        },
         tabBarActiveTintColor: colors.green.g80,
         tabBarInactiveTintColor: colors.black.b40,
       }}

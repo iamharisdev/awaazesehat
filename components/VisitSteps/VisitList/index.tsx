@@ -130,7 +130,7 @@ const VisitList = ({ ref }: Props) => {
       {status === "pending" && (
         <View style={styles.loadingOverlay}>
           <AppLoader />
-          <Text style={styles.loadingText}>Loading visits...</Text>
+        
         </View>
       )}
 

@@ -34,7 +34,7 @@ type VisitObjectSteps =
   | "diagnostics"
   | "proposedPlan";
 
-type VisitS = {
+type Visits = {
   id: string;
   patientId: string;
   visitDate: string;
@@ -129,7 +129,7 @@ interface FollowUpRecord {
 interface UserState {
   currentPatient: any;
   emr: emr;
-  visit: VisitS;
+  visit: Visits;
   visitSteps: number;
   emrSteps: number;
   activeVisit: boolean;

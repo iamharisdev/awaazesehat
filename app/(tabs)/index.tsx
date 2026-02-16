@@ -91,7 +91,7 @@ const Index = () => {
       />
 
       {/* ⏳ Loader */}
-      {(isLoading || isFetching) && <AppLoader fullScreen size="small" />}
+      {(isLoading || isFetching) && <AppLoader fullScreen size="large" />}
 
       {/* 📋 Patients list */}
       <FlatList<Patient>
