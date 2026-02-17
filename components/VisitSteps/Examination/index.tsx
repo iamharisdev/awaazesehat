@@ -11,7 +11,7 @@ import { styles } from "./style";
 
 const NORMAL_OPTIONS = [{ name: "Normal" }, { name: "Abnormal" }];
 
-const Examination: React.FC = () => {
+const PhysicalExamination: React.FC = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.examination);
 
@@ -84,7 +84,7 @@ const Examination: React.FC = () => {
             label="Spine"
             options={NORMAL_OPTIONS}
             value={fields?.spine}
-            onChange={(items: any[]) => updateField("spine", items[0]?.name)}
+            onChange={(items: any[]) => updateField("spine", items.map((i) => i.name).join(","))}
           />
 
           {fields?.spine === "Abnormal" && (
@@ -105,7 +105,7 @@ const Examination: React.FC = () => {
             options={NORMAL_OPTIONS}
             value={fields?.lymphNodes}
             onChange={(items: any[]) =>
-              updateField("lymphNodes", items[0]?.name)
+              updateField("lymphNodes", items.map((i) => i.name).join(","))
             }
           />
 
@@ -117,7 +117,7 @@ const Examination: React.FC = () => {
             options={NORMAL_OPTIONS}
             value={fields?.sizeComparison}
             onChange={(items: any[]) =>
-              updateField("sizeComparison", items[0]?.name)
+              updateField("sizeComparison", items.map((i) => i.name).join(","))
             }
           />
 
@@ -272,4 +272,4 @@ const Examination: React.FC = () => {
   );
 };
 
-export default Examination;
+export default PhysicalExamination;

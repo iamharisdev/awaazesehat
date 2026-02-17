@@ -21,8 +21,6 @@ const DEFAULT_LABS = [
   { name: "Rubella antibody status" },
 ];
 
-const toItems = (arr?: string[]) => arr?.map((v) => ({ name: v })) || [];
-
 const TreatmentPlan: React.FC = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.proposedPlan);
@@ -68,8 +66,7 @@ const TreatmentPlan: React.FC = () => {
       <AppMultiSelect
         label="Advised lab tests & scans"
         options={labsData}
-        // value={toItems(fields?.advisedLabTests)}
-  
+        value={fields?.advisedLabTests}
         onChange={(items) =>
           updateField("advisedLabTests", items.map((i) => i.name).join(","))
         }

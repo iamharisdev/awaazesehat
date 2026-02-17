@@ -1,75 +1,82 @@
-import { useAppSelector } from "@/store";
-import React, { useEffect, useMemo } from "react";
-import { View, Text, ScrollView, ActivityIndicator } from "react-native";
-import { styles } from "./style";
-import { useDispatch } from "react-redux";
+import FileUpload from "@/components/FileUpload";
 import { updateVisit } from "@/features/patientSlice";
-import { FileUpload } from "@/components";
+import {
+  useLazyLabTestsQuery,
+  useUploadPatientFileMutation
+} from "@/services/modules/visit";
+import { useAppSelector } from "@/store";
+import { createSelector } from "@reduxjs/toolkit";
+import React, { useEffect, useMemo } from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import { useDispatch } from "react-redux";
+import { styles } from "./style";
 
-const Diagnostics: React.FC = () => {
-  const dispatch = useDispatch();
-  const diagnostics = useAppSelector(
-    (s) => s.patient.visit.diagnostics.diagnostics,
-  );
-  const diagnosticsArray = useAppSelector((s) => {
-    const d = s.patient.visit.diagnostics;
+const selectDiagnostics = createSelector(
+  (state: any) => state.patient.visit.diagnostics,
+  (d) => {
     if (!d) return [];
     if (Array.isArray(d)) return d;
     if (Array.isArray(d.diagnostics)) return d.diagnostics;
     return [];
-  });
+  },
+);
 
-  const diagnosticsCount = useAppSelector((s) => {
-    const d = s.patient.visit.diagnostics;
-    if (!d) return 0;
-    if (Array.isArray(d)) return d.length;
-    return Array.isArray(d.diagnostics) ? d.diagnostics.length : 0;
-  });
+const selectDiagnosticsCount = createSelector(
+  selectDiagnostics,
+  (d) => d.length,
+);
 
+const Diagnostics: React.FC = () => {
+  const dispatch = useDispatch();
+
+  const diagnostics = useAppSelector(
+    (s) => s.patient.visit.diagnostics.diagnostics,
+  );
+  const diagnosticsArray = useAppSelector(selectDiagnostics);
+  const diagnosticsCount = useAppSelector(selectDiagnosticsCount);
   const patientId = useAppSelector((s) => s.patient?.currentPatient?.id);
 
   const editable = false;
 
-  // const {
-  //   mutate: getAdvisedTests,
-  //   data,
-  //   status,
-  // } = useGetAdvisedTestsMutation();
+  const [getAdvisedTests, { data, status }] = useLazyLabTestsQuery();
+  const [uploadPatientFile, { isLoading: isUploading }] =
+    useUploadPatientFileMutation();
 
-  // const { mutate: uploadPatientFile, isPending: isUploading } =
-  //   useUploadPatientFileMutation();
+
 
   // ✅ Fetch advised tests once
-  // useEffect(() => {
-  //   if (!patientId) return;
-  //   if (diagnosticsCount > 0) return;
 
-  //   getAdvisedTests(patientId, {
-  //     onSuccess: (res) => {
-  //       const advisedTests = res?.advisedTests || [];
+  useEffect(() => {
+    if (!patientId) return;
+    if (diagnosticsCount > 0) return;
 
-  //       Store.setState((draft: any) => {
-  //         const hasExisting =
-  //           draft.visitSteps?.diagnostics &&
-  //           Array.isArray(draft.visitSteps.diagnostics?.diagnostics) &&
-  //           draft.visitSteps.diagnostics.diagnostics.length > 0;
+    const fetchAdvisedTests = async () => {
+      try {
+        const res = await getAdvisedTests({ patientId }).unwrap();
+        const advisedTests = res?.advisedTests || [];
+        const diagnostics = advisedTests.map((test: any) => ({
+          name:
+            test?.testname ??
+            test?.testName ??
+            test?.name ??
+            String(test ?? ""),
+          uri: "",
+        }));
 
-  //         if (!hasExisting) {
-  //           draft.visitSteps.diagnostics = {
-  //             diagnostics: advisedTests.map((test: any) => ({
-  //               name:
-  //                 test?.testname ??
-  //                 test?.testName ??
-  //                 test?.name ??
-  //                 String(test ?? ""),
-  //               uri: "",
-  //             })),
-  //           };
-  //         }
-  //       });
-  //     },
-  //   });
-  // }, [patientId, diagnosticsCount]);
+        dispatch(
+          updateVisit({
+            step: "diagnostics",
+            key: "diagnostics",
+            value: diagnostics,
+          }),
+        );
+      } catch (error) {
+        console.log("Failed to fetch advised tests:", error);
+      }
+    };
+
+    fetchAdvisedTests();
+  }, [patientId, diagnosticsCount]);
 
   // ✅ Merge store + API states
   const testList = useMemo(() => {
@@ -143,21 +150,20 @@ const Diagnostics: React.FC = () => {
   };
 
   // ✅ Upload handler (React Native version expects local file object)
-  const handleFileUpload = (name: string, file: any) => {
+  const handleFileUpload = async (name: string, file: any) => {
     if (!file || !patientId) return;
 
-    uploadPatientFile(
-      {
+    try {
+      const res = await uploadPatientFile({
         patientId,
         file,
         description: `${name} Report`,
-      },
-      {
-        onSuccess: (res) => {
-          updateDiagnostic(name, res);
-        },
-      },
-    );
+      }).unwrap();
+
+      updateDiagnostic(name, res);
+    } catch (error) {
+      console.log("Upload failed:", error);
+    }
   };
 
   // ✅ Loading advised tests
@@ -173,12 +179,12 @@ const Diagnostics: React.FC = () => {
   return (
     <View style={styles.container}>
       {/* Overlay Loader */}
-      {/* {isUploading && (
+      {isUploading && (
         <View style={styles.overlay}>
           <ActivityIndicator size="large" />
           <Text style={styles.loadingText}>Uploading report...</Text>
         </View>
-      )} */}
+      )}
 
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.heading}>Patient Lab Tests</Text>
@@ -193,15 +199,15 @@ const Diagnostics: React.FC = () => {
                 summary={test?.summary || ""}
                 id={test?.id || null}
                 fileUri={test?.uri}
-                // disabled={editable || isUploading}
-                // onFilesChange={(files: any[]) => {
-                //   const fileItem = files?.[0];
-                //   if (!fileItem) return;
+                disabled={editable || isUploading}
+                onFilesChange={(files: any[]) => {
+                  const fileItem = files?.[0];
+                  if (!fileItem) return;
 
-                //   if (fileItem?.isLocal && fileItem?.file) {
-                //     handleFileUpload(test.name, fileItem.file);
-                //   }
-                // }}
+                  if (fileItem?.isLocal && fileItem?.file) {
+                    handleFileUpload(test.name, fileItem.file);
+                  }
+                }}
               />
             </View>
           ))

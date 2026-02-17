@@ -8,6 +8,7 @@ interface Props {
   value?: Date;
   onChange?: (date: Date) => void;
   minDate?: Date;
+  maxDate?:Date;
 }
 
 const DatePicker: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const DatePicker: React.FC<Props> = ({
   value = new Date(),
   onChange,
   minDate,
+  maxDate,
 }) => {
   const [showPicker, setShowPicker] = useState(false);
 
@@ -45,6 +47,7 @@ const DatePicker: React.FC<Props> = ({
           display="calendar"
           onChange={handleChange}
           minimumDate={minDate}
+          maximumDate={maxDate}
         />
       )}
     </View>
