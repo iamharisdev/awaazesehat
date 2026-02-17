@@ -1,4 +1,4 @@
-import { FileUpload } from "@/components";
+import FileUpload from "@/components/FileUpload";
 import { updateVisit } from "@/features/patientSlice";
 import {
   useLazyLabTestsQuery,

@@ -7,18 +7,12 @@ import KeyboardAvoidingWrapper from "@/components/KeyboardAvoidingWrapper";
 import StepProgressBar from "@/components/StepProgressBar";
 import {
   Diagnostics,
-  Examination,
+  PhysicalExamination,
   PatientVital,
   TreatmentPlan,
   VisitList,
 } from "@/components/VisitSteps";
-import {
-  Examination,
-  Examination,
-  ProposedPlan,
-  setVisitSteps,
-  Vitals,
-} from "@/features/patientSlice";
+import { setVisitSteps } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useTranslation } from "react-i18next";
 import { styles } from "./style";
@@ -26,7 +20,7 @@ import { useCreateVisitMutation } from "@/services/modules/visit";
 
 const stepScreens = [
   { key: "Vitials", component: PatientVital },
-  { key: "Examination", component: Examination },
+  { key: "Examination", component: PhysicalExamination },
   { key: "Diagnostics", component: Diagnostics },
   { key: "Treatment Plan", component: TreatmentPlan },
 ];

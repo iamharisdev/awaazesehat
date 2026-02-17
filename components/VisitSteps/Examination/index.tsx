@@ -11,7 +11,7 @@ import { styles } from "./style";
 
 const NORMAL_OPTIONS = [{ name: "Normal" }, { name: "Abnormal" }];
 
-const Examination: React.FC = () => {
+const PhysicalExamination: React.FC = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.examination);
 
@@ -272,4 +272,4 @@ const Examination: React.FC = () => {
   );
 };
 
-export default Examination;
+export default PhysicalExamination;
