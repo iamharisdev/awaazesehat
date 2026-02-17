@@ -13,6 +13,7 @@ interface Props {
   options: Item[];
   value?: string; // comma separated
   editable?: boolean;
+  single?: boolean;
   onChange: (items: Item[]) => void;
 }
 
@@ -22,6 +23,7 @@ const AppMultiSelect: React.FC<Props> = ({
   options: defaultOptions,
   value,
   editable = true,
+  single = false,
   onChange,
 }) => {
   const ADD_MORE_ITEM: Item = {
@@ -29,10 +31,12 @@ const AppMultiSelect: React.FC<Props> = ({
     __addMore: true,
   };
 
+console.log(typeof value, value)
   const [options, setOptions] = useState<Item[]>(defaultOptions);
-  const [selected, setSelected] = useState<Item[]>(
-    value ? value.split(",").map((name) => ({ name })) : [],
-  );
+  const [selected, setSelected] = useState(() => {
+    if (!value) return [];
+    return value?.split(",").map((name) => ({ name }));
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const [isMore, setIsMore] = useState(false);

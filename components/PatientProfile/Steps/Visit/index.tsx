@@ -16,7 +16,10 @@ import { setVisitSteps } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useTranslation } from "react-i18next";
 import { styles } from "./style";
-import { useCreateVisitMutation } from "@/services/modules/visit";
+import {
+  useCreateVisitMutation,
+  useUpdateVisitMutation,
+} from "@/services/modules/visit";
 
 const stepScreens = [
   { key: "Vitials", component: PatientVital },
@@ -30,8 +33,6 @@ const Visit = () => {
   const dispatch = useAppDispatch();
   const sheetRef = useRef<any>(null);
 
-  const totalSteps = stepScreens.length;
-
   const {
     visitSteps,
     visit,
@@ -39,36 +40,46 @@ const Visit = () => {
   } = useAppSelector((s) => s.patient);
 
   const [createVisit] = useCreateVisitMutation();
-  // const [updateVisit] = useUpdateVisitMutation();
+  const [updateVisit] = useUpdateVisitMutation();
 
-  const handleCreate = () => {
-    createVisit({
+  const totalSteps = stepScreens.length;
+  const editable = visit.createdAt;
+
+  const handleApi = async () => {
+    let test = visit?.proposedPlan?.advisedLabTests
+      ? visit.proposedPlan.advisedLabTests.split(",")
+      : [];
+    let body = {
       patientId: id ?? null,
       visitDate: new Date().toISOString(),
       vitals: visit?.vitals,
       examination: visit?.examination,
       diagnostics: visit?.diagnostics,
-      proposedPlan: visit?.proposedPlan,
-    });
-  };
+      proposedPlan: {
+        ...visit?.proposedPlan,
+        advisedLabTests: test,
+      },
+    };
+    let res;
 
-  // const handleUpdate = () => {
-  //   updateVisit({
-  //     visitId: visit.id,
-  //     patientId: id ?? null,
-  //     visitDate: new Date().toISOString(),
-  //     vitals: visit?.vitals,
-  //     examination: visit?.examination,
-  //     diagnostics: visit?.diagnostics,
-  //     proposedPlan: visit?.proposedPlan,
-  //   });
-  // };
+    console.log("editable:=>  ",editable);
+    if (editable) {
+      let payload = { ...body, visitId: visit.id };
+      res = await updateVisit(payload);
+    } else {
+      res = await createVisit(body);
+    }
+
+    if (res.data) {
+      sheetRef?.current.close();
+    }
+  };
 
   const onPressNext = () => {
     if (visitSteps < totalSteps - 1) {
       dispatch(setVisitSteps(visitSteps + 1));
     } else {
-      console.log(visit);
+      handleApi();
     }
   };
 

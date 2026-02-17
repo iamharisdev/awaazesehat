@@ -10,7 +10,7 @@ interface Option {
 interface RadioButtonProps {
   label?: string;
   options?: any;
-  value?: string;
+  value?: string|null;
   onChange?: (val: string) => void;
 }
 

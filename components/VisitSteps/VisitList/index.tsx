@@ -50,13 +50,7 @@ const VisitList = ({ ref }: Props) => {
   // Fetch EMRs
   // List visits query
   const patientId = patient?.id;
-  const {
-    data: visitsData,
-    isLoading,
-    isFetching,
-    status,
-    error,
-  } = useListVisitsQuery(
+  const { data: visitsData, status } = useListVisitsQuery(
     { id: patientId! },
     { skip: !patientId, refetchOnMountOrArgChange: true },
   );
@@ -98,8 +92,10 @@ const VisitList = ({ ref }: Props) => {
           }
         }}
         editAble={() => {
+          dispatch(setVisitSteps(0));
           dispatch(setViewVisit(false));
-          dispatch(setActiveVisit(true));
+          ref?.current?.open();
+          // dispatch(setActiveVisit(true));
         }}
       />
     );

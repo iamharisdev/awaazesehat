@@ -21,6 +21,8 @@ const DEFAULT_LABS = [
   { name: "Rubella antibody status" },
 ];
 
+const toItems = (arr?: string[]) => arr?.map((v) => ({ name: v })) || [];
+
 const TreatmentPlan: React.FC = () => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.proposedPlan);

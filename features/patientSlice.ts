@@ -35,11 +35,11 @@ type VisitObjectSteps =
   | "proposedPlan";
 
 type Visits = {
-  id: string;
-  patientId: string;
-  visitDate: string;
-  createdAt: string;
-  updatedAt: string;
+  id: string | null;
+  patientId: string | null;
+  visitDate: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   vitals?: Vitals;
   examination?: Examination;
   diagnostics?: any;
@@ -47,59 +47,66 @@ type Visits = {
 };
 
 export interface Vitals {
-  presentingComplaint: string;
+  presentingComplaint?: string | null;
   visitId: string;
-  bloodPressure: string;
-  pulseRate: string;
-  temperature: string;
-  respiratoryRate: string;
-  weight: string;
-  visitDate: string;
+  bloodPressure?: string | null;
+  pulseRate?: string | null;
+  temperature?: string | null;
+  respiratoryRate?: string | null;
+  weight?: string | null;
+  visitDate?: string | null;
 }
-
 export interface Examination {
-  bilateralPedalEdema: string;
-  clubbing: string;
-  koilonychia: string;
-  lymphNodes: string;
-  pallor: string;
-  spine: string;
-  abnormalSpine: string;
-  nippleDeformity: string;
-  nippleDischarge: string;
-  sizeComparison: string;
-  swelling: string;
-  abdominalWallEdema: string;
-  estimatedFetalWeight: string;
-  fetalHeartRate: string;
-  fundalHeight: string;
-  hernialOrfices: string;
-  lie: string;
-  liquor: string;
-  leukonychia: string;
-  presentation: string;
-  prominentVeins: string;
-  pulsations: string;
-  scarTenderness: string;
-  shapeOfAbdomen: string;
-  striae: string;
-  umbilicus: string;
-  perSpeculumFindings: string;
-  perVaginalFindings: string;
-  physicalFindings: string;
+  bilateralPedalEdema: string | null;
+  clubbing: string | null;
+  koilonychia: string | null;
+  lymphNodes: string | null;
+  pallor: string | null;
+  spine: string | null;
+  abnormalSpine: string | null;
+  nippleDeformity: string | null;
+  nippleDischarge: string | null;
+  sizeComparison: string | null;
+  swelling: string | null;
+  abdominalWallEdema: string | null;
+  estimatedFetalWeight: string | null;
+  fetalHeartRate: string | null;
+  fundalHeight: string | null;
+  hernialOrfices: string | null;
+  lie: string | null;
+  liquor: string | null;
+  leukonychia: string | null;
+  presentation: string | null;
+  prominentVeins: string | null;
+  pulsations: string | null;
+  scarTenderness: string | null;
+  shapeOfAbdomen: string | null;
+  striae: string | null;
+  umbilicus: string | null;
+  perSpeculumFindings: string | null;
+  perVaginalFindings: string | null;
+  physicalFindings: string | null;
 }
 
 export interface ProposedPlan {
   diagnosisPregnency: string;
-  advisedLabTests: string;
-  doctorNotes: string;
-  nextFollowUpTiming: Date;
-  additionalNotes: string;
-  generalPlan: string;
-  nextFollowUpPurpose: string;
-  instructions: string;
-  medication: string;
-  emrId: string;
+  advisedLabTests?: any | null;
+  doctorNotes?: string | null;
+  nextFollowUpTiming?: string | null; // keep string for API
+  generalPlan?: string | null;
+  createdBy?: "AI" | "Doctor" | null;
+  medication?: string[] | null;
+}
+
+export interface Diagnostics {
+  diagnostics?:
+    | {
+        id?: string;
+        summary?: string;
+        name?: string;
+        uri?: string | null;
+      }[]
+    | null;
 }
 
 interface emr {

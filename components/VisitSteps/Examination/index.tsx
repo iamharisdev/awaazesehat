@@ -84,7 +84,10 @@ const PhysicalExamination: React.FC = () => {
             label="Spine"
             options={NORMAL_OPTIONS}
             value={fields?.spine}
-            onChange={(items: any[]) => updateField("spine", items.map((i) => i.name).join(","))}
+            single
+            onChange={(items: any[]) =>
+              updateField("spine", items.map((i) => i.name).join(","))
+            }
           />
 
           {fields?.spine === "Abnormal" && (
@@ -104,6 +107,7 @@ const PhysicalExamination: React.FC = () => {
             label="Lymph Nodes"
             options={NORMAL_OPTIONS}
             value={fields?.lymphNodes}
+            single
             onChange={(items: any[]) =>
               updateField("lymphNodes", items.map((i) => i.name).join(","))
             }
@@ -116,6 +120,7 @@ const PhysicalExamination: React.FC = () => {
             label="Size Comparison"
             options={NORMAL_OPTIONS}
             value={fields?.sizeComparison}
+            single
             onChange={(items: any[]) =>
               updateField("sizeComparison", items.map((i) => i.name).join(","))
             }

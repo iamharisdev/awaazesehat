@@ -55,6 +55,16 @@ export const visitApi = api.injectEndpoints({
       }),
 
       providesTags: ["visit"],
+      transformResponse: (result: any) => {
+        let temp = {
+          ...result,
+          proposedPlan: {
+            ...result?.proposedPlan,
+            advisedLabTests: result?.proposedPlan?.advisedLabTests.join(","),
+          },
+        };
+        return temp;
+      },
       async onQueryStarted(
         { id }: { id: string },
         { dispatch, queryFulfilled },
@@ -80,9 +90,15 @@ export const visitApi = api.injectEndpoints({
     uploadPatientFile: builder.mutation({
       query: ({ patientId, file, description = "Lab Test Report" }) => {
         const formData = new FormData();
-        formData.append("patientId", patientId);
-        formData.append("file", file);
+
+        formData.append("patientId", String(patientId));
         formData.append("description", description);
+
+        formData.append("file", {
+          uri: file.uri,
+          type: file.mimeType || "application/pdf",
+          name: file.name || "upload.pdf",
+        } as any);
 
         return {
           url: "files/upload",
@@ -101,7 +117,7 @@ export const visitApi = api.injectEndpoints({
       async onQueryStarted(args, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log("Uploaded File Response:", data);
+       
           return data;
         } catch (e: any) {
           errorMessage(
@@ -155,26 +171,26 @@ export const visitApi = api.injectEndpoints({
         }
       },
     }),
-    // updateVisit: builder.mutation({
-    //   query: (body: any) => ({
-    //     url: "/emr/update", // your backend login route
-    //     method: "Patch",
-    //     body,
-    //   }),
-    //   transformResponse: (result: any) => result,
-    //   invalidatesTags: ["emr"],
-    //   async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
-    //     try {
-    //       const { data } = await queryFulfilled;
-    //       console.log(data);
-    //       return data;
-    //     } catch (e: any) {
-    //       errorMessage(
-    //         e?.error?.data?.message || e?.error?.error || "Update emr failed",
-    //       );
-    //     }
-    //   },
-    // }),
+    updateVisit: builder.mutation({
+      query: (body: any) => ({
+        url: `/visits/${body.visitId}`, // your backend login route
+        method: "Patch",
+        body,
+      }),
+      transformResponse: (result: any) => result,
+      invalidatesTags: ["visit"],
+      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          return data;
+        } catch (e: any) {
+          errorMessage(
+            e?.error?.data?.message || e?.error?.error || "Update emr failed",
+          );
+        }
+      },
+    }),
   }),
   overrideExisting: true,
 });
@@ -187,5 +203,5 @@ export const {
   useUploadPatientFileMutation,
   useDeletePatientFileMutation,
   useCreateVisitMutation,
-  //   useUpdateVisitMutation,
+  useUpdateVisitMutation,
 } = visitApi;
