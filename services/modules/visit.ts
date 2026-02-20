@@ -54,7 +54,6 @@ export const visitApi = api.injectEndpoints({
         method: "GET",
       }),
 
-      providesTags: ["visit"],
       transformResponse: (result: any) => {
         let temp = {
           ...result,
@@ -117,7 +116,7 @@ export const visitApi = api.injectEndpoints({
       async onQueryStarted(args, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-       
+
           return data;
         } catch (e: any) {
           errorMessage(

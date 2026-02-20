@@ -20,6 +20,7 @@ import {
   useCreateVisitMutation,
   useUpdateVisitMutation,
 } from "@/services/modules/visit";
+import AppLoader from "@/components/AppLoader";
 
 const stepScreens = [
   { key: "Vitials", component: PatientVital },
@@ -39,8 +40,9 @@ const Visit = () => {
     currentPatient: { id },
   } = useAppSelector((s) => s.patient);
 
-  const [createVisit] = useCreateVisitMutation();
-  const [updateVisit] = useUpdateVisitMutation();
+  const [createVisit, { isLoading: createLoading }] = useCreateVisitMutation();
+  const [updateVisit, { isLoading: updateLoading }] = useUpdateVisitMutation();
+  const isLoading = createLoading || updateLoading;
 
   const totalSteps = stepScreens.length;
   const editable = visit.createdAt;
@@ -62,7 +64,6 @@ const Visit = () => {
     };
     let res;
 
-    console.log("editable:=>  ",editable);
     if (editable) {
       let payload = { ...body, visitId: visit.id };
       res = await updateVisit(payload);
@@ -100,6 +101,7 @@ const Visit = () => {
   return (
     <View>
       <VisitList ref={sheetRef} />
+
       <BottomSheet ref={sheetRef} sheetHeight={1000}>
         {/* header */}
         <AppHeader
@@ -113,6 +115,7 @@ const Visit = () => {
         <KeyboardAvoidingWrapper>
           <CurrentStepComponent title={stepScreens[visitSteps]?.key} />
         </KeyboardAvoidingWrapper>
+        {isLoading && <AppLoader fullScreen />}
         {/* footer */}
         <View style={styles.footerContainer}>
           <StepProgressBar totalSteps={totalSteps} currentStep={visitSteps} />

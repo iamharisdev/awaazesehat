@@ -10,6 +10,7 @@ import React, { useEffect, useMemo } from "react";
 import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { styles } from "./style";
+import AppLoader from "@/components/AppLoader";
 
 const selectDiagnostics = createSelector(
   (state: any) => state.patient.visit.diagnostics,
@@ -169,10 +170,7 @@ const Diagnostics: React.FC = () => {
   // ✅ Loading advised tests
   if (status === "pending") {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="small" />
-        <Text style={styles.loadingText}>Loading advised tests...</Text>
-      </View>
+     <AppLoader fullScreen/>
     );
   }
 
@@ -180,10 +178,7 @@ const Diagnostics: React.FC = () => {
     <View style={styles.container}>
       {/* Overlay Loader */}
       {isUploading && (
-        <View style={styles.overlay}>
-          <ActivityIndicator size="large" />
-          <Text style={styles.loadingText}>Uploading report...</Text>
-        </View>
+        <AppLoader fullScreen/>
       )}
 
       <ScrollView contentContainerStyle={styles.scroll}>

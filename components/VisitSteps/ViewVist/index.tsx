@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Modal } from "react-native";
+import { View, Text, TouchableOpacity} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "@/store";
 import { styles } from "./style";
 import { Examination } from "@/features/patientSlice";
-// import PrescriptionModal from "./PrescriptionModal";
+import Prescription from "../Prescription";
+ 
 
 export const EXAMINATION_FIELDS: {
   key: keyof Examination;
@@ -101,10 +102,12 @@ const ViewVisit: React.FC<Props> = ({
       </View>
 
       {/* CONTENT */}
-      <ScrollView style={styles.content}>
-        {/* VITALS */}
-        {visit?.vitals &&
-          Object.entries(visit.vitals).map(([key, value]) =>
+
+      {/* VITALS */}
+      {visit?.vitals &&
+        Object.entries(visit.vitals)
+          .filter(([key]) => !["id", "visitId"].includes(key)) 
+          .map(([key, value]) =>
             show(value) ? (
               <View key={key} style={styles.row}>
                 <Text style={styles.label}>{key}</Text>
@@ -117,52 +120,51 @@ const ViewVisit: React.FC<Props> = ({
             ) : null,
           )}
 
-        <Text style={styles.sectionTitle}>General physical examination</Text>
+      <Text style={styles.sectionTitle}>General physical examination</Text>
 
-        {!hasAnyExaminationField && visit?.examination?.physicalFindings && (
-          <Text style={styles.value}>{visit.examination.physicalFindings}</Text>
-        )}
+      {!hasAnyExaminationField && visit?.examination?.physicalFindings && (
+        <Text style={styles.value}>{visit.examination.physicalFindings}</Text>
+      )}
 
-        {visit?.examination &&
-          EXAMINATION_FIELDS.map(({ key, label }) => {
-            const value = visit.examination?.[key];
+      {visit?.examination &&
+        EXAMINATION_FIELDS.map(({ key, label }) => {
+          const value = visit.examination?.[key];
 
-            if (!show(value)) return null;
+          if (!show(value)) return null;
 
-            return (
-              <View key={key} style={styles.row}>
-                <Text style={styles.label}>{label}</Text>
-                <Text style={styles.value}>{String(value)}</Text>
-              </View>
-            );
-          })}
+          return (
+            <View key={key} style={styles.row}>
+              <Text style={styles.label}>{label}</Text>
+              <Text style={styles.value}>{String(value)}</Text>
+            </View>
+          );
+        })}
 
-        {/* Diagnostics */}
-        {visit?.diagnostics?.diagnostics?.length > 0 &&
-          visit.diagnostics.diagnostics.map((item: any, index: number) =>
-            item.summary ? (
-              <View key={index} style={styles.section}>
-                <Text style={styles.sectionTitle}>
-                  {item.name} report summary
+      {/* Diagnostics */}                 
+      {visit?.diagnostics?.diagnostics?.length > 0 &&
+        visit.diagnostics.diagnostics.map((item: any, index: number) =>
+          item.summary ? (
+            <View key={index} style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {item.name} report summary
+              </Text>
+              {item.summary.split("\n").map((line: string, i: number) => (
+                <Text key={i} style={styles.bullet}>
+                  • {line}
                 </Text>
-                {item.summary.split("\n").map((line: string, i: number) => (
-                  <Text key={i} style={styles.bullet}>
-                    • {line}
-                  </Text>
-                ))}
-              </View>
-            ) : null,
-          )}
-
-        {/* Medications */}
-
-        {medication && medication.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Advised medications</Text>
-            <Text style={styles.value}>{medication}</Text>
-          </View>
+              ))}
+            </View>
+          ) : null,
         )}
-      </ScrollView>
+
+      {/* Medications */}
+
+      {medication && medication.length > 0 && (
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Advised medications</Text>
+          <Text style={styles.value}>{medication}</Text>
+        </View>
+      )}
 
       {/* FOOTER */}
       <View style={styles.footer}>
@@ -181,14 +183,6 @@ const ViewVisit: React.FC<Props> = ({
           </TouchableOpacity>
         )}
       </View>
-
-      {/* Prescription Modal
-      <Modal visible={showPrescription} animationType="slide">
-        <PrescriptionModal
-          onClose={() => setShowPrescription(false)}
-          visitNumber={visitNumber}
-        />
-      </Modal> */}
     </View>
   );
 };

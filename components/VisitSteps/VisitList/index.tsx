@@ -137,6 +137,7 @@ const VisitList = ({ ref }: Props) => {
         <FlatList
           data={visitsData}
           keyExtractor={(item) => item.id}
+          nestedScrollEnabled
           contentContainerStyle={styles.listContainer}
           renderItem={({ item, index }) => (
             <TouchableOpacity
