@@ -4,24 +4,27 @@ import {
   AppLoader,
   Emr,
   KeyboardAvoidingWrapper,
+  Notes,
   PatientHeader,
-  PatientInfoCard,
   Reports,
   Visit,
 } from "@/components";
 import { TabSwitcher } from "@/components/PatientProfile/TabSwitcher";
 import { useListEMRsQuery } from "@/services/modules/emr";
-import { useAppSelector } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { styles } from "@/styles/patientDetailStyle";
+import { colors } from "@/utils/colors";
 import { Symptoms, tabSwitcher } from "@/utils/Json";
-import React, { useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export default function PatientDetail() {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const patientState: any = useAppSelector((state) => state.patient);
+  const tab: any = useAppSelector((state) => state.patient.tab);
 
   const patient = patientState?.currentPatient;
   const obs = patientState?.emr?.obsHistory;
@@ -35,7 +38,6 @@ export default function PatientDetail() {
     },
   );
 
-  const [tab, setTab] = useState(0);
   const restCount = Symptoms.length - 3;
 
   const tabRendering = () => {
@@ -44,18 +46,18 @@ export default function PatientDetail() {
         return <Emr />;
       case 1:
         return <Visit />;
-      // return <FollowUpQuestion />;
+
       case 2:
         return <Reports />;
       case 3:
-        return <Visit />;
+        return <Notes />;
       default:
         return null;
     }
   };
 
   return (
-    <KeyboardAvoidingWrapper>
+    <View style={{ flex: 1, backgroundColor: colors.white.w2 }}>
       {/* App Header */}
       <AppHeader title={t("Patient profile")} leftIcon={<Icons.left />} />
 
@@ -64,12 +66,17 @@ export default function PatientDetail() {
         <PatientHeader />
 
         {/* Tabs */}
-        <TabSwitcher tabs={tabSwitcher} activeIndex={tab} onChange={setTab} />
-        <View style={styles.cardStyle}>{tabRendering()}</View>
+        <TabSwitcher tabs={tabSwitcher} activeIndex={tab} />
+
+        <View style={styles.cardStyle}>
+          <KeyboardAvoidingWrapper scrollEnable>
+            {tabRendering()}
+          </KeyboardAvoidingWrapper>
+        </View>
 
         {/* Full screen loader */}
         {(isLoading || isFetching) && <AppLoader fullScreen size="large" />}
       </View>
-    </KeyboardAvoidingWrapper>
+    </View>
   );
 }

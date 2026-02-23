@@ -135,6 +135,7 @@ interface FollowUpRecord {
 
 interface UserState {
   currentPatient: any;
+  tab:number;
   emr: emr;
   visit: Visits;
   visitSteps: number;
@@ -147,6 +148,7 @@ interface UserState {
 
 const initialState: UserState = {
   currentPatient: null,
+  tab:0,
   emrSteps: 0,
   visitSteps: 0,
   followUpSteps: 0,
@@ -193,6 +195,9 @@ const patientSlice = createSlice({
   reducers: {
     setCurrentPatient: (state, action: PayloadAction<any>) => {
       state.currentPatient = action.payload;
+    },
+    setTab:(state,action:PayloadAction<number>)=>{
+      state.tab=action.payload;
     },
 
     setEmr: (state, action: PayloadAction<any>) => {
@@ -304,6 +309,7 @@ const patientSlice = createSlice({
 
 export const {
   setCurrentPatient,
+  setTab,
   setEmr,
   updateEmr,
   updateFollowUpRecord,

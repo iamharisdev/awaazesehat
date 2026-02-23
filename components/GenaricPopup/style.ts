@@ -3,18 +3,21 @@ import { hp, wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: {
+    flex: 1,
+   
+    paddingHorizontal: 20,
+  },
   flex: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginBottom:hp(3)
+    marginVertical: hp(3),
   },
   closeButton: {
     backgroundColor: "transparent",
-    height: 0,
-    paddingVertical: 0,
-    paddingHorizontal: 0,
+    position: "absolute",
+    top: -25,
+    right: -10,
+    zIndex: 1,
   },
 
   title: {
@@ -23,7 +26,7 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
 
-   textAlign:"right",
+    textAlign: "center",
     width: wp(80),
   },
 
@@ -57,13 +60,15 @@ export const styles = StyleSheet.create({
 
   linkButton: {
     backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: colors.black.b80,
   },
 
   link: {
-    color: colors?.green?.g20,
+    color: colors.black.b05,
     fontSize: 16,
     textAlign: "center",
     fontWeight: "600",
-    textDecorationLine: "underline",
+  
   },
 });

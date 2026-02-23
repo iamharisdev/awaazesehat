@@ -25,8 +25,9 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.black.b80,
     borderRadius: 10,
-    paddingVertical:25,
-    paddingHorizontal:10,
+    paddingVertical: 25,
+    paddingHorizontal: 10,
     marginTop: hp(2),
+    flex: 1,
   },
 });

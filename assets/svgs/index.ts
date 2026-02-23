@@ -31,11 +31,13 @@ import patientRecord from './patientRecord.svg'
 import mic from './mic.svg';
 import del from './delete.svg';
 import play from './play.svg'
+import emr from './emr.svg';
 
 
 export const Icons = {
   logo: logo,
   cross: cross,
+  emr: emr,
   left: left,
   eye: eye,
   eyeOff: eyeOff,

@@ -28,7 +28,7 @@ const GenericPopup = ({
   closePress,
 }: Props) => {
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.flex}>
         <Text style={styles.title}>{title}</Text>
         <Button

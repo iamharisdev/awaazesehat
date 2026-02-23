@@ -22,7 +22,7 @@ import {
 } from "@/components";
 import { styles } from "@/styles/patientProfileStyle";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setEmrSteps } from "@/features/patientSlice";
+import { setEmrSteps, setTab } from "@/features/patientSlice";
 import { t } from "i18next";
 import {
   useCreateEmrMutation,
@@ -63,12 +63,21 @@ export default function PatientProfile() {
   const [isLoading, setIsLoading] = useState(false);
 
   const totalSteps = stepScreens.length;
+  const check =
+    !emr?.createdAt || emr?.createdAt == emr?.updatedAt ? true : false;
+
+  const [showCompletionSheet, setShowCompletionSheet] = useState(false);
 
   const onPressNext = () => {
     if (emrSteps < totalSteps - 1) {
       dispatch(setEmrSteps(emrSteps + 1));
     } else {
-      apiCall();
+      if (check) {
+        apiCall();
+      } else {
+        setShowCompletionSheet(true);
+        //router.back();
+      }
     }
   };
 
@@ -88,9 +97,13 @@ export default function PatientProfile() {
     setSteps(getSteps(emr));
   }, [emr?.patient?.firstPregnancy]);
 
+  useEffect(() => {
+    if (showCompletionSheet) {
+      sheetRef?.current?.open();
+    }
+  }, [showCompletionSheet]);
+
   const CurrentStepComponent = steps[emrSteps]?.component;
-  const check =
-    !emr?.createdAt || emr?.createdAt == emr?.updatedAt ? true : false;
 
   const apiCall = async () => {
     setIsLoading(true); // 🌀 start loader
@@ -123,7 +136,7 @@ export default function PatientProfile() {
         const res = await updateEmr(payload).unwrap();
 
         console.log("✅ EMR updated successfully:", res);
-        sheetRef?.current?.open();
+        setShowCompletionSheet(true);
       }
       // ➕ CREATE EMR
       else {
@@ -141,6 +154,26 @@ export default function PatientProfile() {
     }
   };
 
+  const onClose = () => {
+    setShowCompletionSheet(false);
+    router.back();
+  };
+  const goToVisit = () => {
+    onClose();
+    dispatch(setTab(1));
+  };
+
+  const isLastStep = emrSteps === totalSteps - 1;
+
+  // Calculate button label
+  let buttonLabel: string = check
+    ? isLastStep
+      ? "Save Patient Record"
+      : "Save & Next"
+    : isLastStep
+      ? "Complete"
+      : "Next";
+
   return (
     <View style={styles.flex}>
       <AppHeader
@@ -150,9 +183,9 @@ export default function PatientProfile() {
         onLeftPress={onPressLeft}
         onRightPress={onPressRight}
       />
-      <KeyboardAvoidingWrapper>
+    
         <CurrentStepComponent title={steps[emrSteps]?.key} editable={check} />
-      </KeyboardAvoidingWrapper>
+   
 
       <View style={styles.footerContainer}>
         <StepProgressBar totalSteps={totalSteps} currentStep={emrSteps} />
@@ -164,26 +197,27 @@ export default function PatientProfile() {
             })}
           </Text>
           <TouchableOpacity style={styles.buttonStyle} onPress={onPressNext}>
-            <Text style={styles.buttonText}>
-              {emrSteps < 8 ? t("Save & Next") : t("Save patient record")}
-            </Text>
+            <Text style={styles.buttonText}>{buttonLabel}</Text>
             {emrSteps < 8 && <Icons.whiteArrow marginLeft={10} />}
           </TouchableOpacity>
         </View>
       </View>
-      <BottomSheet ref={sheetRef} sheetHeight={350}>
-        <GenericPopup
-          title={t("Patient record completed")}
-          description={t(
-            "Patient record is complete! Next, let’s review a few follow-up questions to fill in any gaps that has been left during patient record.",
-          )}
-          btnTitle1={t("Start follow-up questions")}
-          btnTitle2={t("Skip questions")}
-          // icon={<Icons.emr />}
-          onCrossPress={() => sheetRef?.current.close()}
-          closePress={() => sheetRef?.current.close()}
-        />
-      </BottomSheet>
+      {showCompletionSheet && (
+        <BottomSheet ref={sheetRef} sheetHeight={350}>
+          <GenericPopup
+            title={t("EMR Completed")}
+            description={t(
+              "Next you can note patient vitals, physical examination and give them advise them accordingly.",
+            )}
+            btnTitle1={t("Add Visit")}
+            btnTitle2={t("Cancel")}
+            icon={<Icons.emr />}
+            openPress={goToVisit}
+            onCrossPress={onClose}
+            closePress={onClose}
+          />
+        </BottomSheet>
+      )}
     </View>
   );
 }
