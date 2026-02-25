@@ -11,23 +11,24 @@ import {
 } from "@/components";
 import { TabSwitcher } from "@/components/PatientProfile/TabSwitcher";
 import { useListEMRsQuery } from "@/services/modules/emr";
-import { useAppDispatch, useAppSelector } from "@/store";
+import { useAppSelector } from "@/store";
 import { styles } from "@/styles/patientDetailStyle";
 import { colors } from "@/utils/colors";
-import { Symptoms, tabSwitcher } from "@/utils/Json";
+import { tabSwitcher } from "@/utils/Json";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 
 export default function PatientDetail() {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
+
+
 
   const patientState: any = useAppSelector((state) => state.patient);
   const tab: any = useAppSelector((state) => state.patient.tab);
 
   const patient = patientState?.currentPatient;
-  const obs = patientState?.emr?.obsHistory;
+ 
 
   // Fetch EMRs
   const { data, isLoading, isFetching, error } = useListEMRsQuery(
@@ -38,7 +39,7 @@ export default function PatientDetail() {
     },
   );
 
-  const restCount = Symptoms.length - 3;
+ 
 
   const tabRendering = () => {
     switch (tab) {

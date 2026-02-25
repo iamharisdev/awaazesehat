@@ -13,7 +13,7 @@ const PatientHeader = () => {
   const patient = useAppSelector((s) => s.patient.currentPatient);
   const { emr } = useAppSelector((s) => s.patient);
 
-  let ga =
+ let ga =
     emr?.patient?.gestationalAge ||
     patient?.gestationalAge ||
     getWeeksAndDays(
@@ -22,7 +22,6 @@ const PatientHeader = () => {
   let updatedAt = patient?.updatedAt;
 
   const gestationalAge = getUpdatedGestationalAge(ga, updatedAt, "short");
-
   return (
     <View style={styles.container}>
       <View style={styles.flex}>

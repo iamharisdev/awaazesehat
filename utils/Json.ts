@@ -60,7 +60,6 @@ export const steps = [
 
 export const tabConfig = [
   { name: "index", title: "Home", icon: "home" },
-  { name: "search", title: "Search", icon: "search" },
   { name: "patients", title: "Patients", icon: "patients" },
   { name: "activity", title: "Activity", icon: "activity" },
 ];

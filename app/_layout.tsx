@@ -59,7 +59,7 @@ function RootLayoutContent() {
 
   useEffect(() => {
     if (token && inAuthGroup) {
-      router.replace("/(tabs)");
+      router.replace("/(tabs)/patients");
     } else if (!token && !inAuthGroup) {
       router.replace("/(auth)");
     }

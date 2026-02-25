@@ -13,6 +13,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="patients"
       screenOptions={{
         headerShown: false,
         tabBarStyle: styles.tabBarStyle,
@@ -34,7 +35,7 @@ export default function TabLayout() {
       backBehavior="history"
     >
       {tabConfig.map((tab) => {
-        const icon = Icons[tab.icon as keyof typeof Icons];
+        const IconComponent = Icons[tab.icon as keyof typeof Icons];
 
         return (
           <Tabs.Screen
@@ -43,7 +44,7 @@ export default function TabLayout() {
             options={{
               title: t(tab.title),
               tabBarIcon: ({ focused }) => (
-                <TabBarIcon focused={focused}>{icon()}</TabBarIcon>
+                <TabBarIcon focused={focused}><IconComponent /></TabBarIcon>
               ),
             }}
           />

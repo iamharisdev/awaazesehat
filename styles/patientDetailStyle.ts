@@ -1,5 +1,5 @@
 import { colors } from "@/utils/colors";
-import { hp, normalizeFont, pxToWp, wp } from "@/utils/responsive";
+import { hp, wp } from "@/utils/responsive";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({

@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import { Icons } from "@/assets/svgs";
 import {
@@ -51,7 +52,7 @@ const getSteps = (emr: any) => {
 export default function PatientProfile() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const sheetRef = useRef(null);
+  const sheetRef = useRef<any>(null);
   const { emrSteps, emr, currentPatient } = useAppSelector(
     (state) => state.patient,
   );
@@ -62,7 +63,7 @@ export default function PatientProfile() {
   const [steps, setSteps] = useState(getSteps(emr));
   const [isLoading, setIsLoading] = useState(false);
 
-  const totalSteps = stepScreens.length;
+  const totalSteps = steps.length;
   const check =
     !emr?.createdAt || emr?.createdAt == emr?.updatedAt ? true : false;
 
@@ -183,9 +184,9 @@ export default function PatientProfile() {
         onLeftPress={onPressLeft}
         onRightPress={onPressRight}
       />
-    
+      <KeyboardAvoidingWrapper>
         <CurrentStepComponent title={steps[emrSteps]?.key} editable={check} />
-   
+      </KeyboardAvoidingWrapper>
 
       <View style={styles.footerContainer}>
         <StepProgressBar totalSteps={totalSteps} currentStep={emrSteps} />
@@ -198,7 +199,7 @@ export default function PatientProfile() {
           </Text>
           <TouchableOpacity style={styles.buttonStyle} onPress={onPressNext}>
             <Text style={styles.buttonText}>{buttonLabel}</Text>
-            {emrSteps < 8 && <Icons.whiteArrow marginLeft={10} />}
+            {!isLastStep && <Icons.whiteArrow style={{ marginLeft: 10 }} />}
           </TouchableOpacity>
         </View>
       </View>
