@@ -64,8 +64,11 @@ export default function PatientProfile() {
   const [isLoading, setIsLoading] = useState(false);
 
   const totalSteps = steps.length;
-  const check =
-    !emr?.createdAt || emr?.createdAt == emr?.updatedAt ? true : false;
+  const check = !emr?.createdAt
+    ? "create"
+    : emr?.isEditable
+      ? "update"
+      : "none";
 
   const [showCompletionSheet, setShowCompletionSheet] = useState(false);
 
@@ -73,12 +76,7 @@ export default function PatientProfile() {
     if (emrSteps < totalSteps - 1) {
       dispatch(setEmrSteps(emrSteps + 1));
     } else {
-      if (check) {
-        apiCall();
-      } else {
-        setShowCompletionSheet(true);
-        //router.back();
-      }
+      apiCall();
     }
   };
 
@@ -125,8 +123,14 @@ export default function PatientProfile() {
     };
 
     try {
-      // 🔄 UPDATE EMR
-      if (emr?.createdAt && emr?.createdAt === emr?.updatedAt) {
+      if (check === "create") {
+        // ➕ CREATE EMR
+        const res = await createEmr(updatedPayload).unwrap();
+        if (res?.emrId) {
+          onPressRight();
+        }
+      } else if (check === "update") {
+        // 🔄 UPDATE EMR
         const { patient, ...restPayload } = updatedPayload;
 
         const payload = {
@@ -136,17 +140,10 @@ export default function PatientProfile() {
 
         const res = await updateEmr(payload).unwrap();
 
-        console.log("✅ EMR updated successfully:", res);
         setShowCompletionSheet(true);
-      }
-      // ➕ CREATE EMR
-      else {
-        const res = await createEmr(updatedPayload).unwrap();
-        if (res?.emrId) {
-          onPressRight();
-        }
-
-        console.log("✅ EMR created successfully:", res);
+      } else {
+        // No API call needed
+        setShowCompletionSheet(true);
       }
     } catch (err: any) {
       console.error("❌ EMR API error:", err);
@@ -167,13 +164,14 @@ export default function PatientProfile() {
   const isLastStep = emrSteps === totalSteps - 1;
 
   // Calculate button label
-  let buttonLabel: string = check
-    ? isLastStep
-      ? "Save Patient Record"
-      : "Save & Next"
-    : isLastStep
-      ? "Complete"
-      : "Next";
+  let buttonLabel: string =
+    check === "create" || check === "update"
+      ? isLastStep
+        ? "Save Patient Record"
+        : "Save & Next"
+      : isLastStep
+        ? "Complete"
+        : "Next";
 
   return (
     <View style={styles.flex}>
@@ -185,7 +183,10 @@ export default function PatientProfile() {
         onRightPress={onPressRight}
       />
       <KeyboardAvoidingWrapper>
-        <CurrentStepComponent title={steps[emrSteps]?.key} editable={check} />
+        <CurrentStepComponent
+          title={steps[emrSteps]?.key}
+          editable={check === "create" || check === "update"}
+        />
       </KeyboardAvoidingWrapper>
 
       <View style={styles.footerContainer}>

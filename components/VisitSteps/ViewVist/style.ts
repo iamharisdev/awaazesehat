@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    marginBottom: 16,
   },
 
   headerLeft: {
@@ -87,6 +87,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 16,
     borderTopWidth: 1,
+
     borderColor: "#E5E5E5",
   },
 

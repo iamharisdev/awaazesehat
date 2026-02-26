@@ -39,7 +39,7 @@ export default function PatientDetail() {
     },
   );
 
- 
+
 
   const tabRendering = () => {
     switch (tab) {

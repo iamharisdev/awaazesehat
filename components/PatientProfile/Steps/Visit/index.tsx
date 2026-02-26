@@ -113,7 +113,7 @@ const Visit = () => {
         />
         {/* main */}
         <KeyboardAvoidingWrapper>
-          <CurrentStepComponent title={stepScreens[visitSteps]?.key} />
+          <CurrentStepComponent  />
         </KeyboardAvoidingWrapper>
         {isLoading && <AppLoader fullScreen />}
         {/* footer */}

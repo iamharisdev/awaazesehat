@@ -10,7 +10,7 @@ import {
 import { useAppSelector } from "@/store";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import { EXAMINATION_FIELDS } from "../ViewVist";
+import { EXAMINATION_FIELDS } from "../examinationFields";
 import { styles } from "./style";
 
 
@@ -136,6 +136,7 @@ const Prescription: React.FC<Props> = ({
     await Sharing.shareAsync(uri);
   };
 
+ 
   return (
     <Modal visible={visible} animationType="slide">
       <View style={styles.container}>
@@ -172,18 +173,34 @@ const Prescription: React.FC<Props> = ({
 
           {/* VITALS */}
           {visit?.vitals && (
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Vitals</Text>
-              {Object.entries(visit.vitals).map(
-                ([key, value]) =>
-                  show(value) && (
-                    <Text key={key} style={styles.text}>
-                      {key}: {value as string}
-                    </Text>
-                  )
-              )}
-            </View>
-          )}
+  <View style={styles.section}>
+    <Text style={styles.sectionTitle}>Vitals</Text>
+
+    {Object.entries(visit.vitals)
+      .filter(([key]) => key !== "id" && key !== "visitId") // remove unwanted keys
+      .sort(([a], [b]) => (a === "visitDate" ? -1 : b === "visitDate" ? 1 : 0)) // visitDate on top
+      .map(([key, value]) => {
+        if (!show(value)) return null;
+
+        // Format label (camelCase -> Proper Case)
+        const formattedLabel = key
+          .replace(/([A-Z])/g, " $1")
+          .replace(/^./, (str) => str.toUpperCase());
+
+        // Format date if visitDate
+        const formattedValue =
+          key === "visitDate" && value
+            ? new Date(value as string).toLocaleDateString("en-GB") // dd/mm/yyyy
+            : (value as string);
+
+        return (
+          <Text key={key} style={styles.text}>
+            {formattedLabel}: {formattedValue}
+          </Text>
+        );
+      })}
+  </View>
+)}
 
           {/* EXAMINATION */}
           {visit?.examination && (

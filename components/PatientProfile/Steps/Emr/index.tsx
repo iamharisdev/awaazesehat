@@ -19,11 +19,10 @@ const Emr = () => {
 
   let statusMessage =
     "Add all patient details here. Once saved you will be able to edit it once.";
-  if (emr?.createdAt && emr?.updatedAt) {
-    statusMessage =
-      emr.createdAt === emr.updatedAt
-        ? "You have added the patient details. You can edit the EMR once."
-        : "The EMR is no longer editable.";
+  if (emr?.createdAt) {
+    statusMessage = emr?.isEditable
+      ? "You have added the patient details. You can edit the EMR once."
+      : "The EMR is no longer editable.";
   }
   return (
     <View>

@@ -59,7 +59,7 @@ export const visitApi = api.injectEndpoints({
           ...result,
           proposedPlan: {
             ...result?.proposedPlan,
-            advisedLabTests: result?.proposedPlan?.advisedLabTests.join(","),
+            advisedLabTests: (result?.proposedPlan?.advisedLabTests || []).join(","),
           },
         };
         return temp;

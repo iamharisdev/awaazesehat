@@ -1,45 +1,13 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity} from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAppSelector } from "@/store";
 import { styles } from "./style";
-import { Examination } from "@/features/patientSlice";
-import Prescription from "../Prescription";
- 
 
-export const EXAMINATION_FIELDS: {
-  key: keyof Examination;
-  label: string;
-}[] = [
-  { key: "pallor", label: "Pallor" },
-  { key: "koilonychia", label: "Koilonychia" },
-  { key: "leukonychia", label: "Leukonychia" },
-  { key: "clubbing", label: "Clubbing" },
-  { key: "bilateralPedalEdema", label: "Bilateral Pedal Edema" },
-  { key: "spine", label: "Spine" },
-  { key: "abnormalSpine", label: "Abnormal Spine Reason" },
-  { key: "lymphNodes", label: "Lymph Nodes" },
-  { key: "sizeComparison", label: "Breast Size Comparison" },
-  { key: "nippleDischarge", label: "Nipple Discharge" },
-  { key: "swelling", label: "Swelling" },
-  { key: "nippleDeformity", label: "Nipple Deformity" },
-  { key: "shapeOfAbdomen", label: "Shape of Abdomen" },
-  { key: "umbilicus", label: "Umbilicus" },
-  { key: "striae", label: "Striae" },
-  { key: "prominentVeins", label: "Prominent Veins" },
-  { key: "pulsations", label: "Pulsations" },
-  { key: "abdominalWallEdema", label: "Abdominal Wall Edema" },
-  { key: "hernialOrfices", label: "Hernial Orifices" },
-  { key: "fundalHeight", label: "Fundal Height" },
-  { key: "lie", label: "Lie" },
-  { key: "presentation", label: "Presentation" },
-  { key: "estimatedFetalWeight", label: "Estimated Fetal Weight" },
-  { key: "liquor", label: "Liquor" },
-  { key: "scarTenderness", label: "Scar Tenderness" },
-  { key: "fetalHeartRate", label: "Fetal Heart Rate" },
-  { key: "perSpeculumFindings", label: "Per Speculum" },
-  { key: "perVaginalFindings", label: "Per Vaginal" },
-];
+import Prescription from "../Prescription";
+import { EXAMINATION_FIELDS } from "../examinationFields";
+
+
 
 interface Props {
   onClose: () => void;
@@ -106,7 +74,7 @@ const ViewVisit: React.FC<Props> = ({
       {/* VITALS */}
       {visit?.vitals &&
         Object.entries(visit.vitals)
-          .filter(([key]) => !["id", "visitId"].includes(key)) 
+          .filter(([key]) => !["id", "visitId"].includes(key))
           .map(([key, value]) =>
             show(value) ? (
               <View key={key} style={styles.row}>
@@ -140,7 +108,7 @@ const ViewVisit: React.FC<Props> = ({
           );
         })}
 
-      {/* Diagnostics */}                 
+      {/* Diagnostics */}
       {visit?.diagnostics?.diagnostics?.length > 0 &&
         visit.diagnostics.diagnostics.map((item: any, index: number) =>
           item.summary ? (
@@ -183,6 +151,12 @@ const ViewVisit: React.FC<Props> = ({
           </TouchableOpacity>
         )}
       </View>
+
+      <Prescription
+        visible={showPrescription}
+        onClose={() => setShowPrescription(false)}
+        visitNumber={visitNumber}
+      />
     </View>
   );
 };

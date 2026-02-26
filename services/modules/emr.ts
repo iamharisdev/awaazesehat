@@ -11,7 +11,7 @@ export const EmrApi = api.injectEndpoints({
       }),
       transformResponse: (response: any) => {
         const { emrs, prevPregnancies } = response;
-        return { emrs, prevPregnancies };
+        return { emrs };
       },
       providesTags: ["emr"],
       async onQueryStarted(
@@ -20,7 +20,7 @@ export const EmrApi = api.injectEndpoints({
       ) {
         try {
           const { data } = await queryFulfilled;
-        
+        console.log("Fetched EMRs:", data.emrs[0]);
 
           dispatch(setEmr(data.emrs[0]));
         } catch (e: any) {

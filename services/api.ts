@@ -6,10 +6,13 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 
+const development =
+  "https://core-server-patient-centric-workflow-1036152259123.asia-southeast1.run.app";
+
 const dev_url = "http://192.168.18.84:8000/";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: dev_url,
+  baseUrl: development,
 
   prepareHeaders: (headers, { getState }) => {
     const { auth } = getState() as any;
@@ -50,6 +53,6 @@ export const formHeader = {
 
 export const api = createApi({
   baseQuery: baseQueryWithInterceptor,
-  tagTypes: ["auth", "patients", "emr", "visit", "labTest", "reports","notes"],
+  tagTypes: ["auth", "patients", "emr", "visit", "labTest", "reports", "notes"],
   endpoints: () => ({}),
 });

@@ -111,6 +111,7 @@ export interface Diagnostics {
 
 interface emr {
   id?: string | null;
+  isEditable?: boolean;
   patient?: Record<string, any>;
   obsHistory?: Record<string, any>;
   gynecologicalHistory?: Record<string, any>;
@@ -154,6 +155,7 @@ const initialState: UserState = {
   followUpSteps: 0,
   emr: {
     id: null,
+    isEditable: false,
     patient: {},
     obsHistory: {},
     gynecologicalHistory: {},
@@ -203,6 +205,7 @@ const patientSlice = createSlice({
     setEmr: (state, action: PayloadAction<any>) => {
       state.emr = {
         id: action.payload?.id ?? null,
+        isEditable: action.payload?.isEditable ?? false,
         patient: action.payload?.patient ?? {},
         obsHistory: action.payload?.obsHistory ?? {},
         gynecologicalHistory: action.payload?.gynecologicalHistory ?? {},
@@ -314,13 +317,11 @@ export const {
   updateEmr,
   updateFollowUpRecord,
   setEmrSteps,
-
   setVisit,
   updateVisit,
   setActiveVisit,
   setViewVisit,
   setVisitSteps,
-
   setFollowUpSteps,
   resetEmr,
 } = patientSlice.actions;
