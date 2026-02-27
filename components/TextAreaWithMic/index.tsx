@@ -1,16 +1,16 @@
-import React, { useRef, useState } from "react";
+import { useAudioToTextMutation } from "@/services/modules/patient";
+import { useAudioRecording } from "@/utils/audioRecorder"; // new hook replacing expo-av functionality
+import React from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
   ActivityIndicator,
   Alert,
+  Pressable,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
-import { Audio } from "expo-av";
+import Icon from "react-native-vector-icons/Feather";
 import styles from "./style";
-import { useAudioToTextMutation } from "@/services/modules/patient";
-import Icon  from "react-native-vector-icons/Feather";
 
 interface Props {
   label?: string;
@@ -33,35 +33,24 @@ const TextAreaWithMic: React.FC<Props> = ({
 }) => {
   const [audioToText, { isLoading: isPending }] = useAudioToTextMutation();
 
-  const recordingRef = useRef<Audio.Recording | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
+  // use custom hook which wraps expo-audio functionality
+  const {
+    recorder,
+    recorderState,
+    startRecording: hookStartRecording,
+    stopRecording: hookStopRecording,
+  } = useAudioRecording();
+
+  const isRecording = recorderState.isRecording;
 
   const isSingleLine = height <= 50;
 
   /* 🎤 Start recording */
+  // wrapper that delegates to hook
   const startRecording = async () => {
     if (disabled) return;
-
     try {
-      const permission = await Audio.requestPermissionsAsync();
-      if (!permission.granted) {
-        Alert.alert("Permission required", "Microphone access is needed.");
-        return;
-      }
-
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      const recording = new Audio.Recording();
-      await recording.prepareToRecordAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      );
-      await recording.startAsync();
-
-      recordingRef.current = recording;
-      setIsRecording(true);
+      await hookStartRecording();
     } catch (err) {
       Alert.alert("Error", "Failed to start recording");
     }
@@ -70,19 +59,15 @@ const TextAreaWithMic: React.FC<Props> = ({
   /* ⏹ Stop recording */
   const stopRecording = async () => {
     try {
-      const recording = recordingRef.current;
-      if (!recording) return;
+      await hookStopRecording();
 
-      await recording.stopAndUnloadAsync();
-      setIsRecording(false);
-
-      const uri = recording.getURI();
+      const uri = recorder.uri;
       if (!uri) return;
 
       const file = { uri, type: "audio/m4a", name: "recording.m4a" };
 
       // 🔹 Call RTK Query endpoint
-      const result = await audioToText({ file: file }).unwrap();
+      const result = await audioToText({ file }).unwrap();
 
       if (result?.text) {
         const newText = value ? `${value} ${result.text}` : result.text;
@@ -113,11 +98,12 @@ const TextAreaWithMic: React.FC<Props> = ({
           onPress={isRecording ? stopRecording : startRecording}
           style={[styles.micButton, isRecording && styles.micRecording]}
           disabled={disabled}
-        >{isRecording?
-          <Icon name="square" size={20}  />
-          :
-            <Icon name="mic" size={20}  />}
-          
+        >
+          {isRecording ? (
+            <Icon name="square" size={20} />
+          ) : (
+            <Icon name="mic" size={20} />
+          )}
         </Pressable>
 
         {/* ⏳ Loader overlay */}

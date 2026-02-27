@@ -59,7 +59,9 @@ export const visitApi = api.injectEndpoints({
           ...result,
           proposedPlan: {
             ...result?.proposedPlan,
-            advisedLabTests: (result?.proposedPlan?.advisedLabTests || []).join(","),
+            advisedLabTests: (result?.proposedPlan?.advisedLabTests || []).join(
+              ",",
+            ),
           },
         };
         return temp;
@@ -159,7 +161,7 @@ export const visitApi = api.injectEndpoints({
       async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
+
           return data;
         } catch (e: any) {
           errorMessage(
@@ -181,7 +183,6 @@ export const visitApi = api.injectEndpoints({
       async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           return data;
         } catch (e: any) {
           errorMessage(

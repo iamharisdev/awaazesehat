@@ -20,8 +20,6 @@ export const EmrApi = api.injectEndpoints({
       ) {
         try {
           const { data } = await queryFulfilled;
-        console.log("Fetched EMRs:", data.emrs[0]);
-
           dispatch(setEmr(data.emrs[0]));
         } catch (e: any) {
           errorMessage(e?.error.message || e?.error || "❌ EMR fetch error");
@@ -39,7 +37,6 @@ export const EmrApi = api.injectEndpoints({
       async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           return data;
         } catch (e: any) {
           errorMessage(
@@ -59,7 +56,6 @@ export const EmrApi = api.injectEndpoints({
       async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           return data;
         } catch (e: any) {
           errorMessage(

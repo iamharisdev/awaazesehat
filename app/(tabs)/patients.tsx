@@ -25,6 +25,7 @@ const Patients = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  
   const [searchText, setSearchText] = useState<string>("");
   const [debouncedSearch, setDebouncedSearch] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -49,14 +50,12 @@ const Patients = () => {
     {
       searchKey: debouncedSearch,
       page: currentPage,
-      pageSize: 20,
+      pageSize: 50,
     },
     {
       skip: debouncedSearch.length > 0 && debouncedSearch.length < 3,
     },
   );
-
-
 
   // Append new patients
   useEffect(() => {
@@ -98,8 +97,8 @@ const Patients = () => {
         data={allPatients}
         keyExtractor={(item, index) => `${item.id}+${index}`}
         contentContainerStyle={{ paddingBottom: 40 }}
-        initialNumToRender={10} // render only first 10 items
-        maxToRenderPerBatch={10} // render 10 items per batch
+        initialNumToRender={20} // render only first 10 items
+        maxToRenderPerBatch={20} // render 10 items per batch
         windowSize={5} // number of batches kept in memory
         removeClippedSubviews={true}
         onEndReached={handleLoadMore}
@@ -165,5 +164,3 @@ const Patients = () => {
 };
 
 export default Patients;
-
-

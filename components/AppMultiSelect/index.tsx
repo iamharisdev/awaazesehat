@@ -31,7 +31,6 @@ const AppMultiSelect: React.FC<Props> = ({
     __addMore: true,
   };
 
-console.log(typeof value, value)
   const [options, setOptions] = useState<Item[]>(defaultOptions);
   const [selected, setSelected] = useState(() => {
     if (!value) return [];
