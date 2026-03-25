@@ -44,7 +44,7 @@ export const Symptoms: Symptom[] = [
   },
 ];
 
-export const tabSwitcher = ["EMR", "Visits", "Reports", "Notes"];
+export const tabSwitcher = ["Overview", "EMR", "Visits", "Reports", "Notes"];
 
 export const steps = [
   "Patient profile",

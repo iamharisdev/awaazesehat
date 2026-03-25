@@ -53,6 +53,6 @@ export const formHeader = {
 
 export const api = createApi({
   baseQuery: baseQueryWithInterceptor,
-  tagTypes: ["auth", "patients", "emr", "visit", "labTest", "reports", "notes"],
+  tagTypes: ["auth", "patients", "emr", "visit", "labTest", "reports", "notes", "dashboard"],
   endpoints: () => ({}),
 });

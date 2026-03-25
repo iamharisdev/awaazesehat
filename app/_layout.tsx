@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import "@/global.css";
 import i18n from "@/i18n";
 import { MakeStyles } from "@/styles/rootStyle";
 import { useFonts } from "expo-font";
@@ -19,7 +20,7 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={{ flex: 1 }}>
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
           <PersistGate persistor={persistor}>

@@ -3,8 +3,8 @@ import {
   AppHeader,
   AppLoader,
   Emr,
-  KeyboardAvoidingWrapper,
   Notes,
+  Overview,
   PatientHeader,
   Reports,
   Visit,
@@ -12,26 +12,20 @@ import {
 import { TabSwitcher } from "@/components/PatientProfile/TabSwitcher";
 import { useListEMRsQuery } from "@/services/modules/emr";
 import { useAppSelector } from "@/store";
-import { styles } from "@/styles/patientDetailStyle";
-import { colors } from "@/utils/colors";
 import { tabSwitcher } from "@/utils/Json";
-import React from "react";
 import { useTranslation } from "react-i18next";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
 export default function PatientDetail() {
   const { t } = useTranslation();
-
-
 
   const patientState: any = useAppSelector((state) => state.patient);
   const tab: any = useAppSelector((state) => state.patient.tab);
 
   const patient = patientState?.currentPatient;
- 
 
   // Fetch EMRs
-  const { data, isLoading, isFetching, error } = useListEMRsQuery(
+  const { isLoading, isFetching } = useListEMRsQuery(
     { phoneNumber: patient?.phoneNumber! },
     {
       skip: !patient?.phoneNumber,
@@ -39,18 +33,17 @@ export default function PatientDetail() {
     },
   );
 
-
-
   const tabRendering = () => {
     switch (tab) {
       case 0:
-        return <Emr />;
+        return <Overview />;
       case 1:
-        return <Visit />;
-
+        return <Emr />;
       case 2:
-        return <Reports />;
+        return <Visit />;
       case 3:
+        return <Reports />;
+      case 4:
         return <Notes />;
       default:
         return null;
@@ -58,26 +51,29 @@ export default function PatientDetail() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.white.w2 }}>
+    <View className="flex-1 bg-white-2">
       {/* App Header */}
       <AppHeader title={t("Patient profile")} leftIcon={<Icons.left />} />
 
-      <View style={styles.subContainer}>
-        {/* Patient Info - default values while API loading */}
+      <ScrollView
+        className="flex-1 px-3"
+        showsVerticalScrollIndicator={false}
+        contentContainerClassName="pb-8"
+      >
+        {/* Patient Header Card */}
         <PatientHeader />
 
         {/* Tabs */}
         <TabSwitcher tabs={tabSwitcher} activeIndex={tab} />
 
-        <View style={styles.cardStyle}>
-          <KeyboardAvoidingWrapper scrollEnable>
-            {tabRendering()}
-          </KeyboardAvoidingWrapper>
+        {/* Tab Content */}
+        <View className="bg-white-1 border border-black-80 rounded-xl py-6 px-3 mt-4">
+          {tabRendering()}
         </View>
 
         {/* Full screen loader */}
         {(isLoading || isFetching) && <AppLoader fullScreen size="large" />}
-      </View>
+      </ScrollView>
     </View>
   );
 }
