@@ -11,7 +11,10 @@ import { styles } from "./style";
 
 const NORMAL_OPTIONS = [{ name: "Normal" }, { name: "Abnormal" }];
 
-const PhysicalExamination: React.FC = () => {
+const PhysicalExamination: React.FC<{
+  errors?: Record<string, string>;
+  onTypeChange?: (type: string) => void;
+}> = ({ errors = {}, onTypeChange }) => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.examination);
 
@@ -19,6 +22,11 @@ const PhysicalExamination: React.FC = () => {
   const [type, setType] = useState<
     "Structured Fields" | "Free Text / Voice Note"
   >("Structured Fields");
+
+  const handleTypeChange = (val: string) => {
+    setType(val as any);
+    onTypeChange?.(val);
+  };
 
   const updateField = (key: string, value: any) => {
     dispatch(updateVisit({ step: "examination", key, value }));
@@ -37,7 +45,7 @@ const PhysicalExamination: React.FC = () => {
         <RadioButton
           value={type}
           options={["Structured Fields", "Free Text / Voice Note"]}
-          onChange={(val) => setType(val as any)}
+          onChange={handleTypeChange}
         />
       </View>
 
@@ -265,13 +273,20 @@ const PhysicalExamination: React.FC = () => {
       )}
 
       {type === "Free Text / Voice Note" && (
-        <TextAreaWithMic
-          height={150}
-          placeholder="Write or record examination findings..."
-          value={fields?.physicalFindings || ""}
-          onChange={(val: string) => updateField("physicalFindings", val)}
-          onAudioSave={(val: string) => updateField("physicalFindings", val)}
-        />
+        <>
+          <TextAreaWithMic
+            height={150}
+            placeholder="Write or record examination findings..."
+            value={fields?.physicalFindings || ""}
+            onChange={(val: string) => updateField("physicalFindings", val)}
+            onAudioSave={(val: string) => updateField("physicalFindings", val)}
+          />
+          {errors.physicalFindings && (
+            <Text style={{ color: "red", fontSize: 12, marginTop: 4 }}>
+              {errors.physicalFindings}
+            </Text>
+          )}
+        </>
       )}
     </ScrollView>
   );

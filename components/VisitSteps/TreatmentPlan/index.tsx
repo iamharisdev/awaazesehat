@@ -23,7 +23,7 @@ const DEFAULT_LABS = [
 
 const toItems = (arr?: string[]) => arr?.map((v) => ({ name: v })) || [];
 
-const TreatmentPlan: React.FC = () => {
+const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({ errors = {} }) => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.proposedPlan);
 
@@ -63,6 +63,11 @@ const TreatmentPlan: React.FC = () => {
         onChange={(val: string) => updateField("generalPlan", val)}
         onAudioSave={(val: string) => updateField("generalPlan", val)}
       />
+      {errors.generalPlan && (
+        <Text style={{ color: "red", fontSize: 12, marginTop: 4 }}>
+          {errors.generalPlan}
+        </Text>
+      )}
 
       {/* Lab Tests MultiSelect */}
       <AppMultiSelect
@@ -77,6 +82,8 @@ const TreatmentPlan: React.FC = () => {
       {/* Medications */}
       <AppInput
         label="Advised medications"
+        error={errors.medication}
+        touched={!!errors.medication}
         inputProps={{
           placeholder: "Medicine name - how many times a day? - for how long?",
           value: fields?.medication || "",

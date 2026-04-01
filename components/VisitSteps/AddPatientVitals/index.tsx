@@ -6,7 +6,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { styles } from "./style";
 
-const AddPatientVitals: React.FC = () => {
+const AddPatientVitals: React.FC<{ errors?: Record<string, string> }> = ({ errors = {} }) => {
   const dispatch = useAppDispatch();
   const vitals = useAppSelector((s) => s.patient.visit.vitals);
 
@@ -38,6 +38,8 @@ const AddPatientVitals: React.FC = () => {
       {/* Presenting Complaint */}
       <AppInput
         label="Presenting complaint"
+        error={errors.presentingComplaint}
+        touched={!!errors.presentingComplaint}
         inputProps={{
           placeholder: "Enter about complications they are facing now...",
           value: vitals?.presentingComplaint || "",

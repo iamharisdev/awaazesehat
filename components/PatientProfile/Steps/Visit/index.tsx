@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { Icons } from "@/assets/svgs";
 import AppHeader from "@/components/AppHeader";
@@ -21,13 +21,11 @@ import {
   useUpdateVisitMutation,
 } from "@/services/modules/visit";
 import AppLoader from "@/components/AppLoader";
-
-const stepScreens = [
-  { key: "Vitials", component: PatientVital },
-  { key: "Examination", component: PhysicalExamination },
-  { key: "Diagnostics", component: Diagnostics },
-  { key: "Treatment Plan", component: TreatmentPlan },
-];
+import {
+  validateVitals,
+  validateExamination,
+  validateTreatmentPlan,
+} from "@/utils/visitValidator";
 
 const Visit = () => {
   const { t } = useTranslation();
@@ -43,6 +41,18 @@ const Visit = () => {
   const [createVisit, { isLoading: createLoading }] = useCreateVisitMutation();
   const [updateVisit, { isLoading: updateLoading }] = useUpdateVisitMutation();
   const isLoading = createLoading || updateLoading;
+
+  const [vitalsErrors, setVitalsErrors] = useState<Record<string, string>>({});
+  const [examinationErrors, setExaminationErrors] = useState<Record<string, string>>({});
+  const [treatmentErrors, setTreatmentErrors] = useState<Record<string, string>>({});
+  const [examinationType, setExaminationType] = useState<string>("Structured Fields");
+
+  const stepScreens = [
+    { key: "Vitials", component: <PatientVital errors={vitalsErrors} /> },
+    { key: "Examination", component: <PhysicalExamination errors={examinationErrors} onTypeChange={setExaminationType} /> },
+    { key: "Diagnostics", component: <Diagnostics /> },
+    { key: "Treatment Plan", component: <TreatmentPlan errors={treatmentErrors} /> },
+  ];
 
   const totalSteps = stepScreens.length;
   const editable = visit.createdAt;
@@ -77,6 +87,27 @@ const Visit = () => {
   };
 
   const onPressNext = () => {
+    // Step 0: Validate vitals
+    if (visitSteps === 0) {
+      const errors = validateVitals(visit?.vitals);
+      setVitalsErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+    }
+
+    // Step 1: Validate examination
+    if (visitSteps === 1) {
+      const errors = validateExamination(visit?.examination, examinationType);
+      setExaminationErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+    }
+
+    // Step 3: Validate treatment plan
+    if (visitSteps === 3) {
+      const errors = validateTreatmentPlan(visit?.proposedPlan);
+      setTreatmentErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+    }
+
     if (visitSteps < totalSteps - 1) {
       dispatch(setVisitSteps(visitSteps + 1));
     } else {
@@ -96,8 +127,6 @@ const Visit = () => {
     sheetRef?.current.close();
   };
 
-  const CurrentStepComponent = stepScreens[visitSteps]?.component;
-
   return (
     <View>
       <VisitList ref={sheetRef} />
@@ -113,7 +142,7 @@ const Visit = () => {
         />
         {/* main */}
         <KeyboardAvoidingWrapper>
-          <CurrentStepComponent  />
+          {stepScreens[visitSteps]?.component}
         </KeyboardAvoidingWrapper>
         {isLoading && <AppLoader fullScreen />}
         {/* footer */}
