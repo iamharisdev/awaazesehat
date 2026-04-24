@@ -62,6 +62,7 @@ export const tabConfig = [
   { name: "index", title: "Home", icon: "home" },
   { name: "patients", title: "Patients", icon: "patients" },
   { name: "activity", title: "Activity", icon: "activity" },
+  { name: "logout", title: "Logout", icon: "logout" },
 ];
 
 export const bloodGroup = [

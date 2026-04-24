@@ -32,7 +32,7 @@ const OBS_VIEW_FIELDS = [
     type: "list",
   },
   {
-    key: "previousPregnancycomplications",
+    key: "previousPregnancyComplications",
     label: "Any complications in previous pregnancy",
     type: "text",
   },
@@ -174,11 +174,11 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
   const history = useAppSelector((s) => s.patient.emr.obsHistory) ?? {};
   const patient = useAppSelector((s) => s.patient?.emr?.patient) ?? {};
 
-  const livingChildren: any = Number(patient?.living_children) || 0;
+  const livingChildren: any = Number(patient?.livingChildren) || 0;
 
   useEffect(() => {
     let gpa = calculateGPA({
-      prev: Number(patient?.total_pregnancies),
+      prev: Number(patient?.totalPreviousPregnancies),
       miscarriages: Number(patient?.miscarriageCount),
     });
 
@@ -260,52 +260,51 @@ const RecordObstetricHistory = ({ title, editable = true }: any) => {
             )}
             inputProps={{
               placeholder: "Enter",
-              value: history?.previousPregnancycomplications || "",
+              value: history?.previousPregnancyComplications || "",
               onChangeText: (text) =>
-                updateField("previousPregnancycomplications", text),
+                updateField("previousPregnancyComplications", text),
             }}
           />
+
+          {/* Mode of delivery (always shown) */}
+          <RadioButton
+            label={t("Mode of delivery")}
+            options={DELIVERY_OPTIONS}
+            value={history?.birthMethod || ""}
+            onChange={(val) => updateField("birthMethod", val)}
+          />
+          {history?.birthMethod === "Normal delivery" && (
+            <>
+              <RadioButton
+                label={t("Type of contractions")}
+                options={CONTRACTION_OPTIONS}
+                value={history?.contractions || ""}
+                onChange={(val) => updateField("contractions", val)}
+              />
+              <AppInput
+                label={t("Duration of labor")}
+                inputProps={{
+                  placeholder: "Enter",
+                  value: history?.birthDuration || "",
+                  onChangeText: (text) => updateField("birthDuration", text),
+                }}
+              />
+            </>
+          )}
+          {history?.birthMethod === "C-section" && (
+            <AppInput
+              label={t("Reason for C-section")}
+              inputProps={{
+                placeholder: "Enter",
+                value: history?.operationReason || "",
+                onChangeText: (text) => updateField("operationReason", text),
+              }}
+            />
+          )}
 
           {/* Single child flow */}
           {livingChildren == 1 && (
             <>
-              <RadioButton
-                label={t("Mode of delivery")}
-                options={DELIVERY_OPTIONS}
-                value={history?.birthMethod || ""}
-                onChange={(val) => updateField("birthMethod", val)}
-              />
-              {history.birthMethod === "Normal delivery" && (
-                <>
-                  <RadioButton
-                    label={t("Type of contractions")}
-                    options={CONTRACTION_OPTIONS}
-                    value={history?.contractions || ""}
-                    onChange={(val) => updateField("contractions", val)}
-                  />
-
-                  <AppInput
-                    label={t("Duration of labor")}
-                    inputProps={{
-                      placeholder: "Enter",
-                      value: history?.birthDuration || "",
-                      onChangeText: (text) =>
-                        updateField("birthDuration", text),
-                    }}
-                  />
-                </>
-              )}
-              {history.birthMethod === "C-section" && (
-                <AppInput
-                  label={t("Reason for C-section")}
-                  inputProps={{
-                    placeholder: "Enter",
-                    value: history?.operationReason || "",
-                    onChangeText: (text) =>
-                      updateField("operationReason", text),
-                  }}
-                />
-              )}
               <CounterField
                 title={t("Age of the child")}
                 value={Number(history?.childAge) || 0}

@@ -3,13 +3,13 @@ import { removeCountryCode } from "@/utils/helperFunction";
 
 const loginSchema = () => {
   return {
-    email: "healthworker@awaazesehat.com",
-    password: "health@worker@123",
+    email: "admin@test.com",
+    password: "Password123!",
   };
 };
 
 const newPatientSchema = (
-  patient: PatientFormValues,
+  patient: any,
   weeks: string,
   days: string,
 ) => {
@@ -18,6 +18,7 @@ const newPatientSchema = (
     husbandName: patient?.husbandName || "",
     cnic: patient?.cnic || "",
     age: patient?.age || "",
+    lmp: patient?.lmp || patient?.lastMenstruationDate || "",
     weeks: weeks || "",
     days: days || "",
     phoneNumber: removeCountryCode(patient) || "",

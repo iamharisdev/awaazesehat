@@ -8,7 +8,6 @@ import {
 import { Formik } from "formik";
 import { styles } from "@/styles/loginStyle";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import { LoginValidation } from "@/schemas/validations";
@@ -22,13 +21,14 @@ const Login = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [loginUser] = useLoginUserMutation();
 
   const handleLogin = async (v: any) => {
     const response: any = await loginUser({
       body: { email: v.email, password: v.password },
     }).unwrap();
-    dispatch(setToken(response?.token));
+
+    dispatch(setToken(response?.data?.accessToken || response?.data?.token));
   };
 
   return (

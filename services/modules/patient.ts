@@ -2,9 +2,9 @@ import { errorMessage } from "@/utils/helperFunction";
 import { api } from "../api";
 
 interface PatientListParams {
-  searchKey?: string;
+  search?: string;
   page?: number;
-  pageSize?: number;
+  limit?: number;
 }
 
 interface AudioFile {
@@ -15,12 +15,11 @@ interface AudioFile {
 
 export const PatientApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // 🔹 List Patients
     listPatients: builder.query<any, PatientListParams>({
-      query: ({ searchKey = "", page = 1, pageSize = 20 }) => ({
-        url: "/patient/search",
+      query: ({ search = "", page = 1, limit = 20 }) => ({
+        url: "/patients/eligible",
         method: "GET",
-        params: { searchKey, page, pageSize },
+        params: { search, page, limit },
       }),
       transformResponse: (response: any) => response,
       providesTags: ["patients"],
@@ -36,64 +35,67 @@ export const PatientApi = api.injectEndpoints({
       },
     }),
 
-    // 🔹 Audio to Text
+    getPatient: builder.query<any, { id: string }>({
+      query: ({ id }) => ({
+        url: `/patients/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["patients"],
+    }),
+
     audioToText: builder.mutation<{ text: string }, { file: AudioFile }>({
       query: ({ file }) => {
         const formData = new FormData();
-
-        console.log("🎙 Audio file:", file);
-
         formData.append("file", {
           uri: file.uri,
           type: file.type,
           name: file.name,
         } as any);
-
         return {
           url: "/audio-to-text",
           method: "POST",
           body: formData,
-          // ❌ DO NOT set Content-Type manually in React Native
         };
       },
     }),
 
-    // 🔹 Create new patient
     createPatient: builder.mutation({
       query: (body: any) => ({
-        url: "patient", // your backend login route
+        url: "/patients",
         method: "POST",
         body,
       }),
       transformResponse: (result: any) => result,
       invalidatesTags: ["patients"],
-      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+      async onQueryStarted(_args: any, { queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
           return data;
         } catch (e: any) {
-         
           errorMessage(
-            e?.error?.data?.error || e?.error?.error || "Create new faild",
+            e?.error?.data?.error || e?.error?.error || "Create patient failed",
           );
         }
       },
     }),
+
     updatePatient: builder.mutation({
-      query: (body: any) => ({
-        url: "patient", // your backend login route
-        method: "PUT",
+      query: ({ id, ...body }: any) => ({
+        url: `/patients/${id}`,
+        method: "PATCH",
         body,
       }),
       transformResponse: (result: any) => result,
       invalidatesTags: ["patients"],
-      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+      async onQueryStarted(_args: any, { queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
           return data;
         } catch (e: any) {
           errorMessage(
-            e?.error?.data?.message || e?.error?.error || "Create new faild",
+            e?.error?.data?.message ||
+              e?.error?.error ||
+              "Update patient failed",
           );
         }
       },
@@ -103,9 +105,9 @@ export const PatientApi = api.injectEndpoints({
   overrideExisting: true,
 });
 
-// Hooks
 export const {
   useListPatientsQuery,
+  useGetPatientQuery,
   useAudioToTextMutation,
   useCreatePatientMutation,
   useUpdatePatientMutation,

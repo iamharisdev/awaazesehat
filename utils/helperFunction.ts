@@ -100,3 +100,33 @@ export const removeCountryCode = (patient: any) => {
   let number = patient?.phoneNumber;
   return number?.startsWith("+92") ? number?.slice(3) : number;
 };
+
+// Strip keys whose values are "", "0", 0, null, or undefined.
+export const cleanPayload = <T extends Record<string, any>>(
+  obj: T | undefined | null,
+): Partial<T> => {
+  if (!obj || typeof obj !== "object") return {};
+  const out: Partial<T> = {};
+  Object.keys(obj).forEach((k) => {
+    const v = (obj as any)[k];
+    if (v === "" || v === "0" || v === 0 || v === null || v === undefined)
+      return;
+    (out as any)[k] = v;
+  });
+  return out;
+};
+
+// UI <-> API conversions for firstPregnancy.
+export const firstPregnancyToBool = (
+  v: unknown,
+): boolean | undefined => {
+  if (v === "Yes" || v === true || v === "true") return true;
+  if (v === "No" || v === false || v === "false") return false;
+  return undefined;
+};
+
+export const firstPregnancyToYesNo = (v: unknown): string => {
+  if (v === true || v === "true" || v === "Yes") return "Yes";
+  if (v === false || v === "false" || v === "No") return "No";
+  return "";
+};

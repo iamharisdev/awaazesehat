@@ -1,7 +1,6 @@
 import AppInput from "@/components/AppInput";
-import DatePicker from "@/components/DatePicker";
 import RadioButton from "@/components/RadioButton";
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { styles } from "./style";
@@ -9,31 +8,26 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { updateEmr } from "@/features/patientSlice";
 
 import StepItems from "../StepItems";
-import { getWeeksAndDays, parseWeeksAndDays } from "@/utils/helperFunction";
 import CounterField from "@/components/CounterField";
 import { Text } from "react-native";
 
 const VIEW_FIELDS = [
-  { key: "lastMenstruationDate", label: "LMP", type: "date" },
-  { key: "pregnancyMonths", label: "Pregnancy Month", type: "text" },
-  { key: "gestationalAge", label: "Gestational Age", type: "text" },
-  { key: "firstPregnancy", label: "First Pregnancy", type: "radio" },
-  {
-    key: "total_pregnancies",
-    label: "Total previous pregnancies",
-    type: "number",
-  },
-  { key: "living_children", label: "Living children", type: "number" },
-  { key: "miscarriageCount", label: "Miscarriages", type: "number" },
-  { key: "miscarriages", label: "Miscarriages detail", type: "text" },
-  { key: "stillbirthCount", label: "Stillbirths", type: "number" },
-  { key: "neonatalDeathCount", label: "Neonatal deaths", type: "number" },
-  { key: "pretermBirths", label: "Pre-term births", type: "number" },
-  { key: "location", label: "Area of residence", type: "text" },
-  { key: "education", label: "Education", type: "text" },
-  { key: "occupation", label: "Occupation", type: "text" },
-  { key: "married_years", label: "Marriage duration", type: "text" },
-  { key: "husbandRelation", label: "Husband cousin", type: "text" },
+  { key: "lastMenstruationDate", label: "LMP", type: "date", section: "patient" },
+  { key: "pregnancyMonths", label: "Pregnancy Month", type: "text", section: "patient" },
+  { key: "gestationalAge", label: "Gestational Age", type: "text", section: "patient" },
+  { key: "firstPregnancy", label: "First Pregnancy", type: "radio", section: "currentPregnancy" },
+  { key: "totalPreviousPregnancies", label: "Total previous pregnancies", type: "number", section: "patient" },
+  { key: "livingChildren", label: "Living children", type: "number", section: "patient" },
+  { key: "miscarriageCount", label: "Miscarriages", type: "number", section: "patient" },
+  { key: "miscarriages", label: "Miscarriages detail", type: "text", section: "patient" },
+  { key: "stillbirthCount", label: "Stillbirths", type: "number", section: "patient" },
+  { key: "neonatalDeathCount", label: "Neonatal deaths", type: "number", section: "patient" },
+  { key: "pretermBirths", label: "Pre-term births", type: "number", section: "patient" },
+  { key: "address", label: "Area of residence", type: "text", section: "patient" },
+  { key: "education", label: "Education", type: "text", section: "patient" },
+  { key: "occupation", label: "Occupation", type: "text", section: "patient" },
+  { key: "durationOfMarriage", label: "Marriage duration", type: "text", section: "currentPregnancy" },
+  { key: "isHusbandCousin", label: "Husband cousin", type: "text", section: "patient" },
 ];
 
 const AddPatientProfile = ({ title, editable = true }: any) => {
@@ -41,50 +35,26 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
   const dispatch = useAppDispatch();
 
   const patient = useAppSelector((state) => state?.patient?.emr?.patient) ?? {};
+  const currentPregnancy =
+    useAppSelector((state) => state?.patient?.emr?.currentPregnancy) ?? {};
 
-  const updateField = (key: string, value: any) => {
+  const updatePatient = (key: string, value: any) => {
     dispatch(updateEmr({ step: "patient", key, value }));
   };
 
-  const ga = patient?.lastMenstruationDate
-    ? getWeeksAndDays(patient?.lastMenstruationDate)
-    : patient?.gestationalAge || "0 weeks, 0 days";
-
-  const { weeks, days } = parseWeeksAndDays(ga);
-
-  const [formData, setFormData] = useState({
-    weeks: weeks || "",
-    days: days || "",
-  });
-
-  // 🔁 Sync when LMP changes
-  useEffect(() => {
-    setFormData({
-      weeks: weeks || "",
-      days: days || "",
-    });
-  }, [weeks, days]);
-
-  const handleWeeksChange = (text: string) => {
-    setFormData((prev) => ({ ...prev, weeks: text }));
+  const updateCurrentPregnancy = (key: string, value: any) => {
+    dispatch(updateEmr({ step: "currentPregnancy", key, value }));
   };
 
-  const handleDaysChange = (text: string) => {
-    setFormData((prev) => ({ ...prev, days: text }));
-  };
-
-  useEffect(() => {
-    if (formData.weeks === "" && formData.days === "") return;
-
-    const gaString = `${formData.weeks} weeks, ${formData.days} days`;
-
-    if (patient?.gestationalAge !== gaString) {
-      updateField("gestationalAge", gaString);
-    }
-  }, [formData.weeks, formData.days]);
+  const firstPregnancyValue = (() => {
+    const v = currentPregnancy?.firstPregnancy;
+    if (v === true || v === "true" || v === "Yes") return "Yes";
+    if (v === false || v === "false" || v === "No") return "No";
+    return "";
+  })();
 
   const renderViewMode = () => {
-    if (!patient) {
+    if (!patient && !currentPregnancy) {
       return (
         <Text style={{ color: "#707070", fontStyle: "italic" }}>
           No patient data available.
@@ -95,10 +65,12 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
     return (
       <View style={{ gap: 8 }}>
         {VIEW_FIELDS?.map((field) => {
-          const value = (patient as any)[field.key];
-          if (!value) return null;
+          const source: any =
+            field.section === "currentPregnancy" ? currentPregnancy : patient;
+          const value = source?.[field.key];
+          if (value === undefined || value === null || value === "") return null;
 
-          let displayValue = value;
+          let displayValue: any = value;
 
           if (field.type === "date") {
             displayValue = new Date(value).toLocaleDateString("en-GB", {
@@ -109,8 +81,10 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
           }
 
           if (field.type === "radio") {
-            if (value === "true") displayValue = "Yes";
-            if (value === "false") displayValue = "No";
+            if (value === true || value === "true" || value === "Yes")
+              displayValue = "Yes";
+            else if (value === false || value === "false" || value === "No")
+              displayValue = "No";
           }
 
           return (
@@ -128,118 +102,77 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
     <StepItems title={title}>
       {editable ? (
         <>
-          {/* Row 1: LMP + Pregnancy Month */}
+          {/* Pregnancy Month */}
           <View style={styles.row}>
-            <View style={styles.flexItem}>
-              <DatePicker
-                label={t("LMP")}
-                value={
-                  patient?.lastMenstruationDate
-                    ? new Date(patient.lastMenstruationDate)
-                    : new Date()
-                }
-                onChange={(date) => updateField("lastMenstruationDate", date)}
-              />
-            </View>
             <View style={styles.flexItem}>
               <AppInput
                 label={t("Pregnancy Month")}
                 inputProps={{
                   value: patient?.pregnancyMonths || "",
-                  onChangeText: (text) => updateField("pregnancyMonths", text),
+                  onChangeText: (text) => updatePatient("pregnancyMonths", text),
                 }}
               />
             </View>
           </View>
 
-          {/* Row 2: Gestational Age */}
-          <View style={styles.row}>
-            <View style={styles.flexItem}>
-              <AppInput
-                label={t("Gestational age of weeks")}
-                inputProps={{
-                  keyboardType: "numeric",
-                  value: formData.weeks,
-                  onChangeText: handleWeeksChange,
-                }}
-              />
-            </View>
-            <View style={styles.flexItem}>
-              <AppInput
-                label={t("Gestational age of days")}
-                inputProps={{
-                  keyboardType: "numeric",
-                  value: formData.days,
-                  onChangeText: handleDaysChange,
-                }}
-              />
-            </View>
-          </View>
-
-          {/* First Pregnancy */}
+          {/* First Pregnancy (stored in currentPregnancy) */}
           <RadioButton
             label={t("First Pregnancy?")}
             options={[t("Yes"), t("No")]}
-            value={
-              patient?.firstPregnancy === "true"
-                ? "Yes"
-                : patient?.firstPregnancy === "false"
-                  ? "No"
-                  : patient?.firstPregnancy
-            }
-            onChange={(val) =>
-              updateField("firstPregnancy", val === "Yes" ? "true" : "false")
-            }
+            value={firstPregnancyValue}
+            onChange={(val) => updateCurrentPregnancy("firstPregnancy", val)}
           />
 
-          {/* Conditional Fields */}
-          {patient?.firstPregnancy === "false" && (
+          {/* Conditional Fields when NOT first pregnancy */}
+          {firstPregnancyValue === "No" && (
             <View>
-              {/* Previous pregnancies */}
               <CounterField
                 title="Total number of previous pregnancies?"
-                value={patient?.total_pregnancies}
-                onChange={(val) => updateField("total_pregnancies", val)}
+                value={patient?.totalPreviousPregnancies}
+                onChange={(val) =>
+                  updatePatient("totalPreviousPregnancies", val)
+                }
               />
               <CounterField
                 title="Number of living children?"
-                value={patient?.living_children}
-                onChange={(val) => updateField("living_children", val)}
+                value={patient?.livingChildren}
+                onChange={(val) => updatePatient("livingChildren", val)}
               />
               <CounterField
                 title="Number of miscarriages?"
                 value={patient?.miscarriageCount}
-                onChange={(val) => updateField("miscarriageCount", val)}
+                onChange={(val) => updatePatient("miscarriageCount", val)}
               />
               <AppInput
                 label={t("Miscarriages detail")}
                 inputProps={{
                   value: patient?.miscarriages || "",
-                  onChangeText: (text) => updateField("miscarriages", text),
+                  onChangeText: (text) => updatePatient("miscarriages", text),
                 }}
               />
               <CounterField
                 title="Total number of stillbirths?"
                 value={patient?.stillbirthCount}
-                onChange={(val) => updateField("stillbirthCount", val)}
+                onChange={(val) => updatePatient("stillbirthCount", val)}
               />
               <CounterField
                 title="Total no. of neonatal deaths?"
                 initialValue={patient?.neonatalDeathCount || 0}
-                onChange={(val) => updateField("neonatalDeathCount", val)}
+                onChange={(val) => updatePatient("neonatalDeathCount", val)}
               />
               <CounterField
                 title="Total number of pre-term births?"
                 value={patient?.pretermBirths}
-                onChange={(val) => updateField("pretermBirths", val)}
+                onChange={(val) => updatePatient("pretermBirths", val)}
               />
             </View>
           )}
+
           <AppInput
             label={t("Area of residence")}
             inputProps={{
-              value: patient?.location || "",
-              onChangeText: (text) => updateField("location", text),
+              value: patient?.address || "",
+              onChangeText: (text) => updatePatient("address", text),
             }}
           />
 
@@ -248,31 +181,33 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
             inputProps={{
               placeholder: "Enter",
               value: patient?.education || "",
-              onChangeText: (text) => updateField("education", text),
+              onChangeText: (text) => updatePatient("education", text),
             }}
           />
 
           <RadioButton
             label={t("Patient occupation?")}
-            options={[t("Working Woman"), t("HouseWife"), "Both"]}
+            options={[t("Working Woman"), t("Housewife"), "Both"]}
             value={patient?.occupation || ""}
-            onChange={(val) => updateField("occupation", val)}
+            onChange={(val) => updatePatient("occupation", val)}
           />
 
-          {/* Marriage duration */}
+          {/* Marriage duration (stored in currentPregnancy) */}
           <AppInput
             label={t("Duration of marriage")}
             inputProps={{
-              value: patient?.married_years || "",
-              onChangeText: (text) => updateField("married_years", text),
+              value: currentPregnancy?.durationOfMarriage || "",
+              onChangeText: (text) =>
+                updateCurrentPregnancy("durationOfMarriage", text),
             }}
           />
+
           <AppInput
             label="Is husband her cousin?"
             inputProps={{
               placeholder: "Enter",
-              value: patient?.husbandRelation || "",
-              onChangeText: (text) => updateField("husbandRelation", text),
+              value: patient?.isHusbandCousin || "",
+              onChangeText: (text) => updatePatient("isHusbandCousin", text),
             }}
           />
         </>

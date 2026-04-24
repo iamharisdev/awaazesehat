@@ -1,9 +1,13 @@
 import { Icons } from "@/assets/svgs";
 import { AppHeader, Button, KeyboardAvoidingWrapper } from "@/components";
+import {
+  useResendOtpMutation,
+  useVerifyOtpMutation,
+} from "@/services/modules/auth";
 import { styles } from "@/styles/otpStyle";
 import { ROUTES } from "@/utils/routes";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import {
@@ -25,19 +29,41 @@ const Otp = () => {
     value,
     setValue,
   });
-
   const [timer, setTimer] = useState(0);
 
+  const [verifyOtp, { isLoading: verifying }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: resending }] = useResendOtpMutation();
+
   useEffect(() => {
-    let interval: NodeJS.Timeout | undefined;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (timer > 0) {
       interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
     }
-    return () => interval && clearInterval(interval);
+    return () => { if (interval) clearInterval(interval); };
   }, [timer]);
 
-  const handleResend = () => {
-    setTimer(59);
+  const handleResend = async () => {
+    try {
+      await resendOtp({ email }).unwrap();
+      setTimer(59);
+    } catch (_e) {}
+  };
+
+  const handleContinue = async () => {
+    if (check === "login") {
+      try {
+        await verifyOtp({ email, otp: value }).unwrap();
+        router.push({
+          pathname: ROUTES.createPassword,
+          params: { email, otp: value, check },
+        });
+      } catch (_e) {}
+    } else {
+      router.push({
+        pathname: ROUTES.createPassword,
+        params: { check },
+      });
+    }
   };
 
   return (
@@ -83,25 +109,19 @@ const Otp = () => {
           </Text>
         ) : (
           <Text style={[styles.headingLight, styles.center]}>
-            {t("Didn’t receive code? ")}
+            {t("Didn't receive code? ")}
             <Text style={styles.email} onPress={handleResend}>
-              {t("Resend code")}
+              {resending ? t("Sending...") : t("Resend code")}
             </Text>
           </Text>
         )}
       </View>
       <View style={styles.absolute}>
         <Button
-          disabled={value.length !== 6}
+          disabled={value.length !== 6 || verifying}
           title={t("Continue")}
           style={styles.btnViewStyle}
-          btnProps={{
-            onPress: () =>
-              router.push({
-                pathname: ROUTES.createPassword,
-                params: { check },
-              }),
-          }}
+          btnProps={{ onPress: handleContinue }}
         />
       </View>
     </KeyboardAvoidingWrapper>

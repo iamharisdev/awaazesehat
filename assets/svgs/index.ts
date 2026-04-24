@@ -32,6 +32,7 @@ import mic from './mic.svg';
 import del from './delete.svg';
 import play from './play.svg'
 import emr from './emr.svg';
+import logout from './logout.svg';
 
 
 export const Icons = {
@@ -68,5 +69,6 @@ export const Icons = {
   patientRecord:patientRecord,
   mic:mic,
   delete:del,
-  play:play
+  play:play,
+  logout:logout,
 } as const;

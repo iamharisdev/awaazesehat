@@ -6,17 +6,18 @@ import {
   KeyboardAvoidingWrapper,
 } from "@/components";
 import { SignupValidation } from "@/schemas/validations";
+import { useForgotPasswordMutation } from "@/services/modules/auth";
 import { styles } from "@/styles/forgotStyle";
 import { ROUTES } from "@/utils/routes";
 import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 const ForgotPassword = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
   return (
     <KeyboardAvoidingWrapper>
@@ -24,11 +25,14 @@ const ForgotPassword = () => {
       <Formik
         initialValues={{ email: "" }}
         validationSchema={SignupValidation}
-        onSubmit={({ email }) => {
-          router.push({
-            pathname: ROUTES.verifyOtp,
-            params: { email, check: "login" },
-          });
+        onSubmit={async ({ email }) => {
+          try {
+            await forgotPassword({ email }).unwrap();
+            router.push({
+              pathname: ROUTES.verifyOtp,
+              params: { email, check: "login" },
+            });
+          } catch (_e) {}
         }}
       >
         {({
@@ -60,7 +64,7 @@ const ForgotPassword = () => {
               />
               <View style={styles.footerView}>
                 <Button
-                  disabled={!email}
+                  disabled={!email || isLoading}
                   title={t("Reset password")}
                   style={styles.btnViewStyle}
                   btnProps={{

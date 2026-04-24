@@ -48,10 +48,10 @@ const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({ errors =
         label="Diagnosis in pregnancy?"
         inputProps={{
           placeholder: "Enter",
-          value: fields?.diagnosisPregnency || "",
+          value: fields?.diagnosisPregnancy || "",
           editable: !editable,
           onChangeText: (text: string) =>
-            updateField("diagnosisPregnency", text),
+            updateField("diagnosisPregnancy", text),
         }}
       />
 

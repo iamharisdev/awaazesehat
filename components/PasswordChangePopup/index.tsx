@@ -1,5 +1,5 @@
 import { Icons } from "@/assets/svgs";
-import React, { forwardRef, useImperativeHandle, useRef } from "react";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 import BottomSheet from "../BottomSheet";
@@ -12,13 +12,12 @@ export type NotificationSheetRef = {
 };
 
 type Props = {
-  onAllow?: () => void;
   onClose?: () => void;
 };
 
 const PasswordChangePopup = forwardRef<NotificationSheetRef, Props>(
-  ({ onAllow, onClose }, ref) => {
-    const sheetRef = useRef(null);
+  ({ onClose }, ref) => {
+    const sheetRef = useRef<{ open: () => void; close: () => void }>(null);
     const { t } = useTranslation();
 
     useImperativeHandle(ref, () => ({
@@ -50,7 +49,11 @@ const PasswordChangePopup = forwardRef<NotificationSheetRef, Props>(
           {t("Your password has been changed successfully.")}
         </Text>
 
-        <Button title={t("Back to log in")} style={styles.primaryBtn} />
+        <Button
+          title={t("Back to log in")}
+          style={styles.primaryBtn}
+          btnProps={{ onPress: () => { sheetRef.current?.close(); onClose?.(); } }}
+        />
       </BottomSheet>
     );
   }

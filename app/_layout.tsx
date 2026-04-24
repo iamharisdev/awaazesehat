@@ -2,6 +2,7 @@
 import "@/global.css";
 import i18n from "@/i18n";
 import { MakeStyles } from "@/styles/rootStyle";
+import { colors } from "@/utils/colors";
 import { useFonts } from "expo-font";
 import { Stack, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -12,9 +13,11 @@ import { I18nextProvider } from "react-i18next";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store, useAppSelector } from "../store";
+import { persistor, store, useAppDispatch, useAppSelector } from "../store";
+import { setStatusBar } from "@/features/authSlice";
 import Toast from "react-native-toast-message";
 import { Platform } from "react-native";
+import GlobalLoader from "@/components/GlobalLoader";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,6 +41,7 @@ export default function RootLayout() {
 
 function RootLayoutContent() {
   const { statusBar, token } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
   const segments = useSegments();
   const router = useRouter();
 
@@ -66,13 +70,22 @@ function RootLayoutContent() {
     }
   }, [token, inAuthGroup]);
 
+  useEffect(() => {
+    if (token) {
+      dispatch(setStatusBar("auth"));
+    }
+  }, [token]);
+
   const styles = MakeStyles(statusBar);
   if (!loaded) {
     return null;
   }
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
-      <StatusBar style="dark" translucent />
+      <StatusBar
+        style="dark"
+        backgroundColor={statusBar === "startup" ? colors.green.g20 : colors.white.w1}
+      />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -81,6 +94,7 @@ function RootLayoutContent() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="(auth)" />
       </Stack>
+      <GlobalLoader />
     </SafeAreaView>
   );
 }

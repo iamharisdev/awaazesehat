@@ -89,7 +89,7 @@ export interface Examination {
 }
 
 export interface ProposedPlan {
-  diagnosisPregnency: string;
+  diagnosisPregnancy: string;
   advisedLabTests?: any | null;
   doctorNotes?: string | null;
   nextFollowUpTiming?: string | null; // keep string for API
@@ -203,21 +203,32 @@ const patientSlice = createSlice({
     },
 
     setEmr: (state, action: PayloadAction<any>) => {
+      const p = action.payload ?? {};
+      const currentPregnancy = { ...(p?.currentPregnancy ?? {}) };
+
+      // Normalize firstPregnancy (boolean on API) to canonical "Yes"/"No" for UI
+      const rawFp = currentPregnancy.firstPregnancy;
+      if (rawFp === true || rawFp === "true") {
+        currentPregnancy.firstPregnancy = "Yes";
+      } else if (rawFp === false || rawFp === "false") {
+        currentPregnancy.firstPregnancy = "No";
+      }
+
       state.emr = {
-        id: action.payload?.id ?? null,
-        isEditable: action.payload?.isEditable ?? false,
-        patient: action.payload?.patient ?? {},
-        obsHistory: action.payload?.obsHistory ?? {},
-        gynecologicalHistory: action.payload?.gynecologicalHistory ?? {},
-        medicalHistory: action.payload?.medicalHistory ?? {},
-        surgicalHistory: action.payload?.surgicalHistory ?? {},
-        currentPregnancy: action.payload?.currentPregnancy ?? {},
-        familyHistory: action.payload?.familyHistory ?? {},
-        personalHistory: action.payload?.personalHistory ?? {},
-        socioEconomicHistory: action.payload?.socioEconomicHistory ?? {},
-        trimester: action.payload?.trimester ?? {},
-        createdAt: action.payload?.createdAt ?? null,
-        updatedAt: action.payload?.updatedAt ?? null,
+        id: p?.id ?? null,
+        isEditable: p?.isEditable ?? false,
+        patient: p?.patient ?? {},
+        obsHistory: p?.obsHistory ?? {},
+        gynecologicalHistory: p?.gynecologicalHistory ?? {},
+        medicalHistory: p?.medicalHistory ?? {},
+        surgicalHistory: p?.surgicalHistory ?? {},
+        currentPregnancy,
+        familyHistory: p?.familyHistory ?? {},
+        personalHistory: p?.personalHistory ?? {},
+        socioEconomicHistory: p?.socioEconomicHistory ?? {},
+        trimester: p?.trimester ?? {},
+        createdAt: p?.createdAt ?? null,
+        updatedAt: p?.updatedAt ?? null,
       };
     },
 
@@ -244,7 +255,7 @@ const patientSlice = createSlice({
       state.emr[step]![key] = value;
     },
 
-    setVisit: (state, action: PayloadAction<Partial<VisitS>>) => {
+    setVisit: (state, action: PayloadAction<Partial<Visits>>) => {
       const payload = action.payload;
 
       state.visit = {

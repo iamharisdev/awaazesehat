@@ -58,27 +58,29 @@ const Visit = () => {
   const editable = visit.createdAt;
 
   const handleApi = async () => {
-    let test = visit?.proposedPlan?.advisedLabTests
-      ? visit.proposedPlan.advisedLabTests.split(",")
+    const advisedLabTests = visit?.proposedPlan?.advisedLabTests
+      ? visit.proposedPlan.advisedLabTests.split(",").filter(Boolean)
       : [];
-    let body = {
-      patientId: id ?? null,
-      visitDate: new Date().toISOString(),
+
+    const bulkBody = {
+      visit: {
+        patientId: id ?? null,
+        visitDate: new Date().toISOString(),
+      },
       vitals: visit?.vitals,
       examination: visit?.examination,
-      diagnostics: visit?.diagnostics,
       proposedPlan: {
         ...visit?.proposedPlan,
-        advisedLabTests: test,
+        advisedLabTests,
       },
     };
+
     let res;
 
     if (editable) {
-      let payload = { ...body, visitId: visit.id };
-      res = await updateVisit(payload);
+      res = await updateVisit({ visitId: visit.id, ...bulkBody });
     } else {
-      res = await createVisit(body);
+      res = await createVisit(bulkBody);
     }
 
     if (res.data) {

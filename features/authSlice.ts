@@ -25,8 +25,9 @@ const authSlice = createSlice({
     setStatusBar:(state, action: PayloadAction<string>) => {
       state.statusBar = action.payload;
     },
+    logoutReset: () => initialState,
   },
 });
 
-export const { setName,setToken,setStatusBar} = authSlice.actions;
+export const { setName, setToken, setStatusBar, logoutReset } = authSlice.actions;
 export default authSlice.reducer;

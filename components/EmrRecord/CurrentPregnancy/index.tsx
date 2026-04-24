@@ -35,11 +35,11 @@ const CURRENT_PREGNANCY_FIELDS = [
 
 const TRIMESTER_FIELDS = [
   { key: "fetusMovement", label: "Experienced any fetal movements" },
-  { key: "scanResults", label: "Anomaly scan results (if conducted)" },
-  { key: "checkupVisits", label: "Regular antenatal checkups" },
-  { key: "sugarTestResult", label: "Glucose screening results (if conducted)" },
+  { key: "ultrasoundFiveMonths", label: "Anomaly scan results (if conducted)" },
+  { key: "checkupRegularity", label: "Regular antenatal checkups" },
+  { key: "sugarTest", label: "Glucose screening results (if conducted)" },
   {
-    key: "bloodPressureResult",
+    key: "bloodPressure",
     label: "Blood pressure monitoring (if conducted)",
   },
   { key: "recentUltrasound", label: "Most recent ultrasound (if conducted)" },
@@ -211,8 +211,9 @@ return (
             label={t("Anomaly scan results (if conducted)")}
             inputProps={{
               placeholder: "Enter detail if baby reported as normal",
-              value: trimester?.scanResults || "",
-              onChangeText: (text) => updateTrimester("scanResults", text),
+              value: trimester?.ultrasoundFiveMonths || "",
+              onChangeText: (text) =>
+                updateTrimester("ultrasoundFiveMonths", text),
             }}
           />
 
@@ -220,8 +221,9 @@ return (
             label={t("Regular antenatal checkups")}
             inputProps={{
               placeholder: "How many visits has she completed so far?",
-              value: trimester?.checkupVisits || "",
-              onChangeText: (text) => updateTrimester("checkupVisits", text),
+              value: trimester?.checkupRegularity || "",
+              onChangeText: (text) =>
+                updateTrimester("checkupRegularity", text),
             }}
           />
 
@@ -229,8 +231,8 @@ return (
             label={t("Glucose screening results (if conducted)")}
             inputProps={{
               placeholder: "Enter results and any related medications",
-              value: trimester?.sugarTestResult || "",
-              onChangeText: (text) => updateTrimester("sugarTestResult", text),
+              value: trimester?.sugarTest || "",
+              onChangeText: (text) => updateTrimester("sugarTest", text),
             }}
           />
 
@@ -238,9 +240,8 @@ return (
             label={t("Blood pressure monitoring (if conducted)")}
             inputProps={{
               placeholder: "Enter results and any related medications",
-              value: trimester?.bloodPressureResult || "",
-              onChangeText: (text) =>
-                updateTrimester("bloodPressureResult", text),
+              value: trimester?.bloodPressure || "",
+              onChangeText: (text) => updateTrimester("bloodPressure", text),
             }}
           />
 

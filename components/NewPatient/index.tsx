@@ -12,11 +12,13 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import {
   errorMessage,
   formatCNIC,
+  getWeeksAndDays,
   onlyDigits,
   parseWeeksAndDays,
 } from "@/utils/helperFunction";
 import AppInput from "../AppInput";
 import Button from "../Button";
+import DatePicker from "../DatePicker";
 import { styles } from "./style";
 import { hp } from "@/utils/responsive";
 import { t } from "i18next";
@@ -33,6 +35,7 @@ export interface PatientFormValues {
   husbandName: string;
   cnic: string;
   age: string;
+  lmp: string;
   weeks: string;
   days: string;
   phoneNumber: string;
@@ -71,11 +74,15 @@ const NewPatient = ({ ref }: Props) => {
   const handleSubmit = async (values: any) => {
     const cleanPhone = "+92" + values.phoneNumber;
     const gestationalAge = `${values.weeks} weeks,${values.days} days`;
+    const lmpDate = values.lmp
+      ? new Date(values.lmp).toISOString().slice(0, 10)
+      : null;
 
     const payload = {
       ...values,
       phoneNumber: cleanPhone,
       gestationalAge: gestationalAge || null,
+      lmp: lmpDate,
     };
 
     let res: any;
@@ -83,7 +90,7 @@ const NewPatient = ({ ref }: Props) => {
     if (patient?.id) {
       res = await updatePatient({
         id: patient.id,
-        data: payload,
+        ...payload,
       });
     } else {
       res = await createPatient(payload);
@@ -129,7 +136,16 @@ const NewPatient = ({ ref }: Props) => {
         {({
           handleChange,
           handleSubmit,
-          values: { name, husbandName, cnic, age, weeks, days, phoneNumber },
+          values: {
+            name,
+            husbandName,
+            cnic,
+            age,
+            lmp,
+            weeks,
+            days,
+            phoneNumber,
+          },
           errors,
           touched,
           setFieldValue,
@@ -182,35 +198,42 @@ const NewPatient = ({ ref }: Props) => {
               error={errors.age}
             />
 
+            <DatePicker
+              label={t("LMP (Last Menstrual Period)")}
+              value={lmp ? new Date(lmp) : undefined}
+              maxDate={new Date()}
+              onChange={(date) => {
+                setFieldValue("lmp", date.toISOString());
+                const parsed = parseWeeksAndDays(getWeeksAndDays(date));
+                setFieldValue("weeks", parsed.weeks || "0");
+                setFieldValue("days", parsed.days || "0");
+              }}
+              error={touched.lmp ? (errors.lmp as string) : undefined}
+            />
+
             <View style={styles.row}>
-              {/* Weeks */}
+              {/* Weeks (auto-calculated from LMP) */}
               <View style={styles.flex}>
                 <AppInput
                   label={t("Weeks")}
                   inputProps={{
-                    placeholder: "Enter weeks",
+                    placeholder: "Auto from LMP",
                     value: weeks,
-                    keyboardType: "numeric",
-                    maxLength: 2,
-                    onChangeText: (text: string) =>
-                      setFieldValue("weeks", onlyDigits(text).slice(0, 2)),
+                    editable: false,
                   }}
                   touched
                   error={errors.weeks}
                 />
               </View>
 
-              {/* Days */}
+              {/* Days (auto-calculated from LMP) */}
               <View style={styles.flex}>
                 <AppInput
                   label={t("Days")}
                   inputProps={{
-                    placeholder: "Enter days",
+                    placeholder: "Auto from LMP",
                     value: days,
-                    keyboardType: "numeric",
-                    maxLength: 2,
-                    onChangeText: (text: string) =>
-                      setFieldValue("days", onlyDigits(text).slice(0, 1)),
+                    editable: false,
                   }}
                   touched
                   error={errors.days}

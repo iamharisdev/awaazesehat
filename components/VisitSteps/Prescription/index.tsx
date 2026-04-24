@@ -106,8 +106,8 @@ const Prescription: React.FC<Props> = ({
           ${examHtml}
 
           ${
-            plan?.diagnosisPregnency
-              ? `<hr/><h3>Diagnosis Pregnancy</h3><p>${plan.diagnosisPregnency}</p>`
+            plan?.diagnosisPregnancy
+              ? `<hr/><h3>Diagnosis Pregnancy</h3><p>${plan.diagnosisPregnancy}</p>`
               : ""
           }
 
@@ -218,13 +218,13 @@ const Prescription: React.FC<Props> = ({
           )}
 
           {/* DIAGNOSIS */}
-          {show(visit?.proposedPlan?.diagnosisPregnency) && (
+          {show(visit?.proposedPlan?.diagnosisPregnancy) && (
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>
                 Diagnosis Pregnancy
               </Text>
               <Text style={styles.text}>
-                {visit.proposedPlan.diagnosisPregnency}
+                {visit.proposedPlan.diagnosisPregnancy}
               </Text>
             </View>
           )}

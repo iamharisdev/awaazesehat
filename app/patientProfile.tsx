@@ -29,6 +29,10 @@ import {
   useCreateEmrMutation,
   useUpdateEmrMutation,
 } from "@/services/modules/emr";
+import {
+  cleanPayload,
+  firstPregnancyToBool,
+} from "@/utils/helperFunction";
 
 const stepScreens = [
   { key: "Patient Profile", component: AddPatientProfile },
@@ -43,7 +47,8 @@ const stepScreens = [
 ];
 
 const getSteps = (emr: any) => {
-  if (emr?.patient?.firstPregnancy === "true") {
+  const fp = emr?.currentPregnancy?.firstPregnancy;
+  if (fp === "Yes" || fp === true || fp === "true") {
     return stepScreens.filter((_, i) => i !== 1);
   }
   return stepScreens;
@@ -94,7 +99,7 @@ export default function PatientProfile() {
 
   useEffect(() => {
     setSteps(getSteps(emr));
-  }, [emr?.patient?.firstPregnancy]);
+  }, [emr?.currentPregnancy?.firstPregnancy]);
 
   useEffect(() => {
     if (showCompletionSheet) {
@@ -105,50 +110,62 @@ export default function PatientProfile() {
   const CurrentStepComponent = steps[emrSteps]?.component;
 
   const apiCall = async () => {
-    setIsLoading(true); // 🌀 start loader
+    setIsLoading(true);
 
-    const updatedPayload = {
-      ...emr,
-      patient: {
-        ...emr?.patient,
-        name: currentPatient?.name,
-        age: currentPatient?.age,
-        cnic: currentPatient?.cnic,
-        phoneNumber: currentPatient?.phoneNumber || currentPatient?.phone,
-        husbandName: currentPatient?.husbandName,
+    // currentPregnancy: convert firstPregnancy "Yes"/"No" -> boolean for API
+    const cpSource: any = { ...(emr?.currentPregnancy ?? {}) };
+    const fpBool = firstPregnancyToBool(cpSource.firstPregnancy);
+    if (fpBool === undefined) delete cpSource.firstPregnancy;
+    else cpSource.firstPregnancy = fpBool;
+
+    const patientBase = {
+      ...(emr?.patient ?? {}),
+      name: currentPatient?.name,
+      age: currentPatient?.age,
+      cnic: currentPatient?.cnic,
+      phoneNumber: currentPatient?.phoneNumber || currentPatient?.phone,
+      husbandName: currentPatient?.husbandName,
+    };
+
+    const cleanedCurrentPregnancy = cleanPayload(cpSource);
+    // Re-attach firstPregnancy boolean (cleanPayload strips false/0-ish; boolean false is valid)
+    if (fpBool !== undefined) {
+      (cleanedCurrentPregnancy as any).firstPregnancy = fpBool;
+    }
+
+    const bulkPayload: any = {
+      emr: {
+        phone: currentPatient?.phoneNumber,
+        patientId: currentPatient?.id,
       },
-      patientId: currentPatient?.id,
-      phone: currentPatient?.phoneNumber,
-      visit: 1,
+      patient: cleanPayload(patientBase),
+      obsHistory: cleanPayload(emr?.obsHistory),
+      currentPregnancy: cleanedCurrentPregnancy,
+      gynecologicalHistory: cleanPayload(emr?.gynecologicalHistory),
+      medicalHistory: cleanPayload(emr?.medicalHistory),
+      surgicalHistory: cleanPayload(emr?.surgicalHistory),
+      familyHistory: cleanPayload(emr?.familyHistory),
+      personalHistory: cleanPayload(emr?.personalHistory),
+      socioEconomicHistory: cleanPayload(emr?.socioEconomicHistory),
+      trimester: cleanPayload(emr?.trimester),
     };
 
     try {
       if (check === "create") {
-        // ➕ CREATE EMR
-        const res = await createEmr(updatedPayload).unwrap();
-        if (res?.emrId) {
+        const res = await createEmr(bulkPayload).unwrap();
+        if (res?.id) {
           onPressRight();
         }
       } else if (check === "update") {
-        // 🔄 UPDATE EMR
-        const { patient, ...restPayload } = updatedPayload;
-
-        const payload = {
-          ...restPayload,
-          emrId: emr?.id,
-        };
-
-        const res = await updateEmr(payload).unwrap();
-
+        await updateEmr({ emrId: emr?.id, ...bulkPayload }).unwrap();
         setShowCompletionSheet(true);
       } else {
-        // No API call needed
         setShowCompletionSheet(true);
       }
     } catch (err: any) {
       console.error("❌ EMR API error:", err);
     } finally {
-      setIsLoading(false); // 🛑 stop loader
+      setIsLoading(false);
     }
   };
 

@@ -6,30 +6,36 @@ import {
   Button,
   GenericPopup,
   KeyboardAvoidingWrapper,
-  PasswordChangePopup
+  PasswordChangePopup,
 } from "@/components";
 import { passwordValidation } from "@/schemas/validations";
+import { useResetPasswordMutation } from "@/services/modules/auth";
 import { styles } from "@/styles/createPasswordStyle";
 import { enableNotifications } from "@/utils/notification";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Formik } from "formik";
-import React, { useRef } from "react";
+import { useRef } from "react";
+import type { NotificationSheetRef } from "@/components/PasswordChangePopup";
 import { useTranslation } from "react-i18next";
 import { Text, View } from "react-native";
 
 const CreatePassword = () => {
   const { t } = useTranslation();
-  const notificationRef = useRef(null);
-  const passwordRef = useRef(null);
+  const router = useRouter();
+  const notificationRef = useRef<NotificationSheetRef>(null);
+  const passwordRef = useRef<NotificationSheetRef>(null);
 
-  const { check } = useLocalSearchParams<{
+  const { check, email, otp } = useLocalSearchParams<{
     check: string;
+    email: string;
+    otp: string;
   }>();
+
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
   const AllowNotification = async () => {
     const token = await enableNotifications();
     console.log("✅ Notifications enabled, token:", token);
-
     notificationRef.current?.close();
   };
 
@@ -39,10 +45,19 @@ const CreatePassword = () => {
       <Formik
         initialValues={{ password: "" }}
         validationSchema={passwordValidation}
-        onSubmit={(values) => {
-          check == "signup"
-            ? notificationRef?.current?.open()
-            : passwordRef?.current?.open();
+        onSubmit={async ({ password }) => {
+          if (check === "login") {
+            try {
+              await resetPassword({
+                email,
+                otp,
+                newPassword: password,
+              }).unwrap();
+              passwordRef?.current?.open();
+            } catch (_e) {}
+          } else {
+            notificationRef?.current?.open();
+          }
         }}
       >
         {({
@@ -83,7 +98,7 @@ const CreatePassword = () => {
               />
               <View style={styles.footerView}>
                 <Button
-                  disabled={!password}
+                  disabled={!password || isLoading}
                   title={check == "signup" ? t("Register") : t("Set password")}
                   style={styles.btnViewStyle}
                   btnProps={{
@@ -93,7 +108,10 @@ const CreatePassword = () => {
               </View>
             </View>
 
-            <PasswordChangePopup ref={passwordRef} />
+            <PasswordChangePopup
+              ref={passwordRef}
+              onClose={() => router.replace("/login")}
+            />
 
             <BottomSheet ref={notificationRef} sheetHeight={350}>
               <GenericPopup
@@ -104,9 +122,9 @@ const CreatePassword = () => {
                 btnTitle1={t("Allow notifications")}
                 btnTitle2={t("Not now")}
                 icon={<Icons.notification />}
-                onCrossPress={() => notificationRef.current.close()}
+                onCrossPress={() => notificationRef.current?.close()}
                 openPress={AllowNotification}
-                closePress={() => notificationRef.current.close()}
+                closePress={() => notificationRef.current?.close()}
               />
             </BottomSheet>
           </>

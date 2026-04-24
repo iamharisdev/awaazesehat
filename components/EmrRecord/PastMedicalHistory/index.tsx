@@ -8,8 +8,18 @@ import AppMultiSelect from "@/components/AppMultiSelect";
 import TextAreaWithMic from "@/components/TextAreaWithMic";
 import { updateEmr } from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { healthCondition } from "@/utils/Json";
 import { styles } from "./style";
+
+const MEDICAL_CONDITIONS = [
+  { name: "Diabetes" },
+  { name: "High Blood Pressure" },
+  { name: "Asthma" },
+  { name: "Tuberculosis (TB)" },
+  { name: "Hepatitis" },
+  { name: "Jaundice" },
+  { name: "Heart disease" },
+  { name: "Kidney disease" },
+];
 
 const MEDICAL_HISTORY_VIEW_FIELDS = [
   {
@@ -86,7 +96,7 @@ const PastMedicalHistory = ({ title, editable = true }: Props) => {
     <View style={styles.formContainer}>
       <AppMultiSelect
         label={t("Any health conditions")}
-        options={healthCondition}
+        options={MEDICAL_CONDITIONS}
         value={medicalHistory?.medicalConditions}
         onChange={(val) =>
           updateField("medicalConditions", val.map((i) => i.name).join(","))

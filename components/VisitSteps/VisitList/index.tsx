@@ -115,7 +115,7 @@ const VisitList = ({ ref }: Props) => {
           title="Add Visit"
           btnProps={{
             onPress: () => {
-              dispatch(setVisit(null));
+              dispatch(setVisit({}));
               dispatch(setVisitSteps(0));
               dispatch(setActiveVisit(true));
               ref?.current?.open();

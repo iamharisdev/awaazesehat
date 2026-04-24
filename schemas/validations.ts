@@ -42,15 +42,17 @@ const newPatientValidation = Yup.object().shape({
   phoneNumber: Yup.string()
     .length(10, "Phone number must be 10 digits")
     .required("Phone number is required"),
+  lmp: Yup.string().required("LMP is required"),
   weeks: Yup.number()
     .typeError("Weeks must be numeric")
     .min(0, "Weeks must be between 0 and 42")
-    .max(42, "Weeks must be between 0 and 42"),
+    .max(42, "Weeks must be between 0 and 42")
+    .required("Weeks is required"),
   days: Yup.number()
     .typeError("Days must be numeric")
     .min(0, "Days must be between 0 and 6")
     .max(6, "Days must be between 0 and 6")
-
+    .required("Days is required")
     .test(
       "weeks-42-rule",
       "Days must be 0 when gestational age is 42 weeks",

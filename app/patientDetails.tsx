@@ -26,9 +26,9 @@ export default function PatientDetail() {
 
   // Fetch EMRs
   const { isLoading, isFetching } = useListEMRsQuery(
-    { phoneNumber: patient?.phoneNumber! },
+    { patientId: patient?.id! },
     {
-      skip: !patient?.phoneNumber,
+      skip: !patient?.id,
       refetchOnMountOrArgChange: true,
     },
   );

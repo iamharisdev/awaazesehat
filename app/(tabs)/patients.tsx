@@ -61,9 +61,9 @@ export default function Patients() {
   // Fetch patients
   const { data, isLoading, isFetching, error }: any = useListPatientsQuery(
     {
-      searchKey: debouncedSearch,
+      search: debouncedSearch,
       page: currentPage,
-      pageSize: 50,
+      limit: 50,
     },
     {
       skip: debouncedSearch.length > 0 && debouncedSearch.length < 3,

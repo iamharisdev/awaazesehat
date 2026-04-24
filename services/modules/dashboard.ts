@@ -76,7 +76,7 @@ export const DashboardApi = api.injectEndpoints({
       { patientId: string }
     >({
       query: ({ patientId }) => ({
-        url: `/patient/${patientId}/overview`,
+        url: `/patients/${patientId}/clinical-overview`,
         method: "GET",
       }),
       providesTags: ["dashboard"],
@@ -98,7 +98,7 @@ export const DashboardApi = api.injectEndpoints({
       { patientId: string }
     >({
       query: ({ patientId }) => ({
-        url: `/patient/${patientId}/summary`,
+        url: `/patients/${patientId}/visit-summary`,
         method: "GET",
       }),
       providesTags: ["dashboard"],

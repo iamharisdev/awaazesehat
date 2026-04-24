@@ -1,65 +1,66 @@
 import { setEmr } from "@/features/patientSlice";
-import { api } from "../api";
 import { errorMessage } from "@/utils/helperFunction";
+import { api } from "../api";
 
 export const EmrApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listEMRs: builder.query({
-      query: ({ phoneNumber }) => ({
-        url: `emr/getAllEmrsFromPhone/${phoneNumber}`,
+      query: ({ patientId }) => ({
+        url: `/emr/by-patient-id`,
         method: "GET",
+        params: { patientId },
       }),
-      transformResponse: (response: any) => {
-        const { emrs, prevPregnancies } = response;
-        return { emrs };
-      },
+      // new API returns single EMR object directly (not an array)
+      transformResponse: (response: any) => response?.data ?? response,
       providesTags: ["emr"],
       async onQueryStarted(
-        { phoneNumber }: { phoneNumber: string },
+        _args: { patientId: string },
         { dispatch, queryFulfilled },
       ) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setEmr(data.emrs[0]));
+          dispatch(setEmr(data));
         } catch (e: any) {
-          errorMessage(e?.error.message || e?.error || "❌ EMR fetch error");
+          errorMessage(e?.error?.message || e?.error || "❌ EMR fetch error");
         }
       },
     }),
+
     createEmr: builder.mutation({
       query: (body: any) => ({
-        url: "emr/create", // your backend login route
+        url: "/emr/bulk",
         method: "POST",
         body,
       }),
-      transformResponse: (result: any) => result,
+      transformResponse: (result: any) => result?.data ?? result,
       invalidatesTags: ["emr"],
-      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+      async onQueryStarted(_args: any, { queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
           return data;
         } catch (e: any) {
           errorMessage(
-            e?.error?.data?.message || e?.error?.error || "Create new faild",
+            e?.error?.data?.message || e?.error?.error || "Create EMR failed",
           );
         }
       },
     }),
+
     updateEmr: builder.mutation({
-      query: (body: any) => ({
-        url: "/emr/update", // your backend login route
-        method: "Patch",
+      query: ({ emrId, ...body }: any) => ({
+        url: `/emr/${emrId}/bulk`,
+        method: "PATCH",
         body,
       }),
-      transformResponse: (result: any) => result,
+      transformResponse: (result: any) => result?.data ?? result,
       invalidatesTags: ["emr"],
-      async onQueryStarted(args: any, { dispatch, queryFulfilled }: any) {
+      async onQueryStarted(_args: any, { queryFulfilled }: any) {
         try {
           const { data } = await queryFulfilled;
           return data;
         } catch (e: any) {
           errorMessage(
-            e?.error?.data?.message || e?.error?.error || "Update emr failed",
+            e?.error?.data?.message || e?.error?.error || "Update EMR failed",
           );
         }
       },
@@ -68,6 +69,5 @@ export const EmrApi = api.injectEndpoints({
   overrideExisting: true,
 });
 
-// Hooks
 export const { useListEMRsQuery, useCreateEmrMutation, useUpdateEmrMutation } =
   EmrApi;
