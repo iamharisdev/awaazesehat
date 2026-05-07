@@ -101,7 +101,7 @@ const AddPatientVitals: React.FC<{ errors?: Record<string, string> }> = ({ error
 
         <View style={styles.halfWidth}>
           <AppInput
-            label="Respiratory rate"
+            label="Respiratory rate (breaths/min)"
             inputProps={{
               placeholder: "Enter",
               value: vitals?.respiratoryRate || "",

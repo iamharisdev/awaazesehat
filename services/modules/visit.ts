@@ -62,18 +62,23 @@ export const visitApi = api.injectEndpoints({
               visit?.proposedPlan?.advisedLabTests || []
             ).join(","),
           },
+          advisedTests: Array.isArray(visit?.advisedTests)
+            ? visit.advisedTests
+            : [],
         };
       },
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(
             setVisit({
               ...data,
+              id: data?.id ?? id, // fallback to query arg if API omits id
               vitals: data.vitals ?? {},
               examination: data.examination ?? {},
               diagnostics: data.diagnostics ?? {},
               proposedPlan: data.proposedPlan ?? {},
+              advisedTests: data.advisedTests ?? [],
             }),
           );
         } catch (e: any) {
@@ -85,26 +90,35 @@ export const visitApi = api.injectEndpoints({
     }),
 
     uploadPatientFile: builder.mutation({
-      query: ({ patientId, file, description = "Lab Test Report" }) => {
+      query: ({
+        patientId,
+        file,
+        description = "Lab Test Report",
+        advisedTestId,
+      }) => {
         const formData = new FormData();
         formData.append("patientId", String(patientId));
         formData.append("description", description);
+        if (advisedTestId) {
+          formData.append("advisedTestId", String(advisedTestId));
+        }
         formData.append("file", {
           uri: file.uri,
           type: file.mimeType || "application/pdf",
           name: file.name || "upload.pdf",
         } as any);
         return {
-          url: "files/upload",
+          url: `/patient-files/${patientId}/upload-file`,
           method: "POST",
           body: formData,
         };
       },
       transformResponse: (result: any) => {
-        if (!result?.fileUrl) {
+        const data = result?.data ?? result;
+        if (!data?.fileUrl) {
           throw new Error("File upload failed: Missing fileUrl in response");
         }
-        return result;
+        return data;
       },
       async onQueryStarted(_args, { queryFulfilled }) {
         try {

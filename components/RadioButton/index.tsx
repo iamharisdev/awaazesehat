@@ -12,6 +12,7 @@ interface RadioButtonProps {
   options?: any;
   value?: string|null;
   onChange?: (val: string) => void;
+  error?: string;
 }
 
 const RadioButton: React.FC<RadioButtonProps> = ({
@@ -19,6 +20,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   options = [],
   value,
   onChange,
+  error,
 }) => (
   <View style={styles.container}>
     {label && <Text style={styles.title}>{label}</Text>}
@@ -36,6 +38,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
         </TouchableOpacity>
       ))}
     </View>
+    {error ? (
+      <Text style={{ color: "red", fontSize: 12, marginTop: 4 }}>{error}</Text>
+    ) : null}
   </View>
 );
 

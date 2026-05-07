@@ -34,9 +34,29 @@ type VisitObjectSteps =
   | "diagnostics"
   | "proposedPlan";
 
+export interface AdvisedTestReport {
+  id: string;
+  fileName: string;
+  fileType?: string;
+  fileUrl: string;
+  summary?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface AdvisedTest {
+  id: string;
+  testName: string;
+  testType?: "lab" | "imaging" | string;
+  status?: "submitted" | "not_submitted" | string;
+  createdAt?: string;
+  reports: AdvisedTestReport[];
+}
+
 type Visits = {
   id: string | null;
   patientId: string | null;
+  visitNumber?: number | null;
   visitDate: Date | string;
   createdAt: Date | string;
   updatedAt: Date | string;
@@ -44,6 +64,7 @@ type Visits = {
   examination?: Examination;
   diagnostics?: any;
   proposedPlan?: ProposedPlan;
+  advisedTests?: AdvisedTest[];
 };
 
 export interface Vitals {
@@ -88,14 +109,26 @@ export interface Examination {
   physicalFindings: string | null;
 }
 
+export interface PregnancyDiagnosis {
+  id: string;
+  icdCode?: string;
+  name: string;
+}
+
+export interface DiagnosticTest {
+  id: string;
+  testName: string;
+  testType?: "lab" | "imaging" | string;
+}
+
 export interface ProposedPlan {
-  diagnosisPregnancy: string;
+  diagnosisPregnancy: string | string[] | PregnancyDiagnosis[];
   advisedLabTests?: any | null;
   doctorNotes?: string | null;
   nextFollowUpTiming?: string | null; // keep string for API
   generalPlan?: string | null;
   createdBy?: "AI" | "Doctor" | null;
-  medication?: string[] | null;
+  medication?: string | null;
 }
 
 export interface Diagnostics {
@@ -261,6 +294,7 @@ const patientSlice = createSlice({
       state.visit = {
         id: payload?.id ?? "",
         patientId: payload?.patientId ?? "",
+        visitNumber: payload?.visitNumber ?? null,
         visitDate: payload?.visitDate ?? "",
         createdAt: payload?.createdAt ?? "",
         updatedAt: payload?.updatedAt ?? "",
@@ -268,6 +302,7 @@ const patientSlice = createSlice({
         examination: payload?.examination ?? ({} as Examination),
         diagnostics: payload?.diagnostics ?? {},
         proposedPlan: payload?.proposedPlan ?? ({} as ProposedPlan),
+        advisedTests: payload?.advisedTests ?? [],
       };
     },
     updateVisit: (
@@ -285,6 +320,10 @@ const patientSlice = createSlice({
       }
 
       (state.visit[step] as any)[key] = value;
+    },
+
+    setVisitAdvisedTests: (state, action: PayloadAction<AdvisedTest[]>) => {
+      state.visit.advisedTests = action.payload;
     },
 
     setActiveVisit: (state, action: PayloadAction<boolean>) => {
@@ -330,6 +369,7 @@ export const {
   setEmrSteps,
   setVisit,
   updateVisit,
+  setVisitAdvisedTests,
   setActiveVisit,
   setViewVisit,
   setVisitSteps,

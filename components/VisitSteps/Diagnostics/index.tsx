@@ -1,217 +1,235 @@
-import FileUpload from "@/components/FileUpload";
-import { updateVisit } from "@/features/patientSlice";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Linking,
+} from "react-native";
+import * as DocumentPicker from "expo-document-picker";
+import { Ionicons } from "@expo/vector-icons";
+
+import AppLoader from "@/components/AppLoader";
 import {
   useLazyLabTestsQuery,
-  useUploadPatientFileMutation
+  useUploadPatientFileMutation,
 } from "@/services/modules/visit";
 import { useAppSelector } from "@/store";
-import { createSelector } from "@reduxjs/toolkit";
-import React, { useEffect, useMemo } from "react";
-import { ActivityIndicator, ScrollView, Text, View } from "react-native";
-import { useDispatch } from "react-redux";
+import type { AdvisedTest, AdvisedTestReport } from "@/features/patientSlice";
 import { styles } from "./style";
-import AppLoader from "@/components/AppLoader";
 
-const selectDiagnostics = createSelector(
-  (state: any) => state.patient.visit.diagnostics,
-  (d) => {
-    if (!d) return [];
-    if (Array.isArray(d)) return d;
-    if (Array.isArray(d.diagnostics)) return d.diagnostics;
-    return [];
-  },
-);
+interface Props {
+  tests?: AdvisedTest[];
+  setTests: React.Dispatch<React.SetStateAction<AdvisedTest[]>>;
+  isEdit?: boolean;
+}
 
-const selectDiagnosticsCount = createSelector(
-  selectDiagnostics,
-  (d) => d.length,
-);
-
-const Diagnostics: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const diagnostics = useAppSelector(
-    (s) => s.patient.visit.diagnostics.diagnostics,
-  );
-  const diagnosticsArray = useAppSelector(selectDiagnostics);
-  const diagnosticsCount = useAppSelector(selectDiagnosticsCount);
+const LabTests: React.FC<Props> = ({
+  tests = [],
+  setTests,
+  isEdit = false,
+}) => {
   const patientId = useAppSelector((s) => s.patient?.currentPatient?.id);
 
-  const editable = false;
+  const [getNotSubmittedTests, { isFetching }] = useLazyLabTestsQuery();
+  const [uploadPatientFile] = useUploadPatientFileMutation();
 
-  const [getAdvisedTests, { data, status }] = useLazyLabTestsQuery();
-  const [uploadPatientFile, { isLoading: isUploading }] =
-    useUploadPatientFileMutation();
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
 
-
-
-  // ✅ Fetch advised tests once
-
+  // Fetch not-submitted advised tests every time the screen is opened in create mode
   useEffect(() => {
+    if (isEdit) return;
     if (!patientId) return;
-    if (diagnosticsCount > 0) return;
 
-    const fetchAdvisedTests = async () => {
+    (async () => {
       try {
-        const res = await getAdvisedTests({ patientId }).unwrap();
-        const advisedTests = res?.advisedTests || [];
-        const diagnostics = advisedTests.map((test: any) => ({
-          name:
-            test?.testname ??
-            test?.testName ??
-            test?.name ??
-            String(test ?? ""),
-          uri: "",
-        }));
-
-        dispatch(
-          updateVisit({
-            step: "diagnostics",
-            key: "diagnostics",
-            value: diagnostics,
-          }),
+        const res = await getNotSubmittedTests({ patientId }).unwrap();
+        const list = res?.advisedTests || [];
+        setTests(
+          list.map((t: any) => ({
+            id: t.id,
+            testName: t.testName,
+            testType: t.testType,
+            status: t.status,
+            createdAt: "",
+            reports: [],
+          })),
         );
-      } catch (error) {
-        console.log("Failed to fetch advised tests:", error);
+      } catch {
+        // silent
       }
+    })();
+  }, [patientId, isEdit]);
+
+  const pickFile = async (testId: string, testName: string) => {
+    if (!patientId) return;
+
+    const result = await DocumentPicker.getDocumentAsync({
+      type: ["application/pdf", "image/jpeg", "image/png", "image/jpg"],
+      copyToCacheDirectory: true,
+    });
+
+    if (result.canceled) return;
+    const asset = result.assets?.[0];
+    if (!asset) return;
+
+    const file = {
+      uri: asset.uri,
+      name: asset.name,
+      mimeType: asset.mimeType,
     };
 
-    fetchAdvisedTests();
-  }, [patientId, diagnosticsCount]);
-
-  // ✅ Merge store + API states
-  const testList = useMemo(() => {
-    if (diagnosticsArray?.length > 0) {
-      return diagnosticsArray.map((d: any) => ({
-        id: d?.id,
-        name: d?.name ?? d?.testname ?? d?.testName ?? String(d ?? ""),
-        uri: d?.uri ?? "",
-        summary: d?.summary,
-        files: d?.uri
-          ? [
-              {
-                id: d?.id,
-                name: d?.name,
-                uri: d?.uri,
-                summary: d?.summary ?? "",
-              },
-            ]
-          : [],
-      }));
-    }
-
-    const advised = data?.advisedTests || [];
-    return advised.map((t: any) => ({
-      name: t?.testname ?? t?.testName ?? t?.name ?? String(t ?? ""),
-      uri: "",
-      files: [],
-    }));
-  }, [diagnosticsArray, data]);
-
-  // ✅ Update diagnostic in store after upload
-  const updateDiagnostic = (name: string, res: any) => {
-    const fileUrl = res?.fileUrl;
-
-    const existingList: any = diagnostics ?? [];
-
-    const index = existingList.findIndex((d: any) => d?.name === name);
-
-    let updatedDiagnostics: any;
-
-    if (index !== -1) {
-      updatedDiagnostics = existingList.map((item: any, i: number) =>
-        i === index
-          ? {
-              ...item,
-              id: res?.id,
-              uri: fileUrl,
-              summary: res?.summary,
-            }
-          : item,
-      );
-    } else {
-      updatedDiagnostics = [
-        ...existingList,
-        {
-          id: res?.id,
-          name,
-          uri: fileUrl,
-          summary: res?.summary,
-        },
-      ];
-    }
-
-    dispatch(
-      updateVisit({
-        step: "diagnostics",
-        key: "diagnostics",
-        value: updatedDiagnostics,
-      }),
-    );
-  };
-
-  // ✅ Upload handler (React Native version expects local file object)
-  const handleFileUpload = async (name: string, file: any) => {
-    if (!file || !patientId) return;
-
+    setUploadingId(testId);
     try {
       const res = await uploadPatientFile({
         patientId,
         file,
-        description: `${name} Report`,
+        description: `${testName} Report`,
+        advisedTestId: testId,
       }).unwrap();
 
-      updateDiagnostic(name, res);
-    } catch (error) {
-      console.log("Upload failed:", error);
+      const newReport: AdvisedTestReport = {
+        id: res?.id,
+        fileName: res?.fileName,
+        fileType: res?.fileType,
+        fileUrl: res?.fileUrl,
+        summary: res?.summary,
+        createdAt: res?.createdAt,
+        updatedAt: res?.updatedAt,
+      };
+
+      setTests((prev) =>
+        prev.map((t) =>
+          t.id === testId
+            ? { ...t, status: "submitted", reports: [...(t.reports ?? []), newReport] }
+            : t,
+        ),
+      );
+    } catch {
+      // error already toasted via service onQueryStarted
+    } finally {
+      setUploadingId(null);
     }
   };
 
-  // ✅ Loading advised tests
-  if (status === "pending") {
+  const renderTypeBadge = (type?: string) => {
+    const isImaging = type === "imaging";
     return (
-     <AppLoader fullScreen/>
+      <View
+        style={[
+          styles.typeBadge,
+          isImaging ? styles.imagingBadge : styles.labBadge,
+        ]}
+      >
+        <Text
+          style={[
+            styles.typeBadgeText,
+            isImaging ? styles.imagingBadgeText : styles.labBadgeText,
+          ]}
+        >
+          {isImaging ? "Imaging" : "Lab"}
+        </Text>
+      </View>
     );
+  };
+
+  const renderTypeIcon = (type?: string) => {
+    const isImaging = type === "imaging";
+    return (
+      <Ionicons
+        name={isImaging ? "image-outline" : "flask-outline"}
+        size={16}
+        color={isImaging ? "#9333EA" : "#2563EB"}
+      />
+    );
+  };
+
+  if (isFetching && tests.length === 0) {
+    return <AppLoader fullScreen />;
   }
 
   return (
     <View style={styles.container}>
-      {/* Overlay Loader */}
-      {isUploading && (
-        <AppLoader fullScreen/>
-      )}
-
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.heading}>Patient Lab Tests</Text>
 
-        {testList?.length > 0 ? (
-          testList.map((test: any, index: number) => (
-            <View key={index} style={styles.item}>
-              <FileUpload
-                title={test?.name}
-                mode="single"
-                documents={test?.files || []}
-                summary={test?.summary || ""}
-                id={test?.id || null}
-                fileUri={test?.uri}
-                disabled={editable || isUploading}
-                onFilesChange={(files: any[]) => {
-                  const fileItem = files?.[0];
-                  if (!fileItem) return;
-
-                  if (fileItem?.isLocal && fileItem?.file) {
-                    handleFileUpload(test.name, fileItem.file);
-                  }
-                }}
-              />
-            </View>
-          ))
-        ) : (
+        {tests.length === 0 ? (
           <Text style={styles.emptyText}>No lab tests available.</Text>
+        ) : (
+          tests.map((test) => {
+            const isUploading = uploadingId === test.id;
+            const reports = test.reports ?? [];
+            const latestReport: AdvisedTestReport | undefined =
+              reports[reports.length - 1];
+
+            return (
+              <View key={test.id} style={styles.testCard}>
+                <View style={styles.testHeader}>
+                  {renderTypeIcon(test.testType)}
+                  <Text style={styles.testName} numberOfLines={2}>
+                    {test.testName}
+                  </Text>
+                  {renderTypeBadge(test.testType)}
+                  {test.status === "submitted" && (
+                    <View style={styles.submittedBadge}>
+                      <Text style={styles.submittedBadgeText}>Submitted</Text>
+                    </View>
+                  )}
+                </View>
+
+                {latestReport && (
+                  <Pressable
+                    onPress={() =>
+                      latestReport.fileUrl &&
+                      Linking.openURL(latestReport.fileUrl)
+                    }
+                    style={styles.reportLink}
+                  >
+                    <Ionicons
+                      name="document-text-outline"
+                      size={14}
+                      color="#0B6E27"
+                    />
+                    <Text style={styles.reportLinkText} numberOfLines={1}>
+                      {latestReport.fileName}
+                    </Text>
+                  </Pressable>
+                )}
+
+                <TouchableOpacity
+                  onPress={() => pickFile(test.id, test.testName)}
+                  disabled={isUploading}
+                  style={[
+                    styles.uploadBtn,
+                    isUploading && styles.uploadBtnDisabled,
+                  ]}
+                >
+                  {isUploading ? (
+                    <ActivityIndicator size="small" color="#0B6E27" />
+                  ) : (
+                    <Ionicons
+                      name="cloud-upload-outline"
+                      size={14}
+                      color="#0B6E27"
+                    />
+                  )}
+                  <Text style={styles.uploadBtnText}>
+                    {isUploading
+                      ? "Uploading..."
+                      : latestReport
+                        ? "Replace report"
+                        : "Upload report"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })
         )}
       </ScrollView>
     </View>
   );
 };
 
-export default Diagnostics;
+export default LabTests;

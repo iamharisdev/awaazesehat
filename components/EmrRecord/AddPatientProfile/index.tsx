@@ -1,11 +1,16 @@
 import AppInput from "@/components/AppInput";
 import RadioButton from "@/components/RadioButton";
+import DatePicker from "@/components/DatePicker";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
 import { styles } from "./style";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { updateEmr } from "@/features/patientSlice";
+import {
+  getWeeksAndDays,
+  parseWeeksAndDays,
+} from "@/utils/helperFunction";
 
 import StepItems from "../StepItems";
 import CounterField from "@/components/CounterField";
@@ -30,7 +35,13 @@ const VIEW_FIELDS = [
   { key: "isHusbandCousin", label: "Husband cousin", type: "text", section: "patient" },
 ];
 
-const AddPatientProfile = ({ title, editable = true }: any) => {
+interface Props {
+  title: string;
+  editable?: boolean;
+  errors?: Record<string, string>;
+}
+
+const AddPatientProfile = ({ title, editable = true, errors = {} }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -52,6 +63,21 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
     if (v === false || v === "false" || v === "No") return "No";
     return "";
   })();
+
+  const lmpDate = patient?.lastMenstruationDate
+    ? new Date(patient.lastMenstruationDate)
+    : undefined;
+
+  const { weeks: gaWeeks, days: gaDays } = parseWeeksAndDays(
+    patient?.gestationalAge || "",
+  );
+
+  const onLmpChange = (date: Date) => {
+    const iso = date.toISOString();
+    const ga = getWeeksAndDays(date);
+    updatePatient("lastMenstruationDate", iso);
+    updatePatient("gestationalAge", ga);
+  };
 
   const renderViewMode = () => {
     if (!patient && !currentPregnancy) {
@@ -102,6 +128,39 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
     <StepItems title={title}>
       {editable ? (
         <>
+          {/* LMP */}
+          <DatePicker
+            label={t("LMP (Last Menstrual Period)")}
+            value={lmpDate}
+            maxDate={new Date()}
+            onChange={onLmpChange}
+            error={errors.lastMenstruationDate}
+          />
+
+          {/* Weeks / Days (auto-calculated from LMP) */}
+          <View style={styles.row}>
+            <View style={styles.flexItem}>
+              <AppInput
+                label={t("Weeks")}
+                inputProps={{
+                  placeholder: "Auto from LMP",
+                  value: gaWeeks,
+                  editable: false,
+                }}
+              />
+            </View>
+            <View style={styles.flexItem}>
+              <AppInput
+                label={t("Days")}
+                inputProps={{
+                  placeholder: "Auto from LMP",
+                  value: gaDays,
+                  editable: false,
+                }}
+              />
+            </View>
+          </View>
+
           {/* Pregnancy Month */}
           <View style={styles.row}>
             <View style={styles.flexItem}>
@@ -121,6 +180,7 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
             options={[t("Yes"), t("No")]}
             value={firstPregnancyValue}
             onChange={(val) => updateCurrentPregnancy("firstPregnancy", val)}
+            error={errors.firstPregnancy}
           />
 
           {/* Conditional Fields when NOT first pregnancy */}
@@ -174,6 +234,8 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
               value: patient?.address || "",
               onChangeText: (text) => updatePatient("address", text),
             }}
+            touched
+            error={errors.address}
           />
 
           <AppInput
@@ -200,6 +262,8 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
               onChangeText: (text) =>
                 updateCurrentPregnancy("durationOfMarriage", text),
             }}
+            touched
+            error={errors.durationOfMarriage}
           />
 
           <AppInput
@@ -209,6 +273,8 @@ const AddPatientProfile = ({ title, editable = true }: any) => {
               value: patient?.isHusbandCousin || "",
               onChangeText: (text) => updatePatient("isHusbandCousin", text),
             }}
+            touched
+            error={errors.isHusbandCousin}
           />
         </>
       ) : (

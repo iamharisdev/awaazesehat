@@ -12,13 +12,10 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import {
   errorMessage,
   formatCNIC,
-  getWeeksAndDays,
   onlyDigits,
-  parseWeeksAndDays,
 } from "@/utils/helperFunction";
 import AppInput from "../AppInput";
 import Button from "../Button";
-import DatePicker from "../DatePicker";
 import { styles } from "./style";
 import { hp } from "@/utils/responsive";
 import { t } from "i18next";
@@ -35,9 +32,6 @@ export interface PatientFormValues {
   husbandName: string;
   cnic: string;
   age: string;
-  lmp: string;
-  weeks: string;
-  days: string;
   phoneNumber: string;
 }
 
@@ -65,7 +59,6 @@ const NewPatient = ({ ref }: Props) => {
   ] = useUpdatePatientMutation();
 
   const patient = useAppSelector((state) => state.patient.currentPatient);
-  const { weeks, days } = parseWeeksAndDays(patient?.gestationalAge);
 
   const isLoading = isCreateLoading || isUpdateLoading;
   const apiError: any = createError || updateError;
@@ -73,16 +66,10 @@ const NewPatient = ({ ref }: Props) => {
 
   const handleSubmit = async (values: any) => {
     const cleanPhone = "+92" + values.phoneNumber;
-    const gestationalAge = `${values.weeks} weeks,${values.days} days`;
-    const lmpDate = values.lmp
-      ? new Date(values.lmp).toISOString().slice(0, 10)
-      : null;
 
     const payload = {
       ...values,
       phoneNumber: cleanPhone,
-      gestationalAge: gestationalAge || null,
-      lmp: lmpDate,
     };
 
     let res: any;
@@ -128,7 +115,7 @@ const NewPatient = ({ ref }: Props) => {
       {isLoading && <AppLoader fullScreen size="small" />}
 
       <Formik<PatientFormValues>
-        initialValues={newPatientSchema(patient, weeks, days)}
+        initialValues={newPatientSchema(patient)}
         validationSchema={newPatientValidation}
         onSubmit={handleSubmit}
         enableReinitialize
@@ -136,16 +123,7 @@ const NewPatient = ({ ref }: Props) => {
         {({
           handleChange,
           handleSubmit,
-          values: {
-            name,
-            husbandName,
-            cnic,
-            age,
-            lmp,
-            weeks,
-            days,
-            phoneNumber,
-          },
+          values: { name, husbandName, cnic, age, phoneNumber },
           errors,
           touched,
           setFieldValue,
@@ -197,49 +175,6 @@ const NewPatient = ({ ref }: Props) => {
               touched
               error={errors.age}
             />
-
-            <DatePicker
-              label={t("LMP (Last Menstrual Period)")}
-              value={lmp ? new Date(lmp) : undefined}
-              maxDate={new Date()}
-              onChange={(date) => {
-                setFieldValue("lmp", date.toISOString());
-                const parsed = parseWeeksAndDays(getWeeksAndDays(date));
-                setFieldValue("weeks", parsed.weeks || "0");
-                setFieldValue("days", parsed.days || "0");
-              }}
-              error={touched.lmp ? (errors.lmp as string) : undefined}
-            />
-
-            <View style={styles.row}>
-              {/* Weeks (auto-calculated from LMP) */}
-              <View style={styles.flex}>
-                <AppInput
-                  label={t("Weeks")}
-                  inputProps={{
-                    placeholder: "Auto from LMP",
-                    value: weeks,
-                    editable: false,
-                  }}
-                  touched
-                  error={errors.weeks}
-                />
-              </View>
-
-              {/* Days (auto-calculated from LMP) */}
-              <View style={styles.flex}>
-                <AppInput
-                  label={t("Days")}
-                  inputProps={{
-                    placeholder: "Auto from LMP",
-                    value: days,
-                    editable: false,
-                  }}
-                  touched
-                  error={errors.days}
-                />
-              </View>
-            </View>
 
             <View style={{ marginBottom: 12 }}>
               <Text style={{ fontSize: 14, color: "#0D0D0D", marginBottom: 4 }}>

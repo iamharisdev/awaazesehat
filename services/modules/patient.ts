@@ -13,6 +13,18 @@ interface AudioFile {
   name: string;
 }
 
+interface TranscribeResult {
+  text: string;
+  language?: string;
+  duration?: number;
+}
+
+interface TranscribeApiResponse {
+  success: boolean;
+  message: string;
+  data: TranscribeResult;
+}
+
 export const PatientApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listPatients: builder.query<any, PatientListParams>({
@@ -43,20 +55,25 @@ export const PatientApi = api.injectEndpoints({
       providesTags: ["patients"],
     }),
 
-    audioToText: builder.mutation<{ text: string }, { file: AudioFile }>({
-      query: ({ file }) => {
+    audioToText: builder.mutation<
+      TranscribeResult,
+      { file: AudioFile; language?: string }
+    >({
+      query: ({ file, language }) => {
         const formData = new FormData();
         formData.append("file", {
           uri: file.uri,
           type: file.type,
           name: file.name,
         } as any);
+        if (language) formData.append("language", language);
         return {
-          url: "/audio-to-text",
+          url: "transcription/transcribe",
           method: "POST",
           body: formData,
         };
       },
+      transformResponse: (response: TranscribeApiResponse) => response?.data,
     }),
 
     createPatient: builder.mutation({

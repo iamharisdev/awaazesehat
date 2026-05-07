@@ -9,11 +9,17 @@ interface PregnancyDiagnosesParams {
 export const PregnancyDiagnosesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     listPregnancyDiagnoses: builder.query<any, PregnancyDiagnosesParams>({
-      query: ({ page = 1, limit = 50, search = "" }) => ({
-        url: "/pregnancy-diagnoses",
-        method: "GET",
-        params: { page, limit, search },
-      }),
+      query: ({ page = 1, limit = 50, search = "" }) => {
+        const params: Record<string, any> = { page, limit };
+        if (search && search.trim() !== "") {
+          params.search = search.trim();
+        }
+        return {
+          url: "/pregnancy-diagnoses",
+          method: "GET",
+          params,
+        };
+      },
       transformResponse: (response: any) => response?.data ?? response,
       providesTags: ["pregnancyDiagnoses"],
     }),
@@ -21,4 +27,7 @@ export const PregnancyDiagnosesApi = api.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useListPregnancyDiagnosesQuery } = PregnancyDiagnosesApi;
+export const {
+  useListPregnancyDiagnosesQuery,
+  useLazyListPregnancyDiagnosesQuery,
+} = PregnancyDiagnosesApi;

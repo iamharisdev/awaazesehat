@@ -33,6 +33,7 @@ import {
   cleanPayload,
   firstPregnancyToBool,
 } from "@/utils/helperFunction";
+import { validateEmrStep } from "@/utils/emrValidator";
 
 const stepScreens = [
   { key: "Patient Profile", component: AddPatientProfile },
@@ -67,6 +68,7 @@ export default function PatientProfile() {
 
   const [steps, setSteps] = useState(getSteps(emr));
   const [isLoading, setIsLoading] = useState(false);
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
 
   const totalSteps = steps.length;
   const check = !emr?.createdAt
@@ -78,6 +80,16 @@ export default function PatientProfile() {
   const [showCompletionSheet, setShowCompletionSheet] = useState(false);
 
   const onPressNext = () => {
+    const isEditableMode = check === "create" || check === "update";
+    if (isEditableMode) {
+      const errs = validateEmrStep(steps[emrSteps]?.key, emr);
+      if (Object.keys(errs).length > 0) {
+        setStepErrors(errs);
+        return;
+      }
+      setStepErrors({});
+    }
+
     if (emrSteps < totalSteps - 1) {
       dispatch(setEmrSteps(emrSteps + 1));
     } else {
@@ -100,6 +112,10 @@ export default function PatientProfile() {
   useEffect(() => {
     setSteps(getSteps(emr));
   }, [emr?.currentPregnancy?.firstPregnancy]);
+
+  useEffect(() => {
+    setStepErrors({});
+  }, [emrSteps]);
 
   useEffect(() => {
     if (showCompletionSheet) {
@@ -203,6 +219,7 @@ export default function PatientProfile() {
         <CurrentStepComponent
           title={steps[emrSteps]?.key}
           editable={check === "create" || check === "update"}
+          errors={stepErrors}
         />
       </KeyboardAvoidingWrapper>
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
 import AppInput from "@/components/AppInput";
@@ -19,9 +19,21 @@ const PhysicalExamination: React.FC<{
   const fields = useAppSelector((state) => state.patient.visit.examination);
 
   const editable = false;
+
+  // Derive initial examination type: Free Text mode if physicalFindings exists
+  const initialType: "Structured Fields" | "Free Text / Voice Note" =
+    fields?.physicalFindings && fields.physicalFindings.trim() !== ""
+      ? "Free Text / Voice Note"
+      : "Structured Fields";
+
   const [type, setType] = useState<
     "Structured Fields" | "Free Text / Voice Note"
-  >("Structured Fields");
+  >(initialType);
+
+  // Notify parent of initial type so validators are correct
+  useEffect(() => {
+    onTypeChange?.(initialType);
+  }, []);
 
   const handleTypeChange = (val: string) => {
     setType(val as any);
@@ -175,6 +187,41 @@ const PhysicalExamination: React.FC<{
               value: fields?.umbilicus || "",
               onChangeText: (text: string) => updateField("umbilicus", text),
             }}
+          />
+
+          <RadioButton
+            label="Striae?"
+            value={fields?.striae}
+            options={["Present", "Absent"]}
+            onChange={(val) => updateField("striae", val)}
+          />
+
+          <RadioButton
+            label="Prominent veins?"
+            value={fields?.prominentVeins}
+            options={["Present", "Absent"]}
+            onChange={(val) => updateField("prominentVeins", val)}
+          />
+
+          <RadioButton
+            label="Pulsations?"
+            value={fields?.pulsations}
+            options={["Present", "Absent"]}
+            onChange={(val) => updateField("pulsations", val)}
+          />
+
+          <RadioButton
+            label="Abdominal wall edema?"
+            value={fields?.abdominalWallEdema}
+            options={["Present", "Absent"]}
+            onChange={(val) => updateField("abdominalWallEdema", val)}
+          />
+
+          <RadioButton
+            label="Hernial orifices?"
+            value={fields?.hernialOrfices}
+            options={["Intact", "Not Intact"]}
+            onChange={(val) => updateField("hernialOrfices", val)}
           />
 
           {/* Palpation Section */}

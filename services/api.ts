@@ -8,12 +8,12 @@ import {
 import { logoutReset } from "../features/authSlice";
 
 const development =
-  "https://core-server-patient-centric-workflow-1036152259123.asia-southeast1.run.app";
+  "https://core-server-patient-centric-workflow-1036152259123.asia-southeast1.run.app/api/v1/";
 
-const dev_url = "http://localhost:3000/api/v1/";
+const dev_url = "http://10.0.2.2:3000/api/v1/";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: dev_url,
+  baseUrl: dev_url, 
 
   prepareHeaders: (headers, { getState }) => {
     const { auth } = getState() as any;
@@ -49,7 +49,6 @@ const baseQueryWithInterceptor: BaseQueryFn<
 
   if (result?.error?.status === 401) {
     dispatch(logoutReset());
-    dispatch(api.util.resetApiState());
   }
 
   return result;

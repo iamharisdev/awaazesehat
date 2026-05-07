@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -16,8 +16,8 @@ import {
   setViewVisit,
   setVisit,
   setVisitSteps,
-  updateVisit,
 } from "@/features/patientSlice";
+import type { AdvisedTest } from "@/features/patientSlice";
 import {
   useLazyVisitDetailQuery,
   useListVisitsQuery,
@@ -36,8 +36,17 @@ const formatDate = (dateString: string) => {
 
 interface Props {
   ref?: any;
+  onAdvisedTestsLoad?: (tests: AdvisedTest[]) => void;
+  onNextVisitNumberChange?: (n: number) => void;
+  onModeChange?: (mode: "create" | "edit") => void;
 }
-const VisitList = ({ ref }: Props) => {
+
+const VisitList = ({
+  ref,
+  onAdvisedTestsLoad,
+  onNextVisitNumberChange,
+  onModeChange,
+}: Props) => {
   const dispatch = useAppDispatch();
 
   const [loadingDetailId, setLoadingDetailId] = useState<string | null>(null);
@@ -46,36 +55,67 @@ const VisitList = ({ ref }: Props) => {
 
   const patient = useAppSelector((state) => state.patient.currentPatient);
   const viewVisit = useAppSelector((s) => s.patient.viewVisit);
+  const currentVisit = useAppSelector((s) => s.patient.visit);
 
-  // Fetch EMRs
-  // List visits query
   const patientId = patient?.id;
   const { data: visitsData, status } = useListVisitsQuery(
     { id: patientId! },
     { skip: !patientId, refetchOnMountOrArgChange: true },
   );
 
-  // Lazy trigger for visit detail
   const [triggerGetVisitDetail] = useLazyVisitDetailQuery();
 
   const visitIds: string[] = visitsData?.map((v: any) => v.id) || [];
+
+  // Whenever the visit list changes, propagate next visit number
+  useEffect(() => {
+    if (!visitsData) return;
+    const max = visitsData.reduce(
+      (acc: number, v: any) =>
+        typeof v?.visitNumber === "number" && v.visitNumber > acc
+          ? v.visitNumber
+          : acc,
+      0,
+    );
+    onNextVisitNumberChange?.(max + 1);
+  }, [visitsData, onNextVisitNumberChange]);
+
+  // When entering edit mode, seed advisedTests from store
+  const handleEditPress = () => {
+    const advised = (currentVisit as any)?.advisedTests as
+      | AdvisedTest[]
+      | undefined;
+    onAdvisedTestsLoad?.(advised ?? []);
+    onModeChange?.("edit");
+    dispatch(setVisitSteps(0));
+    dispatch(setViewVisit(false));
+    ref?.current?.open();
+  };
 
   const handleVisitClick = (visit: any, index: number) => {
     setLoadingDetailId(visit.id);
     setVisitNumber(visit.visitNumber);
     setCurrentVisitIndex(index);
-    setLoadingDetailId(visit.id); // optional loading state
     const id = visit?.id;
     triggerGetVisitDetail({ id })
-      .unwrap() // unwrap promise to get data or throw error
-      .then((data) => {
-        dispatch(setViewVisit(true)); // optional: UI flag
-        setLoadingDetailId(null); // stop loading
+      .unwrap()
+      .then(() => {
+        dispatch(setViewVisit(true));
+        setLoadingDetailId(null);
       })
       .catch((err) => {
         console.error("Error fetching visit detail:", err);
         setLoadingDetailId(null);
       });
+  };
+
+  const handleAddPress = () => {
+    dispatch(setVisit({}));
+    dispatch(setVisitSteps(0));
+    dispatch(setActiveVisit(true));
+    onAdvisedTestsLoad?.([]); // reset; LabTests will fetch not-submitted
+    onModeChange?.("create");
+    ref?.current?.open();
   };
 
   if (viewVisit) {
@@ -87,26 +127,20 @@ const VisitList = ({ ref }: Props) => {
         currentIndex={currentVisitIndex}
         onNextVisit={() => {
           const nextIndex = currentVisitIndex + 1;
-          if (nextIndex < visitIds.length) {
+          if (visitsData && nextIndex < visitIds.length) {
             handleVisitClick(visitsData[nextIndex], nextIndex);
           }
         }}
-        editAble={() => {
-          dispatch(setVisitSteps(0));
-          dispatch(setViewVisit(false));
-          ref?.current?.open();
-          // dispatch(setActiveVisit(true));
-        }}
+        editAble={handleEditPress}
       />
     );
   }
 
   return (
     <View style={styles.container}>
-      {/* Description + Add Button */}
-      <View style={[visitsData?.length === 0 && styles.centeredEmpty]}>
+      <View style={[(visitsData?.length ?? 0) === 0 && styles.centeredEmpty]}>
         <Text style={styles.description}>
-          {visitsData?.length > 0
+          {(visitsData?.length ?? 0) > 0
             ? "For every visit, record patient vitals, examination findings, prescriptions, and general plan & advice."
             : "During each visit, note the patient’s vitals, record your examination, review her reports, and share prescriptions with your care plan and advice."}
         </Text>
@@ -114,25 +148,18 @@ const VisitList = ({ ref }: Props) => {
         <Button
           title="Add Visit"
           btnProps={{
-            onPress: () => {
-              dispatch(setVisit({}));
-              dispatch(setVisitSteps(0));
-              dispatch(setActiveVisit(true));
-              ref?.current?.open();
-            },
+            onPress: handleAddPress,
           }}
           icon={<Ionicons name="add" size={20} color="#FFFFFF" />}
         />
       </View>
 
-      {/* Loading Overlay */}
       {status === "pending" && (
         <View style={styles.loadingOverlay}>
           <AppLoader />
         </View>
       )}
 
-      {/* Visit List */}
       {visitsData && (
         <FlatList
           data={visitsData}

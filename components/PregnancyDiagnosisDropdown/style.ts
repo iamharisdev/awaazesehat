@@ -1,0 +1,142 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  wrapper: {
+    marginBottom: 8,
+  },
+  label: {
+    fontSize: 14,
+    color: "#0D0D0D",
+    marginBottom: 4,
+  },
+  dropdown: {
+    minHeight: 44,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "#FFFFFF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  openDropdown: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+  },
+  errorBorder: {
+    borderColor: "#E53935",
+  },
+  disabled: {
+    opacity: 0.6,
+  },
+  placeholder: {
+    fontSize: 14,
+    color: "#707070",
+    flex: 1,
+  },
+  tagWrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    flex: 1,
+    marginRight: 4,
+  },
+  tag: {
+    flexDirection: "row",
+    backgroundColor: "#F2F2F2",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  tagText: {
+    fontSize: 13,
+    color: "#3D3D3D",
+    maxWidth: 220,
+  },
+  tagRemove: {
+    marginLeft: 6,
+    fontSize: 16,
+    color: "#707070",
+    lineHeight: 16,
+  },
+  menu: {
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderTopWidth: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    maxHeight: 280,
+    backgroundColor: "#FFFFFF",
+  },
+  searchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+    backgroundColor: "#FAFAFA",
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    color: "#0D0D0D",
+    padding: 0,
+  },
+  option: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#F2F2F2",
+    gap: 10,
+  },
+  optionText: {
+    flex: 1,
+    fontSize: 14,
+    color: "#0D0D0D",
+  },
+  code: {
+    fontWeight: "600",
+    color: "#0B6E27",
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxSelected: {
+    backgroundColor: "#0B6E27",
+    borderColor: "#28B851",
+  },
+  check: {
+    color: "#FFFFFF",
+    fontSize: 12,
+  },
+  loadingBox: {
+    paddingVertical: 12,
+    alignItems: "center",
+  },
+  empty: {
+    padding: 16,
+    textAlign: "center",
+    fontSize: 13,
+    color: "#707070",
+    fontStyle: "italic",
+  },
+  errorText: {
+    color: "#E53935",
+    fontSize: 12,
+    marginTop: 4,
+  },
+});

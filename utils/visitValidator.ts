@@ -34,7 +34,10 @@ export const validateTreatmentPlan = (
   if (!v?.generalPlan || v.generalPlan.trim() === "")
     errors.generalPlan = "General plan is required";
 
-  if (!v?.medication || (typeof v.medication === "string" && v.medication.trim() === "") || (Array.isArray(v.medication) && v.medication.length === 0))
+  if (
+    !v?.medication ||
+    (typeof v.medication === "string" && v.medication.trim() === "")
+  )
     errors.medication = "Medication details are required";
 
   return errors;

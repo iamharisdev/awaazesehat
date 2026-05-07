@@ -8,19 +8,12 @@ const loginSchema = () => {
   };
 };
 
-const newPatientSchema = (
-  patient: any,
-  weeks: string,
-  days: string,
-) => {
+const newPatientSchema = (patient: any) => {
   return {
     name: patient?.name || "",
     husbandName: patient?.husbandName || "",
     cnic: patient?.cnic || "",
     age: patient?.age || "",
-    lmp: patient?.lmp || patient?.lastMenstruationDate || "",
-    weeks: weeks || "",
-    days: days || "",
     phoneNumber: removeCountryCode(patient) || "",
   };
 };

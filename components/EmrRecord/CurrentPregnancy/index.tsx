@@ -67,9 +67,10 @@ const DEFAULT_SYMPTOMS: any = [
 interface Props {
   title: string;
   editable?: boolean;
+  errors?: Record<string, string>;
 }
 
-const CurrentPregnancy = ({ title, editable = true }: Props) => {
+const CurrentPregnancy = ({ title, editable = true, errors = {} }: Props) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -145,6 +146,8 @@ return (
               onChangeText: (text) =>
                 updateCurrentPregnancy("pregnancyDetectionMethod", text),
             }}
+            touched
+            error={errors.pregnancyDetectionMethod}
           />
 
           <AppMultiSelect

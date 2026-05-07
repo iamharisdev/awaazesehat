@@ -3,7 +3,7 @@ import { AppLoader, BottomSheet, NewPatient } from "@/components";
 import { SearchInput } from "@/components/SearchInput";
 import { setCurrentPatient, setEmr } from "@/features/patientSlice";
 import { useListPatientsQuery } from "@/services/modules/patient";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { useRouter } from "expo-router";
 import { memo, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,6 +40,7 @@ export default function Patients() {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const token = useAppSelector((s) => s.auth.token);
 
   const [searchText, setSearchText] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -66,7 +67,9 @@ export default function Patients() {
       limit: 50,
     },
     {
-      skip: debouncedSearch.length > 0 && debouncedSearch.length < 3,
+      skip:
+        !token ||
+        (debouncedSearch.length > 0 && debouncedSearch.length < 3),
     },
   );
 

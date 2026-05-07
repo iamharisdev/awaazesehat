@@ -224,7 +224,19 @@ const Prescription: React.FC<Props> = ({
                 Diagnosis Pregnancy
               </Text>
               <Text style={styles.text}>
-                {visit.proposedPlan.diagnosisPregnancy}
+                {(() => {
+                  const d: any = visit.proposedPlan?.diagnosisPregnancy;
+                  if (!d) return "";
+                  if (typeof d === "string") return d;
+                  if (Array.isArray(d))
+                    return d
+                      .map((x: any) =>
+                        typeof x === "string" ? x : x?.name || x?.id || "",
+                      )
+                      .filter(Boolean)
+                      .join(", ");
+                  return "";
+                })()}
               </Text>
             </View>
           )}

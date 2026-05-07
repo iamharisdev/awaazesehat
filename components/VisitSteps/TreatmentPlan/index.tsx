@@ -1,36 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 
 import AppInput from "@/components/AppInput";
-import AppMultiSelect from "@/components/AppMultiSelect";
 import DatePicker from "@/components/DatePicker";
 import TextAreaWithMic from "@/components/TextAreaWithMic";
-import { updateVisit } from "@/features/patientSlice";
+import PregnancyDiagnosisDropdown from "@/components/PregnancyDiagnosisDropdown";
+import DiagnosticTestsDropdown from "@/components/DiagnosticTestsDropdown";
+import { setVisitAdvisedTests, updateVisit } from "@/features/patientSlice";
+import type {
+  AdvisedTest,
+  DiagnosticTest,
+  PregnancyDiagnosis,
+} from "@/features/patientSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { styles } from "./style";
 
-const DEFAULT_LABS = [
-  { name: "Ultrasound scan" },
-  { name: "CBC" },
-  { name: "Anti HCV" },
-  { name: "Blood Test" },
-  { name: "Blood glucose random" },
-  { name: "Urine culture (MSU)" },
-  { name: "HB1AC (Glycosylated Hb)" },
-  { name: "Urine analysis" },
-  { name: "Rubella antibody status" },
-];
-
-const toItems = (arr?: string[]) => arr?.map((v) => ({ name: v })) || [];
-
-const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({ errors = {} }) => {
+const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({
+  errors = {},
+}) => {
   const dispatch = useAppDispatch();
   const fields = useAppSelector((state) => state.patient.visit.proposedPlan);
+  const advisedTests = useAppSelector(
+    (state) => state.patient.visit.advisedTests ?? [],
+  );
 
   const editable = false;
-  // const editable = visit?.createdAt !== visit?.updatedAt;
-
-  const [labsData, setLabsData] = useState(DEFAULT_LABS);
 
   const updateField = (key: string, value: any) => {
     dispatch(updateVisit({ step: "proposedPlan", key, value }));
@@ -39,20 +33,49 @@ const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({ errors =
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
+  const handleAdvisedTestsChange = (items: DiagnosticTest[]) => {
+    const merged: AdvisedTest[] = items.map((it) => {
+      const existing = advisedTests.find((a) => a.id === it.id);
+      if (existing) return existing;
+      return {
+        id: it.id,
+        testName: it.testName,
+        testType: it.testType,
+        status: "not_submitted",
+        reports: [],
+      };
+    });
+    dispatch(setVisitAdvisedTests(merged));
+  };
+
+  const dropdownValue: DiagnosticTest[] = advisedTests.map((a) => ({
+    id: a.id,
+    testName: a.testName,
+    testType: a.testType,
+  }));
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Treatment Plan</Text>
 
       {/* Diagnosis */}
-      <AppInput
+      <PregnancyDiagnosisDropdown
         label="Diagnosis in pregnancy?"
-        inputProps={{
-          placeholder: "Enter",
-          value: fields?.diagnosisPregnancy || "",
-          editable: !editable,
-          onChangeText: (text: string) =>
-            updateField("diagnosisPregnancy", text),
-        }}
+        value={
+          Array.isArray(fields?.diagnosisPregnancy)
+            ? (fields?.diagnosisPregnancy as PregnancyDiagnosis[])
+            : []
+        }
+        disabled={editable}
+        onChange={(items) => updateField("diagnosisPregnancy", items)}
+      />
+
+      {/* Advised Tests (Lab + Scans) — paginated dropdown */}
+      <DiagnosticTestsDropdown
+        label="Advised lab tests & scans"
+        value={dropdownValue}
+        disabled={editable}
+        onChange={handleAdvisedTestsChange}
       />
 
       {/* General Plan */}
@@ -68,16 +91,6 @@ const TreatmentPlan: React.FC<{ errors?: Record<string, string> }> = ({ errors =
           {errors.generalPlan}
         </Text>
       )}
-
-      {/* Lab Tests MultiSelect */}
-      <AppMultiSelect
-        label="Advised lab tests & scans"
-        options={labsData}
-        value={fields?.advisedLabTests}
-        onChange={(items) =>
-          updateField("advisedLabTests", items.map((i) => i.name).join(","))
-        }
-      />
 
       {/* Medications */}
       <AppInput
